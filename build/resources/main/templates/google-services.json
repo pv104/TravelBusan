@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "320997657144",
+    "project_id": "travelbusan-5fe9b",
+    "storage_bucket": "travelbusan-5fe9b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:320997657144:android:9c6c3c489f0fa6111d74cd",
+        "android_client_info": {
+          "package_name": "Project.TravelBusan"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0XeoPTVSnYCz6SxUlG7bSq0aGaXRBKwE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
