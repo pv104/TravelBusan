@@ -3,10 +3,12 @@ package Project.TravelBusan.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+
 @Entity
 @Getter
 @Builder
-@AllArgsConstructor // 필드에 쓴 모든 생성자 자동 생성
+@NoArgsConstructor(access = AccessLevel.PROTECTED) // 의미 없는 객체의 생성 무분별하게 생성하는 것을 막을 수 있음
+@AllArgsConstructor
 @Table(name = "member")
 public class Member{
 
@@ -21,7 +23,9 @@ public class Member{
 
     private String email;
 
-    public Member() {
-
+    public void modify(String password,String email){
+        this.password = password;
+        this.email = email;
     }
+
 }

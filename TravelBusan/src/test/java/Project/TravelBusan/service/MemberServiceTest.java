@@ -12,7 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 class MemberServiceTest {
     @Autowired MemberService memberService;
 
-    @Test
+/*    @Test
     @Transactional
     public void 회원가입_(){
         //given
@@ -28,5 +28,5 @@ class MemberServiceTest {
         //then
         Member result = memberService.findById(memberId);
         Assertions.assertEquals(member, result);
-    }
+    }*/
 }

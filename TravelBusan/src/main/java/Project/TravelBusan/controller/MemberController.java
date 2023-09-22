@@ -1,6 +1,7 @@
 package Project.TravelBusan.controller;
 
-import Project.TravelBusan.domain.Member;
+
+import Project.TravelBusan.request.MemberRequestDto;
 import Project.TravelBusan.response.ResponseDto;
 import Project.TravelBusan.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -16,15 +17,27 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping
-    public ResponseDto<?> createMember(@RequestBody Member member) {
-        log.info("controller!!");
-        memberService.join(member);
-        return ResponseDto.success("성공",null);
+    public ResponseDto<?> createMember(@RequestBody MemberRequestDto memberRequestDto) {
+        return memberService.join(memberRequestDto);
     }
 
     @GetMapping
-    public ResponseDto<?> hello(){
-        log.info("hello!");
-        return ResponseDto.success("hello",null);
+    public ResponseDto<?> memberList(){
+        return memberService.findAllMembers();
+    }
+
+    @GetMapping("/{memberId}")
+    public ResponseDto<?> findMember(@PathVariable Long memberId){
+        return memberService.findById(memberId);
+    }
+
+    @PatchMapping("/{memberId}")
+    public ResponseDto<?> updateMember(@PathVariable Long memberId,@RequestBody MemberRequestDto memberRequestDto){
+        return memberService.updateMemberById(memberId,memberRequestDto);
+    }
+
+    @DeleteMapping("/{memberId}")
+    public ResponseDto<?> deleteMember(@PathVariable Long memberId){
+        return memberService.deleteById(memberId);
     }
 }

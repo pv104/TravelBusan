@@ -10,7 +10,7 @@ import lombok.Getter;
 public class ResponseDto<T> {
     private boolean success;
     private String message;
-    private T data; // data 부분에는 어떤 여러가지 data 내용이 들어갈 수 있기에, 제네릭 타입의 data로 설정한다.
+    private T data;
     private Error error;
     public static <T> ResponseDto<T> success(String message,T data) {
         return new ResponseDto<>(true, message, data,null);
