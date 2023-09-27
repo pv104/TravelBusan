@@ -1,0 +1,13 @@
+CREATE TABLE `member` (
+	`member_id` BIGINT NOT NULL AUTO_INCREMENT,
+	`id` VARCHAR(50) NOT NULL,
+	`password` VARCHAR(100) NOT NULL,
+	`email` VARCHAR(100) NOT NULL,
+	`nickname` VARCHAR(50) NOT NULL,
+	`cre_date` TIMESTAMP NOT NULL,
+	`del_date` TIMESTAMP NULL,
+	`state` VARCHAR(1) NULL DEFAULT 'N',
+	`grade` VARCHAR(1) NOT NULL DEFAULT 'M',
+	PRIMARY KEY (`member_id`)
+);
+
