@@ -40,4 +40,9 @@ public class MemberController {
     public ResponseDto<?> deleteMember(@PathVariable Long memberId){
         return memberService.deleteById(memberId);
     }
+
+    @PostMapping("/login")
+    public ResponseDto<?> memberLogin(@RequestBody MemberRequestDto memberRequestDto){
+        return memberService.login(memberRequestDto);
+    }
 }

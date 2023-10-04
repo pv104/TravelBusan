@@ -8,6 +8,8 @@ import Project.TravelBusan.response.MemberResponseDto;
 import Project.TravelBusan.response.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +23,7 @@ import java.util.List;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * 회원 가입
@@ -28,13 +31,15 @@ public class MemberService {
     @Transactional
     public ResponseDto<?> join(MemberRequestDto memberRequestDto) {
         if (isPresentUsername(memberRequestDto.getUsername())) {
-            throw new IllegalStateException("이미 존재하는 아이디 입니다");
+            throw new NullPointerException("이미 존재하는 아이디 입니다");
         }
+
 
         Member member = Member.builder()
                 .username(memberRequestDto.getUsername())
-                .password(memberRequestDto.getPassword())
+                .password(passwordEncoder.encode(memberRequestDto.getPassword()))
                 .email(memberRequestDto.getEmail())
+                .nickname(memberRequestDto.getNickname())
                 .build();
 
         memberRepository.save(member);
@@ -54,12 +59,30 @@ public class MemberService {
 
 
     /**
+     * 로그인
+     */
+    public ResponseDto<?> login(MemberRequestDto memberRequestDto){
+        Member member = memberRepository.findByUsername(memberRequestDto.getUsername()).orElseThrow(() ->
+                new IllegalStateException("존재하지 않는 아이디 입니다"));
+
+        if(!passwordEncoder.matches(memberRequestDto.getPassword(), member.getPassword())){
+            throw new IllegalStateException("패스워드가 일치하지 않습니다");
+        }
+
+        return ResponseDto.success("로그인 성공",
+                MemberResponseDto.builder()
+                        .id(member.getId())
+                        .build()
+        );
+    }
+
+    /**
      * 회원 조회
      */
     public ResponseDto<?> findById(Long memberId) {
         Member member = memberRepository.findByIdOrElseThrow(memberId);
 
-        return ResponseDto.success("멤버 조회 성공",
+        return ResponseDto.success("회원 조회 성공",
                 MemberResponseDto.builder()
                         .id(member.getId())
                         .username(member.getUsername())
@@ -68,6 +91,7 @@ public class MemberService {
         );
     }
 
+    // 전체 조회
     public ResponseDto<?> findAllMembers() {
         List<Member> members = memberRepository.findAll();
         List<MemberResponseDto> memberResponseDto = new ArrayList<>();
@@ -91,7 +115,7 @@ public class MemberService {
     public ResponseDto<?> updateMemberById(Long memberId, MemberRequestDto memberRequestDto) {
         Member member = memberRepository.findByIdOrElseThrow(memberId);
 
-        member.modify(memberRequestDto.getPassword(), memberRequestDto.getEmail());
+        member.memberModify(memberRequestDto.getPassword(), memberRequestDto.getEmail());
 
         memberRepository.save(member);
 
