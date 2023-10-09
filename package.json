@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "jakarta": "^0.0.1",
+    "jsonwebtoken": "^9.0.2",
+    "react-native": "^0.72.5"
+  }
+}
