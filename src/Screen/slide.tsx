@@ -41,12 +41,6 @@ function Slide() {
 
   return (
     <View>
-      <TouchableOpacity onPress={prevImage}>
-        <Text>{'←'}</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={nextImage}>
-        <Text>{'→'}</Text>
-      </TouchableOpacity>
       <View style={{ flexDirection: 'row' }}>
         {images.map((image, i) => (
           <Animated.View
@@ -59,8 +53,8 @@ function Slide() {
               <Image
                 source={image.url}
                 style={{
-                  width: 300, // 이미지 가로 너비
-                  height: 200, // 이미지 세로 높이
+                  width: 417, // 이미지 가로 너비
+                  height: 270, // 이미지 세로 높이
                 }}
               />
             </TouchableOpacity>

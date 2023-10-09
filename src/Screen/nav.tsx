@@ -23,7 +23,8 @@ const NavigationBarButton = () => {
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
   },
   button: {
     padding: 10,
@@ -35,7 +36,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'green',
   },
   inactiveButton: {
-    backgroundColor: 'red',
+    backgroundColor: 'black',
   },
   buttonText: {
     color: 'white',
