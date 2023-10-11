@@ -6,6 +6,9 @@ const images = [
     url: require('../pics/영도대교.png'), // 이미지 파일 경로
     //link: '/mainPage', // 링크 정보 (React Native에서는 다른 네비게이션 방식을 사용해야 함)
   },
+  {
+    url : require('../pics/광안대교.jpg')
+  }
 ];
 
 function Slide() {
@@ -24,7 +27,7 @@ function Slide() {
 
   useEffect(() => {
     Animated.timing(translateX, {
-      toValue: -index * 100, // 이미지 너비에 따라 조절 (100은 이미지의 수평 이동 거리입니다)
+      toValue: -index * 417, // 이미지 너비에 따라 조절 (100은 이미지의 수평 이동 거리입니다)
       duration: 500, // 애니메이션 지속 시간 (500ms로 설정)
       easing: Easing.inOut(Easing.ease), // 이징 함수 설정
       useNativeDriver: false, // 네이티브 드라이버 사용 안 함
