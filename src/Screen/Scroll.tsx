@@ -1,10 +1,10 @@
 import React from 'react';
-import { FlatList, Text, View, StyleSheet } from 'react-native';
+import { FlatList, Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import Button from './button';
 
 const data = [
-  { key: '1', component: <Text>맛집 아이콘 자리</Text> },
-  { key: '2', component: <Text>추천 여행지 아이콘 자리</Text> },
+  { key: '1', component: <TouchableOpacity><Text>맛집 아이콘 자리</Text></TouchableOpacity> },
+  { key: '2', component: <TouchableOpacity><Text>추천 여행지 아이콘 자리</Text></TouchableOpacity> },
   { key: '3', component : <Button/>},
   { key: '4', component : <Button/>},
   // 더 많은 아이템 추가
