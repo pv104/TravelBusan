@@ -4,6 +4,7 @@ import { GestureHandlerRootView, PanGestureHandler, State } from 'react-native-g
 import Scroll from './Scroll';
 import SearchBar from './SearchBar';
 
+
 const SlideLayer = () => {
   const [isOpen, setIsOpen] = useState(true);
 
@@ -49,8 +50,6 @@ const SlideLayer = () => {
       }
     }
   };
-  
-
   return (
    <GestureHandlerRootView>
      <View style={styles.container}>
@@ -80,6 +79,7 @@ const SlideLayer = () => {
     </View>
    </GestureHandlerRootView>
   );
+  
 };
 
 const styles = StyleSheet.create({

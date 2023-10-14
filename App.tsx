@@ -8,6 +8,7 @@ import { useNavigation, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from './src/Screen/Login';
 
+
 //가로 확장가능
 function App() {
   const handleButtonPress = () => {

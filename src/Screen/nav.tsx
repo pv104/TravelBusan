@@ -27,7 +27,7 @@ const NavigationBarButton = () => {
         onPress={toggleButton}
       >
         <Text style={styles.buttonText}>
-          {isActive ? '+' : <Icon name="bars" size={30} color="white" />}
+          {isActive ? '+' : <Icon name="bars" size={30} color="black" />}
         </Text>
       </TouchableOpacity>
       <Modal
@@ -62,13 +62,13 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
   },
   activeButton: {
-    backgroundColor: 'red',
+    backgroundColor: 'white',
   },
   inactiveButton: {
-    backgroundColor: 'black',
+    backgroundColor: 'white',
   },
   buttonText: {
-    color: 'white',
+    color: 'black',
     fontWeight: 'bold',
   },
   modalContainer: {
