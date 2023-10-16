@@ -19,6 +19,12 @@ const NavigationBarButton = () => {
   const handleLogin = () => {
     toggleModal(); // 모달 닫기
   };
+  const handleBlog = () => {
+    toggleModal(); // 모달 닫기
+  };
+  const handleCommunity = () => {
+    toggleModal(); // 모달 닫기
+  };
 
   return (
     <View style={styles.container}>
@@ -39,6 +45,12 @@ const NavigationBarButton = () => {
           <Text style={styles.modalText}>모달창 메뉴 확장 추가 중</Text>
           <TouchableOpacity onPress={handleLogin}>
             <Text style={styles.loginButton}>Login</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleBlog}>
+            <Text style={styles.loginButton}>Blog</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleCommunity}>
+            <Text style={styles.loginButton}>Community</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={toggleModal}>
             <Text style={styles.closeButton}>Close</Text>

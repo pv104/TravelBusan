@@ -25,7 +25,7 @@ const myData =()=>{
                     <Text style={styles.buttonText}>내 블로그로</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button}>
-                    <Text style={styles.buttonText}>방명록 남기기</Text>
+                    <Text style={styles.buttonText}>방명록</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button} onPress ={handleSign}>
                     <Text style={styles.buttonText}>내 소식</Text>

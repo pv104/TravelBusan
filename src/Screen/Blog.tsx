@@ -2,9 +2,10 @@ import React from 'react';
 import { View,Image, Text, StyleSheet, FlatList, SafeAreaView,TouchableOpacity } from 'react-native';
 import Nav from "./nav";
 import BlogSearch from "./BlogSearch"
+import Mine from "./Blog_mydata";
 
 const userData = {
-  username: '사용자 아이디(블로그 주인)',
+  username: '작성자 아이디',
 };
 
 const explain ={
@@ -34,14 +35,14 @@ const BlogScreen = () => {
         <Nav/>
         <Text style={styles.Title}>Travel Busan</Text>
       </View>
-      <View style={styles.button}>
-        <Text style={styles.username}>{userData.username}</Text>
-        <Text style={styles.explain}>{explain.ex}</Text>
-      </View>
-      <View style={styles.separator} />
       <View style={styles.searchbar}>
         <BlogSearch/>
       </View>
+      <Mine/>
+      <View style={styles.button}>
+        <Text style={styles.explain}>{explain.ex}</Text>
+      </View>
+      <View style={styles.separator} />
       <FlatList
         data={blogData}
         keyExtractor={(item) => item.id.toString()}
@@ -51,9 +52,9 @@ const BlogScreen = () => {
               <Image source={item.imageUri} style={styles.blogImage} />
               <View style={styles.overlay}>
                 <Text style={styles.blogTitle}>{item.title}</Text>
+                <Text style={styles.blogDate}>{item.date}</Text>
+                <Text style={styles.username}>{userData.username}</Text>
                 </View>
-                <Text>{item.content}</Text>
-                <Text>{item.date}</Text>
                 </TouchableOpacity>
                 </View>
         )}
@@ -70,6 +71,7 @@ const styles = StyleSheet.create({
     fontSize: 40,
     color : '#00B292',//진한 민트색
     fontWeight: 'bold',
+    marginLeft : 20,
   },
   container: {
     flex: 1,
@@ -77,23 +79,26 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
   username: {
-    fontSize: 30,
-    color : 'black',
+    fontSize: 13,
+    color : 'white',
     fontWeight: 'bold',
+    textAlign : "right",
     marginBottom: 10,
   },
   overlay: {
     ...StyleSheet.absoluteFillObject, // 컨테이너 전체를 채우도록 스타일 적용
     backgroundColor: 'rgba(0, 0, 0, 0.5)', // 불투명한 배경색
-    justifyContent: 'center',
-    alignItems: 'center',
+    height: '38%', // 세로 높이의 1/3 크기
+    top: 125,
     padding: 10,
-    elevation: 3, // 그림자 효과 (Android)
+    elevation: 4, // 그림자 효과 (Android)
+    textAlign: 'left',
+    
   },
   explain:{
     fontSize: 15,
     color : 'black',
-    marginTop: 15,
+    marginTop: -30,
   },
   separator: {
     height: 1,
@@ -117,8 +122,11 @@ const styles = StyleSheet.create({
   },
   blogTitle:{
     fontSize : 20,
-    color : 'black',
+    color : 'white',
     fontWeight: 'bold',
+  },
+  blogDate:{
+    color:'white',
   },
   button: {
     marginTop: 50,
