@@ -54,7 +54,7 @@ public class SecurityConfig {
                         .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 )
                 .authorizeHttpRequests(authorize ->
-                        authorize.requestMatchers("/api/hello", "/api/authenticate", "/api/signup").permitAll()
+                        authorize.requestMatchers("/api/login", "/api/authenticate", "/api/signup").permitAll()
                 .anyRequest().authenticated())
                         .
                 sessionManagement(sessionManagement ->
@@ -63,26 +63,6 @@ public class SecurityConfig {
 
 
         return http.build();
-        /* http
-                // token을 사용하는 방식이기 때문에 csrf를 disable합니다.
-                .csrf(csrf -> csrf.disable())
 
-                .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling(exceptionHandling -> exceptionHandling
-                        .accessDeniedHandler(jwtAccessDeniedHandler)
-                        .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                )
-
-                .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
-                        .requestMatchers("/api/hello", "/api/authenticate", "/api/signup").permitAll()
-                        .anyRequest().authenticated()
-                )
-
-                // 세션을 사용하지 않기 때문에 STATELESS로 설정
-                .sessionManagement(sessionManagement ->
-                        sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
-                .apply(new JwtSecurityConfig(tokenProvider));
-        return http.build();*/
     }
 }

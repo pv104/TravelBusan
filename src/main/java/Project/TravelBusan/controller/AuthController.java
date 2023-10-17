@@ -1,7 +1,7 @@
 package Project.TravelBusan.controller;
 
-import Project.TravelBusan.dto.LoginDto;
-import Project.TravelBusan.dto.TokenDto;
+import Project.TravelBusan.request.LoginDto;
+import Project.TravelBusan.request.TokenDto;
 import Project.TravelBusan.jwt.JwtFilter;
 import Project.TravelBusan.jwt.TokenProvider;
 import org.springframework.http.HttpHeaders;
@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 

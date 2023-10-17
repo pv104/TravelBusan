@@ -3,7 +3,7 @@ package Project.TravelBusan.handler;
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 
-import Project.TravelBusan.dto.ErrorDto;
+import Project.TravelBusan.request.ErrorDto;
 import Project.TravelBusan.exception.DuplicateMemberException;
 import Project.TravelBusan.exception.NotFoundMemberException;
 import org.springframework.security.access.AccessDeniedException;

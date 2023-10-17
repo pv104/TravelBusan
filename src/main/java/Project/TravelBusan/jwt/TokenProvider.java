@@ -59,7 +59,6 @@ public class TokenProvider implements InitializingBean {
     }
 
     public Authentication getAuthentication(String token) {
-        System.out.println("함수 실행 테스트");
         Claims claims = Jwts
                 .parserBuilder()
                 .setSigningKey(key)
@@ -74,7 +73,6 @@ public class TokenProvider implements InitializingBean {
 
         User principal = new User(claims.getSubject(), "", authorities);
 
-        System.out.println("함수 실행 테스트2");
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
 

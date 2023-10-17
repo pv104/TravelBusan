@@ -1,4 +1,4 @@
-package Project.TravelBusan.entity;
+package Project.TravelBusan.domain;
 import lombok.*;
 import jakarta.persistence.*;
 import java.util.Set;

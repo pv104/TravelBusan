@@ -3,7 +3,7 @@ package Project.TravelBusan.handler;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 import java.util.List;
-import Project.TravelBusan.dto.ErrorDto;
+import Project.TravelBusan.request.ErrorDto;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.validation.BindingResult;

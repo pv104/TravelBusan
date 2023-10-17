@@ -1,6 +1,7 @@
 package Project.TravelBusan.controller;
 
-import Project.TravelBusan.dto.UserDto;
+import Project.TravelBusan.request.UserDto;
+import Project.TravelBusan.response.ResponseDto;
 import Project.TravelBusan.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -42,7 +43,10 @@ public class UserController {
     public ResponseEntity<UserDto> getMyUserInfo(HttpServletRequest request) {
         return ResponseEntity.ok(userService.getMyUserWithAuthorities());
     }
-
+    @PostMapping("/login")
+    public ResponseDto<?> memberLogin(@RequestBody UserDto userDto){
+        return userService.login(userDto);
+    }
     @GetMapping("/user/{username}")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<UserDto> getUserInfo(@PathVariable String username) {
