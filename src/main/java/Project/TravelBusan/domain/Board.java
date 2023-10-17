@@ -21,12 +21,13 @@ public class Board {
     private Long id;
 
     private String title;
-    private String nickname;
     private String content;
+    private String nickname;
     private String img;
 
     @ColumnDefault("0")
-    private Long like;
+    @Column(name = "like_count")
+    private Long likeCount;
 
     @ColumnDefault("0")
     private Long visit;
@@ -40,7 +41,6 @@ public class Board {
 
     @ColumnDefault("N")
     private String state;
-
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
