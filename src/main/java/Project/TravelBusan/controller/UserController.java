@@ -1,6 +1,6 @@
 package Project.TravelBusan.controller;
 
-import Project.TravelBusan.dto.UserDto;
+import Project.TravelBusan.request.UserDto;
 import Project.TravelBusan.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

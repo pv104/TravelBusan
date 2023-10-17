@@ -1,8 +1,8 @@
-package Project.TravelBusan.dto;
+package Project.TravelBusan.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
-import Project.TravelBusan.entity.User;
+import Project.TravelBusan.domain.User;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;

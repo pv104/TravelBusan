@@ -1,4 +1,4 @@
-package Project.TravelBusan.dto;
+package Project.TravelBusan.request;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.validation.FieldError;

@@ -1,5 +1,5 @@
 package Project.TravelBusan.repository;
-import  Project.TravelBusan.entity.User;
+import Project.TravelBusan.domain.User;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 

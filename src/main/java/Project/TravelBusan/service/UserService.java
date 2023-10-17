@@ -1,9 +1,9 @@
 package Project.TravelBusan.service;
 import java.util.Collections;
-import java.util.Optional;
-import Project.TravelBusan.dto.UserDto;
-import Project.TravelBusan.entity.Authority;
-import Project.TravelBusan.entity.User;
+
+import Project.TravelBusan.request.UserDto;
+import Project.TravelBusan.domain.Authority;
+import Project.TravelBusan.domain.User;
 import Project.TravelBusan.exception.DuplicateMemberException;
 import Project.TravelBusan.exception.NotFoundMemberException;
 import Project.TravelBusan.repository.UserRepository;

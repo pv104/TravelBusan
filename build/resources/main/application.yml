@@ -7,9 +7,11 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
       hibernate:
-        format_sql: true
+        show_sql: true
   jwt:
     header: Authorization
     secret: a5j9papjwrpoieaaeiofjgiojaskluytresetdyfugyftretyfutzs5764zex87e6wz7exr8cxr7ezx8rz767ex8r87z4ex8
