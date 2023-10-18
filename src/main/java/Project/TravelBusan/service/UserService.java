@@ -7,6 +7,7 @@ import Project.TravelBusan.domain.User;
 import Project.TravelBusan.exception.DuplicateMemberException;
 import Project.TravelBusan.exception.NotFoundMemberException;
 import Project.TravelBusan.repository.UserRepository;
+import Project.TravelBusan.response.ResponseDto;
 import Project.TravelBusan.util.SecurityUtil;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -41,6 +42,24 @@ public class UserService {
                 .build();
 
         return UserDto.from(userRepository.save(user));
+    }
+
+
+    @Transactional
+    public ResponseDto<?> login(UserDto userDto)
+    {
+        User user = userRepository.findByUsername(userDto.getUsername()).orElseThrow(() ->
+                new IllegalStateException("존재하지 않는 아이디 입니다"));
+
+        if(!passwordEncoder.matches(userDto.getPassword(), user.getPassword())){
+            throw new IllegalStateException("패스워드가 일치하지 않습니다");
+        }
+
+        return ResponseDto.success("로그인 성공",
+                UserDto.builder()
+                        .username(user.getUsername())
+                        .build()
+        );
     }
 
     @Transactional(readOnly = true)
