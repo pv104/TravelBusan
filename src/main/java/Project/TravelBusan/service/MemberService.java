@@ -3,8 +3,11 @@ package Project.TravelBusan.service;
 
 import Project.TravelBusan.domain.Member;
 import Project.TravelBusan.repository.MemberRepository;
-import Project.TravelBusan.request.MemberRequestDto;
-import Project.TravelBusan.response.MemberResponseDto;
+import Project.TravelBusan.request.MemberJoinRequestDto;
+import Project.TravelBusan.request.MemberLoginRequestDto;
+import Project.TravelBusan.request.MemberModifyRequestDto;
+import Project.TravelBusan.response.MemberListResponseDto;
+import Project.TravelBusan.response.MemberLoginResponseDto;
 import Project.TravelBusan.response.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,26 +31,28 @@ public class MemberService {
      * 회원 가입
      */
     @Transactional
-    public ResponseDto<?> join(MemberRequestDto memberRequestDto) {
-        if (isPresentUsername(memberRequestDto.getUsername())) {
-            throw new NullPointerException("이미 존재하는 아이디 입니다");
+    public ResponseDto<MemberLoginResponseDto> join(MemberJoinRequestDto memberJoinRequestDto) {
+        if (isPresentUsername(memberJoinRequestDto.getUsername())) {
+            throw new IllegalStateException("이미 존재하는 아이디 입니다");
         }
 
+        if(!memberJoinRequestDto.getPassword().equals(memberJoinRequestDto.getPasswordCheck())){
+            throw new IllegalStateException("비빌번호와 비밀번호 확인이 일치하지 않습니다");
+        }
 
         Member member = Member.builder()
-                .username(memberRequestDto.getUsername())
-                .password(passwordEncoder.encode(memberRequestDto.getPassword()))
-                .email(memberRequestDto.getEmail())
-                .nickname(memberRequestDto.getNickname())
+                .nickname(memberJoinRequestDto.getNickname())
+                .username(memberJoinRequestDto.getUsername())
+                .password(passwordEncoder.encode(memberJoinRequestDto.getPassword()))
+                .email(memberJoinRequestDto.getEmail())
                 .build();
 
         memberRepository.save(member);
 
         return ResponseDto.success("회원가입 성공",
-                MemberResponseDto.builder()
+                MemberLoginResponseDto.builder()
                         .id(member.getId())
-                        .username(member.getUsername())
-                        .email(member.getEmail())
+                        .nickname(member.getNickname())
                         .build()
         );
     }
@@ -60,50 +65,57 @@ public class MemberService {
     /**
      * 로그인
      */
-    public ResponseDto<?> login(MemberRequestDto memberRequestDto){
-        Member member = memberRepository.findByUsername(memberRequestDto.getUsername()).orElseThrow(() ->
+    public ResponseDto<MemberLoginResponseDto> login(MemberLoginRequestDto memberLoginRequestDto){
+        Member member = memberRepository.findByUsername(memberLoginRequestDto.getUsername()).orElseThrow(() ->
                 new IllegalStateException("존재하지 않는 아이디 입니다"));
 
-        if(!passwordEncoder.matches(memberRequestDto.getPassword(), member.getPassword())){
+        if(!passwordEncoder.matches(memberLoginRequestDto.getPassword(), member.getPassword())){
             throw new IllegalStateException("패스워드가 일치하지 않습니다");
         }
 
         return ResponseDto.success("로그인 성공",
-                MemberResponseDto.builder()
+                MemberLoginResponseDto.builder()
                         .id(member.getId())
+                        .nickname(member.getNickname())
                         .build()
         );
     }
 
     /**
-     * 회원 조회
+     * 회원 상세 조회
      */
-    public ResponseDto<?> findById(Long memberId) {
+    public ResponseDto<MemberListResponseDto> findById(Long memberId) {
         Member member = memberRepository.findByIdOrElseThrow(memberId);
 
         return ResponseDto.success("회원 조회 성공",
-                MemberResponseDto.builder()
+                MemberListResponseDto.builder()
                         .id(member.getId())
                         .username(member.getUsername())
+                        .nickname(member.getNickname())
                         .email(member.getEmail())
+                        .creDate(member.getCreDate())
                         .build()
         );
     }
 
-    // 전체 조회
-    public ResponseDto<?> findAllMembers() {
+    /**
+     * 회원 전체 조회
+     */
+    public ResponseDto<List<MemberListResponseDto>> findAllMembers() {
         List<Member> members = memberRepository.findAll();
-        List<MemberResponseDto> memberResponseDto = new ArrayList<>();
+        List<MemberListResponseDto> memberListResponseDto = new ArrayList<>();
 
         for (Member member : members) {
-            MemberResponseDto dto = MemberResponseDto.builder()
+            MemberListResponseDto dto = MemberListResponseDto.builder()
                     .id(member.getId())
                     .username(member.getUsername())
+                    .nickname(member.getNickname())
                     .email(member.getEmail())
+                    .creDate(member.getCreDate())
                     .build();
-            memberResponseDto.add(dto);
+            memberListResponseDto.add(dto);
         }
-        return ResponseDto.success("전체 회원 조회 성공", memberResponseDto);
+        return ResponseDto.success("전체 회원 조회 성공", memberListResponseDto);
     }
 
 
@@ -111,18 +123,25 @@ public class MemberService {
      * 회원 수정
      */
     @Transactional
-    public ResponseDto<?> updateMemberById(Long memberId, MemberRequestDto memberRequestDto) {
+    public ResponseDto<MemberListResponseDto> updateMemberById(Long memberId, MemberModifyRequestDto memberModifyRequestDto) {
         Member member = memberRepository.findByIdOrElseThrow(memberId);
 
-        member.memberModify(memberRequestDto.getPassword(), memberRequestDto.getEmail());
+        if(!memberModifyRequestDto.getPassword().equals(memberModifyRequestDto.getPasswordCheck())){
+            throw new IllegalStateException("새 비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+
+        }
+
+        member.modifyMember(passwordEncoder.encode(memberModifyRequestDto.getPassword()), memberModifyRequestDto.getEmail(), memberModifyRequestDto.getNickname());
 
         memberRepository.save(member);
 
         return ResponseDto.success("회원 수정 성공",
-                MemberResponseDto.builder()
+                MemberListResponseDto.builder()
                         .id(member.getId())
                         .username(member.getUsername())
+                        .nickname(member.getNickname())
                         .email(member.getEmail())
+                        .creDate(member.getCreDate())
                         .build()
                 );
     }
@@ -132,7 +151,7 @@ public class MemberService {
      * 회원 삭제
      */
     @Transactional
-    public ResponseDto<?> deleteById(Long memberId) {
+    public ResponseDto<Void> deleteById(Long memberId) {
         Member member = memberRepository.findByIdOrElseThrow(memberId);
         memberRepository.deleteById(member.getId());
         return ResponseDto.success("회원 삭제 성공",null);

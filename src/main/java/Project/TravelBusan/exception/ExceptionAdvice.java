@@ -1,4 +1,4 @@
-package Project.TravelBusan;
+package Project.TravelBusan.exception;
 
 import Project.TravelBusan.response.ResponseDto;
 import org.springframework.http.HttpStatus;

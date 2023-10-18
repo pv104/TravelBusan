@@ -1,14 +1,12 @@
 package Project.TravelBusan.service;
 import java.util.Collections;
 
-import Project.TravelBusan.domain.Member;
 import Project.TravelBusan.request.UserDto;
 import Project.TravelBusan.domain.Authority;
 import Project.TravelBusan.domain.User;
 import Project.TravelBusan.exception.DuplicateMemberException;
 import Project.TravelBusan.exception.NotFoundMemberException;
 import Project.TravelBusan.repository.UserRepository;
-import Project.TravelBusan.response.MemberResponseDto;
 import Project.TravelBusan.response.ResponseDto;
 import Project.TravelBusan.util.SecurityUtil;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -45,6 +43,8 @@ public class UserService {
 
         return UserDto.from(userRepository.save(user));
     }
+
+
     @Transactional
     public ResponseDto<?> login(UserDto userDto)
     {
@@ -61,6 +61,7 @@ public class UserService {
                         .build()
         );
     }
+
     @Transactional(readOnly = true)
     public UserDto getUserWithAuthorities(String username) {
         return UserDto.from(userRepository.findOneWithAuthoritiesByUsername(username).orElse(null));
