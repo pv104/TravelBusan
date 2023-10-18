@@ -45,8 +45,9 @@ public class Member{
     private String grade;
 
 
-    public void memberModify(String password, String email){
+    public void modifyMember(String password, String email, String nickname){
         this.password = password;
         this.email = email;
+        this.nickname = nickname;
     }
 }

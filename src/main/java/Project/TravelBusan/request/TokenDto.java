@@ -1,4 +1,4 @@
-package Project.TravelBusan.dto;
+package Project.TravelBusan.request;
 import lombok.*;
 
 @Getter

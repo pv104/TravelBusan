@@ -1,6 +1,7 @@
 package Project.TravelBusan.controller;
 
-import Project.TravelBusan.dto.UserDto;
+import Project.TravelBusan.request.UserDto;
+import Project.TravelBusan.response.ResponseDto;
 import Project.TravelBusan.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,11 +21,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/hello")
-    public ResponseEntity<String> hello() {
-        return ResponseEntity.ok("hello");
-    }
-
     @PostMapping("/test-redirect")
     public void testRedirect(HttpServletResponse response) throws IOException {
         response.sendRedirect("/api/user");
@@ -41,6 +37,12 @@ public class UserController {
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<UserDto> getMyUserInfo(HttpServletRequest request) {
         return ResponseEntity.ok(userService.getMyUserWithAuthorities());
+    }
+
+
+    @PostMapping("/login")
+    public ResponseDto<?> memberLogin(@RequestBody UserDto userDto){
+        return userService.login(userDto);
     }
 
     @GetMapping("/user/{username}")

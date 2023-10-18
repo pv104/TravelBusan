@@ -1,5 +1,5 @@
 package Project.TravelBusan.service;
-import Project.TravelBusan.entity.User;
+import Project.TravelBusan.domain.User;
 import Project.TravelBusan.repository.UserRepository;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 @Component("userDetailsService")
 public class CustomUserDetailsService implements UserDetailsService {
