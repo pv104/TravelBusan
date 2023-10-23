@@ -1,10 +1,28 @@
 import React, { useState } from 'react';
-import { View, Text,StyleSheet, TouchableOpacity, Animated } from 'react-native';
+import { View, Text,StyleSheet, TouchableOpacity, Animated,FlatList } from 'react-native';
 import { GestureHandlerRootView, PanGestureHandler, State } from 'react-native-gesture-handler';
-import Scroll from './Scroll';
 import SearchBar from './SearchBar';
+import Button from './button';
+import Mine from './Blog_mydata';
 
-
+const data = [
+  { key: '1', component: <TouchableOpacity><Text>맛집 아이콘 자리</Text></TouchableOpacity> },
+  { key: '2', component: <TouchableOpacity><Text>추천 여행지 아이콘 자리</Text></TouchableOpacity> },
+  { key: '3', component : <Mine/>},
+  { key: '4', component : <Button/>},
+  { key: '5', component : <Button/>},
+  // 더 많은 아이템 추가
+];
+const Separator = () => (
+  <View style={styles.separator}></View>
+);
+const renderItem = ({ item }) => {
+  return (
+    <View style={styles.item}>
+      {item.component}
+    </View>
+  );
+};
 const SlideLayer = () => {
   const [isOpen, setIsOpen] = useState(true);
 
@@ -73,7 +91,12 @@ const SlideLayer = () => {
         >
           {/* 슬라이드 레이어 내용 */}
           <SearchBar/>
-          <Scroll/>
+          <FlatList 
+          data={data}
+          keyExtractor={(item) => item.key}
+          renderItem={renderItem}
+          ItemSeparatorComponent={Separator}
+          />
         </Animated.View>
       </PanGestureHandler>
     </View>
@@ -100,6 +123,14 @@ const styles = StyleSheet.create({
     elevation: 5, // Android에서 그림자 효과
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  item: {
+    padding: 16,
+    backgroundColor: 'white',
+  },
+  separator: {
+    height: 3, // 간격의 높이 조절
+    backgroundColor: 'black', // 간격의 색상 조절
   },
 });
 

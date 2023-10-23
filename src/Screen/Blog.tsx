@@ -3,6 +3,7 @@ import { View,Image, Text, StyleSheet, FlatList, SafeAreaView,TouchableOpacity }
 import Nav from "./nav";
 import BlogSearch from "./BlogSearch"
 import Mine from "./Blog_mydata";
+import { useNavigation } from '@react-navigation/native';
 
 const userData = {
   username: '작성자 아이디',
@@ -15,12 +16,12 @@ const explain ={
 const blogData = [
   { id: 1,
      title: '예시 1 - 블로그 제목',
-     imageUri: require('./src/pics/광안대교.jpg'),
+     imageUri: require('../pics/광안대교.jpg'),
      content: '블로그 내용 1', 
      date: '2023.10.13' },
-  { id: 2, title: '예시 2',imageUri: require('./src/pics/영도대교.png'),content:  '블로그 내용 2', date: '2023.10.14' },
-  { id: 3, title: '예시 3',imageUri: require('./src/pics/광안대교.jpg'),content:  '블로그 내용 3', date: '2023.10.15' },
-  { id: 4, title: '예시 4',imageUri: require('./src/pics/광안대교.jpg'),content:  '블로그 내용 4', date: '2023.10.16' },
+  { id: 2, title: '예시 2',imageUri: require('../pics/영도대교.png'),content:  '블로그 내용 2', date: '2023.10.14' },
+  { id: 3, title: '예시 3',imageUri: require('../pics/광안대교.jpg'),content:  '블로그 내용 3', date: '2023.10.15' },
+  { id: 4, title: '예시 4',imageUri: require('../pics/광안대교.jpg'),content:  '블로그 내용 4', date: '2023.10.16' },
   // 다른 블로그 내용들 추가
 ];
 
@@ -29,6 +30,10 @@ const IntoBlog =()=>{
 };
 
 const BlogScreen = () => {
+  const navigation  = useNavigation();
+  const IntoEditor=()=>{
+    navigation.navigate('Editor');
+  }
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.menu}> 
@@ -39,10 +44,15 @@ const BlogScreen = () => {
         <BlogSearch/>
       </View>
       <Mine/>
-      <View style={styles.button}>
+      <View style={styles.button2}>
         <Text style={styles.explain}>{explain.ex}</Text>
       </View>
       <View style={styles.separator} />
+      <View>
+        <TouchableOpacity onPress={IntoEditor}>
+          <Text style={styles.button}>글 작성하기</Text>
+        </TouchableOpacity>
+      </View>
       <FlatList
         data={blogData}
         keyExtractor={(item) => item.id.toString()}
@@ -84,6 +94,15 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign : "right",
     marginBottom: 10,
+  },
+  button: {
+    color : 'white',
+    backgroundColor: '#00B292', // 버튼 배경색
+    paddingVertical: 8, // 세로 방향 padding
+    paddingHorizontal: 5, // 가로 방향 padding
+    width : '23.8%',
+    borderRadius: 5,
+    marginRight : 5,
   },
   overlay: {
     ...StyleSheet.absoluteFillObject, // 컨테이너 전체를 채우도록 스타일 적용
@@ -128,7 +147,7 @@ const styles = StyleSheet.create({
   blogDate:{
     color:'white',
   },
-  button: {
+  button2: {
     marginTop: 50,
   }
 });

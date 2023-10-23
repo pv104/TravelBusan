@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, Modal } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { useNavigation } from '@react-navigation/native';
 
 const NavigationBarButton = () => {
   const [isActive, setIsActive] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
-
+  const navigation  = useNavigation();
   const toggleButton = () => {
     setIsModalVisible(!isModalVisible);
     setIsActive(!isActive);
@@ -18,12 +19,19 @@ const NavigationBarButton = () => {
 
   const handleLogin = () => {
     toggleModal(); // 모달 닫기
+    navigation.navigate('Login');
   };
   const handleBlog = () => {
     toggleModal(); // 모달 닫기
+    navigation.navigate('Blog');
   };
   const handleCommunity = () => {
     toggleModal(); // 모달 닫기
+    navigation.navigate('Community');
+  };
+  const handleMaps =() =>{
+    toggleModal();
+    navigation.navigate('Maps');
   };
 
   return (
@@ -51,6 +59,9 @@ const NavigationBarButton = () => {
           </TouchableOpacity>
           <TouchableOpacity onPress={handleCommunity}>
             <Text style={styles.loginButton}>Community</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleMaps}>
+            <Text style={styles.loginButton}>MAPS</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={toggleModal}>
             <Text style={styles.closeButton}>Close</Text>

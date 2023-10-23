@@ -2,6 +2,7 @@ import React from 'react';
 import { View,Image, Text, StyleSheet, FlatList, SafeAreaView,TouchableOpacity } from 'react-native';
 import Nav from "./nav";
 import Mine from "./Blog_mydata";
+import { useNavigation } from '@react-navigation/native';
 const CommunityData =[
   {Title:"부산 여행 추천 쫌", Writer : "여행자", Date : "15:39"},
   {Title:"어디가 좋을까", Writer : "웨어", Date : "15:39"},
@@ -12,12 +13,15 @@ const CommunityData =[
   {Title:"백에서 받을 예정", Writer : "ㅇㅇ3", Date : "11:30"},
   {Title:"테스트 중", Writer : "ㅇㅇ4", Date : "10:30"},
 ];
-const handleSign =() =>{
-};
-const IntoContent =()=>{
 
-};
 const Community =()=>{
+  const navigation  = useNavigation();
+  const handleSign =() =>{
+    navigation.navigate('Editor_CM')
+  };
+  const IntoContent =()=>{
+  
+  };
     return(
         <View style = {styles.container}>
             <View style={styles.menu}>
