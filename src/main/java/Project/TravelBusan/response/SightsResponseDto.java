@@ -1,6 +1,6 @@
 package Project.TravelBusan.response;
 
-import Project.TravelBusan.domain.Member;
+import Project.TravelBusan.domain.User;
 import Project.TravelBusan.domain.Sights;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +19,7 @@ public class SightsResponseDto {
     private String like;
     private int rate;
     private String type;
-    private Member member;
+    private User User;
 
 
     public static SightsResponseDto toDto(Sights sights) {
@@ -35,7 +35,7 @@ public class SightsResponseDto {
                 sights.getLike(),
                 sights.getRate(),
                 sights.getType(),
-                sights.getMember()
+                sights.getUser()
         );
     }
 

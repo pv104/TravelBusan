@@ -1,78 +1,193 @@
 package Project.TravelBusan.service;
-import java.util.Collections;
 
-import Project.TravelBusan.request.UserDto;
+
 import Project.TravelBusan.domain.Authority;
 import Project.TravelBusan.domain.User;
-import Project.TravelBusan.exception.DuplicateMemberException;
-import Project.TravelBusan.exception.NotFoundMemberException;
+import Project.TravelBusan.exception.DuplicateUserException;
+import Project.TravelBusan.exception.NotFoundUserException;
 import Project.TravelBusan.repository.UserRepository;
+import Project.TravelBusan.request.UserJoinRequestDto;
+import Project.TravelBusan.request.UserLoginRequestDto;
+import Project.TravelBusan.request.UserModifyRequestDto;
+import Project.TravelBusan.response.UserListResponseDto;
+import Project.TravelBusan.response.UserLoginResponseDto;
 import Project.TravelBusan.response.ResponseDto;
 import Project.TravelBusan.util.SecurityUtil;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 @Service
+@Slf4j
+@Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class UserService {
+
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
-
+    /**
+     * 회원 가입
+     */
     @Transactional
-    public UserDto signup(UserDto userDto) {
-        if (userRepository.findOneWithAuthoritiesByUsername(userDto.getUsername()).orElse(null) != null) {
-            throw new DuplicateMemberException("이미 가입되어 있는 유저입니다.");
+    public ResponseDto<UserLoginResponseDto> join(UserJoinRequestDto userJoinRequestDto) {
+        /*if (isPresentUsername(userJoinRequestDto.getUsername())) {
+            throw new DuplicateUserException("이미 존재하는 아이디 입니다");
         }
 
-        Authority authority = Authority.builder()
-                .authorityName("ROLE_USER")
-                .build();
+        if(!userJoinRequestDto.getPassword().equals(userJoinRequestDto.getPasswordCheck())){
+            logger.info(" original : {}",userJoinRequestDto.getPassword());
+            logger.info(" Check :  {}", userJoinRequestDto.getPasswordCheck());
+            throw new IllegalStateException("비빌번호와 비밀번호 확인이 일치하지 않습니다");
+        }*/
 
-        User user = User.builder()
-                .username(userDto.getUsername())
-                .password(passwordEncoder.encode(userDto.getPassword()))
-                .nickname(userDto.getNickname())
-                .authorities(Collections.singleton(authority))
-                .activated(true)
-                .build();
+            Authority authority = Authority.builder()
+                    .authorityName("ROLE_USER")
+                    .build();
 
-        return UserDto.from(userRepository.save(user));
+
+                User user = User.builder()
+                        .nickname(userJoinRequestDto.getNickname())
+                        .username(userJoinRequestDto.getUsername())
+                        .password(passwordEncoder.encode(userJoinRequestDto.getPassword()))
+                        .email(userJoinRequestDto.getEmail())
+                        .authorities((Collections.singleton(authority)))
+                        .activated(true)
+                        .build();
+
+                userRepository.save(user);
+
+            return ResponseDto.success("회원가입 성공",
+                    UserLoginResponseDto.builder()
+                            .id(user.getId())
+                            .nickname(user.getNickname())
+                            .build()
+            );
+
+        }
+
+
+
+
+    public boolean isPresentUsername(String username) {
+        return userRepository.findByUsername(username).isPresent();
     }
 
 
-    @Transactional
-    public ResponseDto<?> login(UserDto userDto)
-    {
-        User user = userRepository.findByUsername(userDto.getUsername()).orElseThrow(() ->
-                new IllegalStateException("존재하지 않는 아이디 입니다"));
+    /**
+     * 로그인
+     */
+    public ResponseDto<UserLoginResponseDto> login(UserLoginRequestDto userLoginRequestDto){
+        User user = userRepository.findByUsername(userLoginRequestDto.getUsername()).orElseThrow(() ->
+                new DuplicateUserException("존재하지 않는 아이디 입니다"));
 
-        if(!passwordEncoder.matches(userDto.getPassword(), user.getPassword())){
+        if(!passwordEncoder.matches(userLoginRequestDto.getPassword(), user.getPassword())){
             throw new IllegalStateException("패스워드가 일치하지 않습니다");
         }
 
         return ResponseDto.success("로그인 성공",
-                UserDto.builder()
-                        .username(user.getUsername())
+                UserLoginResponseDto.builder()
+                        .id(user.getId())
+                        .nickname(user.getNickname())
                         .build()
         );
     }
 
-    @Transactional(readOnly = true)
-    public UserDto getUserWithAuthorities(String username) {
-        return UserDto.from(userRepository.findOneWithAuthoritiesByUsername(username).orElse(null));
+    /**
+     * 회원 상세 조회
+     */
+    public ResponseDto<UserListResponseDto> findById(Long userId) {
+        User user = userRepository.findByIdOrElseThrow(userId);
+
+        return ResponseDto.success("회원 조회 성공",
+                UserListResponseDto.builder()
+                        .id(user.getId())
+                        .username(user.getUsername())
+                        .nickname(user.getNickname())
+                        .email(user.getEmail())
+                        .creDate(user.getCreDate())
+                        .build()
+        );
     }
 
+    /**
+     * 회원 전체 조회
+     */
+    public ResponseDto<List<UserListResponseDto>> findAllUsers() {
+        List<User> users = userRepository.findAll();
+        List<UserListResponseDto> userListResponseDto = new ArrayList<>();
+
+        for (User user : users) {
+            UserListResponseDto dto = UserListResponseDto.builder()
+                    .id(user.getId())
+                    .username(user.getUsername())
+                    .nickname(user.getNickname())
+                    .email(user.getEmail())
+                    .creDate(user.getCreDate())
+                    .build();
+            userListResponseDto.add(dto);
+        }
+        return ResponseDto.success("전체 회원 조회 성공", userListResponseDto);
+    }
+
+
+    /**
+     * 회원 수정
+     */
+    @Transactional
+    public ResponseDto<UserListResponseDto> updateUserById(Long userId, UserModifyRequestDto userModifyRequestDto) {
+        User user = userRepository.findByIdOrElseThrow(userId);
+
+        if(!userModifyRequestDto.getPassword().equals(userModifyRequestDto.getPasswordCheck())){
+            throw new IllegalStateException("새 비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+
+        }
+
+        user.modifyUser(passwordEncoder.encode(userModifyRequestDto.getPassword()), userModifyRequestDto.getEmail(), userModifyRequestDto.getNickname());
+
+        userRepository.save(user);
+
+        return ResponseDto.success("회원 수정 성공",
+                UserListResponseDto.builder()
+                        .id(user.getId())
+                        .username(user.getUsername())
+                        .nickname(user.getNickname())
+                        .email(user.getEmail())
+                        .creDate(user.getCreDate())
+                        .build()
+                );
+    }
+
+
+    /**
+     * 회원 삭제
+     */
+    @Transactional
+    public ResponseDto<Void> deleteById(Long userId) {
+        User user = userRepository.findByIdOrElseThrow(userId);
+        userRepository.deleteById(user.getId());
+        return ResponseDto.success("회원 삭제 성공",null);
+    }
     @Transactional(readOnly = true)
-    public UserDto getMyUserWithAuthorities() {
-        return UserDto.from(
+    public UserJoinRequestDto getUserWithAuthorities(String username) {
+        return UserJoinRequestDto.from(userRepository.findOneWithAuthoritiesByUsername(username).orElse(null));
+    }
+    @Transactional(readOnly = true)
+    public UserLoginRequestDto getMyUserWithAuthorities() {
+        return UserLoginRequestDto.from(
                 SecurityUtil.getCurrentUsername()
                         .flatMap(userRepository::findOneWithAuthoritiesByUsername)
-                        .orElseThrow(() -> new NotFoundMemberException("Member not found"))
+                        .orElseThrow(() -> new NotFoundUserException("User not found"))
         );
     }
 }
+

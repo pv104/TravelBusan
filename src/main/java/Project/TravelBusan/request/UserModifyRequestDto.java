@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MemberModifyRequestDto {
+public class UserModifyRequestDto {
 
     private String password;
     private String passwordCheck;

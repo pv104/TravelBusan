@@ -4,8 +4,8 @@ import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 
 import Project.TravelBusan.request.ErrorDto;
-import Project.TravelBusan.exception.DuplicateMemberException;
-import Project.TravelBusan.exception.NotFoundMemberException;
+import Project.TravelBusan.exception.DuplicateUserException;
+import Project.TravelBusan.exception.NotFoundUserException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -18,14 +18,14 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class RestResponseExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ResponseStatus(CONFLICT)
-    @ExceptionHandler(value = { DuplicateMemberException.class })
+    @ExceptionHandler(value = { DuplicateUserException.class })
     @ResponseBody
     protected ErrorDto conflict(RuntimeException ex, WebRequest request) {
         return new ErrorDto(CONFLICT.value(), ex.getMessage());
     }
 
     @ResponseStatus(FORBIDDEN)
-    @ExceptionHandler(value = { NotFoundMemberException.class, AccessDeniedException.class })
+    @ExceptionHandler(value = { NotFoundUserException.class, AccessDeniedException.class })
     @ResponseBody
     protected ErrorDto forbidden(RuntimeException ex, WebRequest request) {
         return new ErrorDto(FORBIDDEN.value(), ex.getMessage());

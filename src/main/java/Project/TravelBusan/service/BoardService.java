@@ -2,9 +2,9 @@ package Project.TravelBusan.service;
 
 
 import Project.TravelBusan.domain.Board;
-import Project.TravelBusan.domain.Member;
+import Project.TravelBusan.domain.User;
 import Project.TravelBusan.repository.BoardRepository;
-import Project.TravelBusan.repository.MemberRepository;
+import Project.TravelBusan.repository.UserRepository;
 import Project.TravelBusan.request.BoardModifyRequestDto;
 import Project.TravelBusan.request.BoardRequestDto;
 import Project.TravelBusan.response.BoardListResponseDto;
@@ -26,26 +26,26 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class BoardService {
 
-    private final MemberRepository memberRepository;
+    private final UserRepository userRepository;
     private final BoardRepository boardRepository;
 
     /**
      * 게시글 생성
      */
     @Transactional
-    public ResponseDto<BoardSaveResponseDto> addBoard(BoardRequestDto boardRequestDto, Long memberId) {
+    public ResponseDto<BoardSaveResponseDto> addBoard(BoardRequestDto boardRequestDto, Long userId) {
         // 작성자 정보 받아와야됨
-        Member member = memberRepository.findByIdOrElseThrow(memberId);
+        User user = userRepository.findByIdOrElseThrow(userId);
 
-        boardRequestDto.updateCreateBy(1L, 0L, member);
+        boardRequestDto.updateCreateBy(1L, 0L, user);
 
         Board board = Board.builder()
                 .title(boardRequestDto.getTitle())
                 .content(boardRequestDto.getContent())
-                .nickname(boardRequestDto.getMember().getNickname())
+                .nickname(boardRequestDto.getUser().getNickname())
                 .visit(boardRequestDto.getVisit())
                 .likeCount(boardRequestDto.getLikeCount())
-                .member(boardRequestDto.getMember())
+                .user(boardRequestDto.getUser())
                 .build();
 
         boardRepository.save(board);
@@ -56,7 +56,7 @@ public class BoardService {
                         .id(board.getId())
                         .title(board.getTitle())
                         .content(board.getContent())
-                        .nickname(board.getMember().getNickname())
+                        .nickname(board.getUser().getNickname())
                         .visit(board.getVisit())
                         .likeCount(board.getLikeCount())
                         .creDate(board.getCreDate())

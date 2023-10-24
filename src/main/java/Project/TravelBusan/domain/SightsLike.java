@@ -23,6 +23,6 @@ public class SightsLike {
     private Sights sights;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
+    @JoinColumn(name = "user_id")
+    private User User;
 }

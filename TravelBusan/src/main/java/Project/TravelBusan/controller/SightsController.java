@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/members")
+@RequestMapping("/users")
 public class SightsController {
 }

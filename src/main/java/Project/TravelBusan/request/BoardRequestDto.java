@@ -1,6 +1,6 @@
 package Project.TravelBusan.request;
 
-import Project.TravelBusan.domain.Member;
+import Project.TravelBusan.domain.User;
 import lombok.Builder;
 import lombok.Data;
 
@@ -12,11 +12,11 @@ public class BoardRequestDto {
     private String nickname;
     private Long visit;
     private Long likeCount;
-    private Member member;
+    private User user;
 
-    public void updateCreateBy(Long visit,Long likeCount,Member member) {
+    public void updateCreateBy(Long visit, Long likeCount, User user) {
         this.visit = visit;
         this.likeCount = likeCount;
-        this.member = member;
+        this.user = user;
     }
 }

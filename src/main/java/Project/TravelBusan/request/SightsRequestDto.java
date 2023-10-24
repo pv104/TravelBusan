@@ -1,7 +1,7 @@
 package Project.TravelBusan.request;
 
 
-import Project.TravelBusan.domain.Member;
+import Project.TravelBusan.domain.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;

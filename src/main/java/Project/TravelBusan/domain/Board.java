@@ -33,18 +33,18 @@ public class Board {
     private Long visit;
 
     @CreationTimestamp
-    @Column(name = "cre_date")
+    @Column(name = "credate")
     private Timestamp creDate;
 
-    @Column(name = "del_date")
+    @Column(name = "deldate")
     private Timestamp delDate;
 
     @ColumnDefault("N")
     private String state;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public void modifyBoard(String title, String content) {
         this.title = title;

@@ -1,6 +1,6 @@
 package Project.TravelBusan.request;
 
-import Project.TravelBusan.domain.Member;
+import Project.TravelBusan.domain.User;
 import lombok.Builder;
 import lombok.Data;
 

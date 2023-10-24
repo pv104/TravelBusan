@@ -1,42 +1,33 @@
 package Project.TravelBusan.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.*;
-import Project.TravelBusan.domain.User;
 
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import Project.TravelBusan.domain.User;
+import lombok.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Getter
-@Setter
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class UserDto {
+@AllArgsConstructor
+@Builder
+public class UserJoinRequestDto {
 
-    @NotNull
-    @Size(min = 3, max = 50)
-    private String username;
-
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @NotNull
-    @Size(min = 3, max = 100)
-    private String password;
-
-    @NotNull
-    @Size(min = 3, max = 50)
     private String nickname;
-
+    private String username;
+    private String password;
+    private String passwordCheck;
+    private String email;
     private Set<AuthorityDto> authorityDtoSet;
-
-    public static UserDto from(User user) {
+    public static UserJoinRequestDto from(User user) {
         if(user == null) return null;
 
-        return UserDto.builder()
+        return UserJoinRequestDto.builder()
                 .username(user.getUsername())
                 .nickname(user.getNickname())
+                .password(user.getPassword())
                 .authorityDtoSet(user.getAuthorities().stream()
                         .map(authority -> AuthorityDto.builder().authorityName(authority.getAuthorityName()).build())
                         .collect(Collectors.toSet()))

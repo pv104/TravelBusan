@@ -23,8 +23,8 @@ public class BoardLike{
     private Board board;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
+    @JoinColumn(name = "User_id")
+    private User User;
 
 
 }

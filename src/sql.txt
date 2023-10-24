@@ -1,7 +1,7 @@
 
 
-CREATE TABLE `MEMBER` (
-                          `member_id` BIGINT NOT NULL AUTO_INCREMENT,
+CREATE TABLE `USER` (
+                          `user_id` BIGINT NOT NULL AUTO_INCREMENT,
                           `id` VARCHAR(50) NOT NULL,
                           `password` VARCHAR(100) NOT NULL,
                           `email` VARCHAR(100) NOT NULL,
@@ -10,7 +10,7 @@ CREATE TABLE `MEMBER` (
                           `del_date` TIMESTAMP NULL,
                           `state` VARCHAR(1) NULL DEFAULT 'N',
                           `grade` VARCHAR(1) NOT NULL DEFAULT 'M',
-                          PRIMARY KEY (`member_id`)
+                          PRIMARY KEY (`user_id`)
 );
 
 DROP TABLE BOARD;
@@ -25,9 +25,9 @@ CREATE TABLE `BOARD` (
                          `cre_date`	TIMESTAMP	NOT NULL,
                          `del_date`	TIMESTAMP	NULL,
                          `state`	VARCHAR(1)	NULL	DEFAULT 'N',
-                         `member_id`	BIGINT	NOT NULL,
+                         `user_id`	BIGINT	NOT NULL,
                          PRIMARY KEY (`board_id`),
-                         FOREIGN KEY (`member_id`) REFERENCES `MEMBER` (`member_id`)
+                         FOREIGN KEY (`user_id`) REFERENCES `USER` (`user_id`)
 );
 
 
@@ -35,10 +35,10 @@ DROP TABLE BOARD_LIKE;
 CREATE TABLE `BOARD_LIKE` (
                               `like_id`	BIGINT	NOT NULL AUTO_INCREMENT,
                               `board_id` BIGINT NOT NULL,
-                              `member_id` BIGINT NOT NULL,
+                              `user_id` BIGINT NOT NULL,
                               PRIMARY KEY (`like_id`),
                               FOREIGN KEY (`board_id`) REFERENCES `BOARD` (`board_id`),
-                              FOREIGN KEY (`member_id`) REFERENCES `MEMBER` (`member_id`)
+                              FOREIGN KEY (`user_id`) REFERENCES `USER` (`user_id`)
 );
 
 
@@ -51,10 +51,10 @@ CREATE TABLE `BOARD_COMMENT` (
                                  `state`	VARCHAR(1)	NULL	DEFAULT 'N',
                                  `parent_id`	BIGINT	NULL,
                                  `board_id`	BIGINT	NOT NULL,
-                                 `member_id`	BIGINT	NOT NULL,
+                                 `user_id`	BIGINT	NOT NULL,
                                  PRIMARY KEY (`comment_id`),
                                  FOREIGN KEY (`board_id`) REFERENCES `BOARD` (`board_id`),
-                                 FOREIGN KEY (`member_id`) REFERENCES `MEMBER` (`member_id`)
+                                 FOREIGN KEY (`user_id`) REFERENCES `USER` (`user_id`)
 );
 
 CREATE TABLE `TB_BOARD_COMMENT` (
@@ -66,11 +66,11 @@ CREATE TABLE `TB_BOARD_COMMENT` (
                                     `state`	VARCHAR(1)	NULL	DEFAULT 'N',
                                     `parent_id` BIGINT,
                                     `board_id` BIGINT,
-                                    `member_id` BIGINT,
+                                    `user_id` BIGINT,
                                     PRIMARY KEY (`comment_id`),
                                     FOREIGN KEY (`parent_id`) REFERENCES `TB_BOARD_COMMENT` (`comment_id`),
                                     FOREIGN KEY (`board_id`) REFERENCES `BOARD` (`board_id`),
-                                    FOREIGN KEY (`member_id`) REFERENCES `MEMBER` (`member_id`)
+                                    FOREIGN KEY (`user_id`) REFERENCES `USER` (`user_id`)
 );
 
 
@@ -88,18 +88,18 @@ CREATE TABLE `SIGHTS` (
                           `like`	BIGINT	NULL	DEFAULT 0,
                           `rate`	INT	NULL	DEFAULT 0,
                           `isSights`	VARCHAR(10)	NOT NULL	DEFAULT 0	COMMENT '1=관광지,2=맛집',
-                          `member_id`	BIGINT	NOT NULL,
+                          `user_id`	BIGINT	NOT NULL,
                           PRIMARY KEY (`sights_id`),
-                          FOREIGN KEY (`member_id`) REFERENCES `MEMBER` (`member_id`)
+                          FOREIGN KEY (`user_id`) REFERENCES `USER` (`user_id`)
 );
 
 CREATE TABLE `SIGHTS_LIKE` (
                                `like_id`	BIGINT	NOT NULL AUTO_INCREMENT,
                                `sights_id`	BIGINT	NOT NULL,
-                               `member_id`	BIGINT	NOT NULL,
+                               `user_id`	BIGINT	NOT NULL,
                                PRIMARY KEY (`like_id`),
                                FOREIGN KEY (`sights_id`) REFERENCES `SIGHTS` (`sights_id`),
-                               FOREIGN KEY (`member_id`) REFERENCES `MEMBER` (`member_id`)
+                               FOREIGN KEY (`user_id`) REFERENCES `USER` (`user_id`)
 );
 
 CREATE TABLE `SIGHTS_REVIEW` (
@@ -112,10 +112,10 @@ CREATE TABLE `SIGHTS_REVIEW` (
                                  `img`	VARCHAR(500)	NULL,
                                  `state`	VARCHAR(1)	NOT NULL	DEFAULT 'N',
                                  `sights_id`	BIGINT	NOT NULL,
-                                 `member_id`	BIGINT	NOT NULL,
+                                 `user_id`	BIGINT	NOT NULL,
                                  PRIMARY KEY (`review_id`),
                                  FOREIGN KEY (`sights_id`) REFERENCES `SIGHTS` (`sights_id`),
-                                 FOREIGN KEY (`member_id`) REFERENCES `MEMBER` (`member_id`)
+                                 FOREIGN KEY (`user_id`) REFERENCES `USER` (`user_id`)
 );
 CREATE TABLE `user` (
                                 `username` VARCHAR(10),

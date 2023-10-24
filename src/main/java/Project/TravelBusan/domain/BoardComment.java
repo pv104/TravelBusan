@@ -27,10 +27,10 @@ public class BoardComment{
     private String writer;
 
     @CreationTimestamp
-    @Column(name = "cre_date")
+    @Column(name = "credate")
     private Timestamp creDate;
 
-    @Column(name = "del_date")
+    @Column(name = "deldate")
     private Timestamp delDate;
 
     @ColumnDefault("N")
@@ -45,8 +45,8 @@ public class BoardComment{
     private Board board;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @OneToMany(mappedBy = "parent", orphanRemoval = true)
     private List<BoardComment> children = new ArrayList<>();

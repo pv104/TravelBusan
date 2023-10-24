@@ -1,8 +1,8 @@
 package Project.TravelBusan.service;
 
-import Project.TravelBusan.domain.Member;
+import Project.TravelBusan.domain.User;
 import Project.TravelBusan.domain.Sights;
-import Project.TravelBusan.repository.MemberRepository;
+import Project.TravelBusan.repository.UserRepository;
 import Project.TravelBusan.repository.SightsRepository;
 import Project.TravelBusan.request.SightsRequestDto;
 import Project.TravelBusan.response.ResponseDto;
@@ -22,17 +22,17 @@ import java.util.stream.Collectors;
 public class SightsService {
 
     private final SightsRepository sightsRepository;
-    private final MemberRepository memberRepository;
+    private final UserRepository userRepository;
 
     /**
      * 명소 등록
      */
     @Transactional
-    public ResponseDto<?> saveSights(SightsRequestDto sightsRequestDto,Long memberId) {
-        Member member = memberRepository.findByIdOrElseThrow(memberId);
+    public ResponseDto<?> saveSights(SightsRequestDto sightsRequestDto,Long userId) {
+        User user = userRepository.findByIdOrElseThrow(userId);
 
         Sights sights = Sights.builder()
-                .name(member.getNickname())
+                .name(user.getNickname())
                 .info(sightsRequestDto.getInfo())
                 .addr(sightsRequestDto.getAddr())
                 .mapx(sightsRequestDto.getMapx())
@@ -40,7 +40,6 @@ public class SightsService {
                 .img(sightsRequestDto.getImg())
                 .city(sightsRequestDto.getCity())
                 .type(sightsRequestDto.getType())
-                .member(member)
                 .build();
 
         sightsRepository.save(sights);

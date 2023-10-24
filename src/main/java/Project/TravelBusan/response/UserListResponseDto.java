@@ -6,7 +6,7 @@ import java.sql.Timestamp;
 
 @Getter
 @Builder
-public class MemberListResponseDto {
+public class UserListResponseDto {
     private Long id;
     private String username;
     private String nickname;
