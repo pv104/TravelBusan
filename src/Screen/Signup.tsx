@@ -3,7 +3,15 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Button } from 'react-native';
 import Modal from 'react-native-modal'
 import Nav from './nav';
-
+import axios from 'axios';
+import qs from 'qs';
+/*.post('http://localhost:8080/api/signup',qs.stringify
+      ({
+        userName: userName,
+        password: password,
+        email: email,
+        nickName: nickName,
+      }))*/
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -12,12 +20,27 @@ const LoginScreen = ({ navigation }) => {
   const [nickName, setnickName] = useState('');
   const [isModalVisible, setModalVisible] = useState(false);
 
-  const handleSignup = () => {
+  const  handleSignup = ()=>{
     // 여기에 로그인 로직을 구현합니다.
     // 로그인이 성공하면 다음 화면으로 이동할 수 있습니다.
     if(password == checkpassword)
     {
-        navigation.navigate('Home'); // Home은 다음 화면의 이름 (설정에 따라 다를 수 있음)
+      console.log('진입');
+      axios({
+        method: "post",
+        url : "http://127.0.0.1/api/signup",
+        data:{
+          userName : userName,
+          password: password,
+          email : email,
+          nickName : nickName
+        }
+      })
+      .then(res =>{
+      console.log(res.data);
+      navigation.pop();
+    })
+    .catch(error =>{ console.log(error)});
     }
     else//password != checkpassword
     {

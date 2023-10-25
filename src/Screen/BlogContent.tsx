@@ -19,11 +19,11 @@ const BlogEditor = () => {
       },
     };
   
-    ImagePicker.launchImageLibrary(option, (response) => {
+    /*ImagePicker.launchImageLibrary(option, (response) => {
       if (response.didCancel) {
         console.log('사용자가 이미지 선택을 취소했습니다.');
       }
-    });
+    });*/
   };
 
   const handleSubmit = () => {

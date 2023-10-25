@@ -1,3 +1,7 @@
 {
-    "java.compile.nullAnalysis.mode": "automatic"
+    "java.compile.nullAnalysis.mode": "automatic",
+    "code-runner.executorMap":{
+        "terminal.integrated.shell.windows": "C:\\Windows\\sysnative\\cmd.exe",
+    }
+    
 }
