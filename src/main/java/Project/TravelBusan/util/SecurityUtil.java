@@ -21,7 +21,7 @@ public class SecurityUtil {
             logger.debug("Security Context에 인증 정보가 없습니다.");
             return Optional.empty();
         }
-
+        logger.info(authentication.toString());
         String username = null;
         if (authentication.getPrincipal() instanceof UserDetails) {
             UserDetails springSecurityUser = (UserDetails) authentication.getPrincipal();

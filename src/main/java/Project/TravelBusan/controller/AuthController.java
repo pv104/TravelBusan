@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -39,14 +40,14 @@ public class AuthController {
         this.userRepository = userRepository;
     }
 
-    @PostMapping("/login")
+    @PostMapping("/authenticate")
     public ResponseEntity<TokenDto> authorize(@Valid @RequestBody UserLoginRequestDto userLoginRequestDto) {
 
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(userLoginRequestDto.getUsername(), userLoginRequestDto.getPassword());
+
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
 
         String jwt = tokenProvider.createToken(authentication);
 
@@ -55,9 +56,13 @@ public class AuthController {
 
         return new ResponseEntity<>(new TokenDto(jwt), httpHeaders, HttpStatus.OK);
     }
+    @PostMapping("/login")
+    public ResponseDto<UserLoginResponseDto> userLogin(@RequestBody UserLoginRequestDto userLoginRequestDto){
+        return userService.login(userLoginRequestDto);
+    }
     @PostMapping("/signup")
     public ResponseDto<UserLoginResponseDto> userAdd(@RequestBody UserJoinRequestDto userJoinRequestDto) {
-
+    // 위 authenticate에 있는 코드가 들어와야 토큰을 생성할 수 있음
         return userService.join(userJoinRequestDto);
     }
 

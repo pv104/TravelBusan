@@ -147,10 +147,10 @@ public class UserService {
     public ResponseDto<UserListResponseDto> updateUserById(Long userId, UserModifyRequestDto userModifyRequestDto) {
         User user = userRepository.findByIdOrElseThrow(userId);
 
-        if(!userModifyRequestDto.getPassword().equals(userModifyRequestDto.getPasswordCheck())){
+       /* if(!userModifyRequestDto.getPassword().equals(userModifyRequestDto.getPasswordCheck())){
             throw new IllegalStateException("새 비밀번호와 비밀번호 확인이 일치하지 않습니다.");
 
-        }
+        }*/
 
         user.modifyUser(passwordEncoder.encode(userModifyRequestDto.getPassword()), userModifyRequestDto.getEmail(), userModifyRequestDto.getNickname());
 
@@ -176,17 +176,17 @@ public class UserService {
         User user = userRepository.findByIdOrElseThrow(userId);
         userRepository.deleteById(user.getId());
         return ResponseDto.success("회원 삭제 성공",null);
+    }@Transactional(readOnly = true)
+    public UserLoginRequestDto getUserWithAuthorities(String username) {
+        return UserLoginRequestDto.from(userRepository.findOneWithAuthoritiesByUsername(username).orElse(null));
     }
-    @Transactional(readOnly = true)
-    public UserJoinRequestDto getUserWithAuthorities(String username) {
-        return UserJoinRequestDto.from(userRepository.findOneWithAuthoritiesByUsername(username).orElse(null));
-    }
+
     @Transactional(readOnly = true)
     public UserLoginRequestDto getMyUserWithAuthorities() {
         return UserLoginRequestDto.from(
                 SecurityUtil.getCurrentUsername()
                         .flatMap(userRepository::findOneWithAuthoritiesByUsername)
-                        .orElseThrow(() -> new NotFoundUserException("User not found"))
+                        .orElseThrow(() -> new NotFoundUserException("Member not found"))
         );
     }
 }

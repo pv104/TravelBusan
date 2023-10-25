@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 @Builder
 public class UserJoinRequestDto {
 
+    private Long id;
     private String nickname;
     private String username;
     private String password;
@@ -25,6 +26,7 @@ public class UserJoinRequestDto {
         if(user == null) return null;
 
         return UserJoinRequestDto.builder()
+                .id(user.getId())
                 .username(user.getUsername())
                 .nickname(user.getNickname())
                 .password(user.getPassword())

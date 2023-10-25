@@ -34,6 +34,7 @@ public class JwtFilter extends GenericFilterBean {
 
             logger.info("Security Context에 '{}' 인증 정보를 저장했습니다, uri: {}", authentication.getName(), requestURI);
         } else {
+             //logger.info("유효한 JWT 토큰이 없습니다, uri: {}", jwt);
             logger.info("유효한 JWT 토큰이 없습니다, uri: {}", requestURI);
         }
 
@@ -42,7 +43,7 @@ public class JwtFilter extends GenericFilterBean {
 
     private String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
-
+        logger.info("bearerToken : {}",bearerToken);
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
         }

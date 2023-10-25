@@ -11,9 +11,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class UserModifyRequestDto {
-
+    private Long id;
     private String password;
-    private String passwordCheck;
     private String email;
     private String nickname;
 
