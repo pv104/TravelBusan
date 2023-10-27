@@ -1,4 +1,4 @@
-package Project.TravelBusan.request;
+package Project.TravelBusan.request.User;
 
 
 import lombok.AllArgsConstructor;

@@ -1,8 +1,8 @@
 package Project.TravelBusan.controller;
 
 import Project.TravelBusan.repository.UserRepository;
-import Project.TravelBusan.request.UserJoinRequestDto;
-import Project.TravelBusan.request.UserLoginRequestDto;
+import Project.TravelBusan.request.User.UserJoinRequestDto;
+import Project.TravelBusan.request.User.UserLoginRequestDto;
 import Project.TravelBusan.request.TokenDto;
 import Project.TravelBusan.jwt.JwtFilter;
 import Project.TravelBusan.jwt.TokenProvider;
@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;

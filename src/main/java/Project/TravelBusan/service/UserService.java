@@ -6,9 +6,9 @@ import Project.TravelBusan.domain.User;
 import Project.TravelBusan.exception.DuplicateUserException;
 import Project.TravelBusan.exception.NotFoundUserException;
 import Project.TravelBusan.repository.UserRepository;
-import Project.TravelBusan.request.UserJoinRequestDto;
-import Project.TravelBusan.request.UserLoginRequestDto;
-import Project.TravelBusan.request.UserModifyRequestDto;
+import Project.TravelBusan.request.User.UserJoinRequestDto;
+import Project.TravelBusan.request.User.UserLoginRequestDto;
+import Project.TravelBusan.request.User.UserModifyRequestDto;
 import Project.TravelBusan.response.UserListResponseDto;
 import Project.TravelBusan.response.UserLoginResponseDto;
 import Project.TravelBusan.response.ResponseDto;
@@ -40,15 +40,15 @@ public class UserService {
      */
     @Transactional
     public ResponseDto<UserLoginResponseDto> join(UserJoinRequestDto userJoinRequestDto) {
-        /*if (isPresentUsername(userJoinRequestDto.getUsername())) {
+        if (isPresentUsername(userJoinRequestDto.getUsername())) {
             throw new DuplicateUserException("이미 존재하는 아이디 입니다");
         }
 
-        if(!userJoinRequestDto.getPassword().equals(userJoinRequestDto.getPasswordCheck())){
-            logger.info(" original : {}",userJoinRequestDto.getPassword());
-            logger.info(" Check :  {}", userJoinRequestDto.getPasswordCheck());
-            throw new IllegalStateException("비빌번호와 비밀번호 확인이 일치하지 않습니다");
-        }*/
+//        if(!userJoinRequestDto.getPassword().equals(userJoinRequestDto.getPasswordCheck())){
+//            logger.info(" original : {}",userJoinRequestDto.getPassword());
+//            logger.info(" Check :  {}", userJoinRequestDto.getPasswordCheck());
+//            throw new IllegalStateException("비빌번호와 비밀번호 확인이 일치하지 않습니다");
+//        }
 
             Authority authority = Authority.builder()
                     .authorityName("ROLE_USER")
@@ -72,11 +72,7 @@ public class UserService {
                             .nickname(user.getNickname())
                             .build()
             );
-
         }
-
-
-
 
     public boolean isPresentUsername(String username) {
         return userRepository.findByUsername(username).isPresent();
@@ -93,7 +89,6 @@ public class UserService {
         if(!passwordEncoder.matches(userLoginRequestDto.getPassword(), user.getPassword())){
             throw new IllegalStateException("패스워드가 일치하지 않습니다");
         }
-
         return ResponseDto.success("로그인 성공",
                 UserLoginResponseDto.builder()
                         .id(user.getId())
@@ -105,7 +100,7 @@ public class UserService {
     /**
      * 회원 상세 조회
      */
-    public ResponseDto<UserListResponseDto> findById(Long userId) {
+    public ResponseDto<UserListResponseDto> detailUser(Long userId) {
         User user = userRepository.findByIdOrElseThrow(userId);
 
         return ResponseDto.success("회원 조회 성공",
@@ -122,7 +117,7 @@ public class UserService {
     /**
      * 회원 전체 조회
      */
-    public ResponseDto<List<UserListResponseDto>> findAllUsers() {
+    public ResponseDto<List<UserListResponseDto>> listUser() {
         List<User> users = userRepository.findAll();
         List<UserListResponseDto> userListResponseDto = new ArrayList<>();
 
@@ -144,14 +139,9 @@ public class UserService {
      * 회원 수정
      */
     @Transactional
-    public ResponseDto<UserListResponseDto> updateUserById(Long userId, UserModifyRequestDto userModifyRequestDto) {
+    public ResponseDto<UserListResponseDto> modifyUser(Long userId, UserModifyRequestDto userModifyRequestDto) {
         User user = userRepository.findByIdOrElseThrow(userId);
-
-       /* if(!userModifyRequestDto.getPassword().equals(userModifyRequestDto.getPasswordCheck())){
-            throw new IllegalStateException("새 비밀번호와 비밀번호 확인이 일치하지 않습니다.");
-
-        }*/
-
+        // 사용자 검증 필요
         user.modifyUser(passwordEncoder.encode(userModifyRequestDto.getPassword()), userModifyRequestDto.getEmail(), userModifyRequestDto.getNickname());
 
         userRepository.save(user);
@@ -172,16 +162,17 @@ public class UserService {
      * 회원 삭제
      */
     @Transactional
-    public ResponseDto<Void> deleteById(Long userId) {
+    public ResponseDto<Void> removeUser(Long userId) {
         User user = userRepository.findByIdOrElseThrow(userId);
+        // 사용자 검증 필요
         userRepository.deleteById(user.getId());
         return ResponseDto.success("회원 삭제 성공",null);
-    }@Transactional(readOnly = true)
+    }
+
     public UserLoginRequestDto getUserWithAuthorities(String username) {
         return UserLoginRequestDto.from(userRepository.findOneWithAuthoritiesByUsername(username).orElse(null));
     }
 
-    @Transactional(readOnly = true)
     public UserLoginRequestDto getMyUserWithAuthorities() {
         return UserLoginRequestDto.from(
                 SecurityUtil.getCurrentUsername()

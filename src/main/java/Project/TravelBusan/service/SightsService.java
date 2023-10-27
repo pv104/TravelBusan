@@ -4,7 +4,7 @@ import Project.TravelBusan.domain.User;
 import Project.TravelBusan.domain.Sights;
 import Project.TravelBusan.repository.UserRepository;
 import Project.TravelBusan.repository.SightsRepository;
-import Project.TravelBusan.request.SightsRequestDto;
+import Project.TravelBusan.request.Sights.SightsRequestDto;
 import Project.TravelBusan.response.ResponseDto;
 import Project.TravelBusan.response.SightsResponseDto;
 import lombok.RequiredArgsConstructor;

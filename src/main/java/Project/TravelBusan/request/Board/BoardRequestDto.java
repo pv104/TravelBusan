@@ -1,4 +1,4 @@
-package Project.TravelBusan.request;
+package Project.TravelBusan.request.Board;
 
 import Project.TravelBusan.domain.User;
 import lombok.Builder;

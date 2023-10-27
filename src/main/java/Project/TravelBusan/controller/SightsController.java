@@ -1,6 +1,6 @@
 package Project.TravelBusan.controller;
 
-import Project.TravelBusan.request.SightsRequestDto;
+import Project.TravelBusan.request.Sights.SightsRequestDto;
 import Project.TravelBusan.response.ResponseDto;
 import Project.TravelBusan.service.SightsService;
 import lombok.RequiredArgsConstructor;

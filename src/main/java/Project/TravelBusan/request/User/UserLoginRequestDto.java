@@ -1,10 +1,12 @@
-package Project.TravelBusan.request;
+package Project.TravelBusan.request.User;
 
 
 import Project.TravelBusan.domain.User;
-import lombok.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import Project.TravelBusan.request.AuthorityDto;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -13,23 +15,19 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserJoinRequestDto {
-
-    private Long id;
-    private String nickname;
+public class UserLoginRequestDto {
     private String username;
     private String password;
-    private String passwordCheck;
-    private String email;
+    private String nickname;
     private Set<AuthorityDto> authorityDtoSet;
-    public static UserJoinRequestDto from(User user) {
+
+    public static UserLoginRequestDto from(User user) {
         if(user == null) return null;
 
-        return UserJoinRequestDto.builder()
-                .id(user.getId())
+        return UserLoginRequestDto.builder()
                 .username(user.getUsername())
-                .nickname(user.getNickname())
                 .password(user.getPassword())
+                .nickname(user.getNickname())
                 .authorityDtoSet(user.getAuthorities().stream()
                         .map(authority -> AuthorityDto.builder().authorityName(authority.getAuthorityName()).build())
                         .collect(Collectors.toSet()))

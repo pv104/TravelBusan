@@ -1,4 +1,4 @@
-package Project.TravelBusan.request;
+package Project.TravelBusan.request.Sights;
 
 
 import Project.TravelBusan.domain.User;

@@ -5,8 +5,8 @@ import Project.TravelBusan.domain.Board;
 import Project.TravelBusan.domain.User;
 import Project.TravelBusan.repository.BoardRepository;
 import Project.TravelBusan.repository.UserRepository;
-import Project.TravelBusan.request.BoardModifyRequestDto;
-import Project.TravelBusan.request.BoardRequestDto;
+import Project.TravelBusan.request.Board.BoardModifyRequestDto;
+import Project.TravelBusan.request.Board.BoardRequestDto;
 import Project.TravelBusan.response.BoardListResponseDto;
 import Project.TravelBusan.response.BoardResponseDto;
 import Project.TravelBusan.response.BoardSaveResponseDto;
@@ -133,9 +133,9 @@ public class BoardService {
      * 게시글 삭제
      */
     @Transactional
-    public ResponseDto<Void> boardRemove(Long boardId) {
+    public ResponseDto<Void> removeBoard(Long boardId) {
         Board board = boardRepository.findByBoardOrElseThrow(boardId);
-        // 작성자 검증 로직 필요
+        // 작성자 검증 필요
         boardRepository.deleteById(board.getId());
         return ResponseDto.success("게시글 삭제 성공", null);
     }

@@ -1,7 +1,7 @@
 package Project.TravelBusan.controller;
 
-import Project.TravelBusan.request.BoardModifyRequestDto;
-import Project.TravelBusan.request.BoardRequestDto;
+import Project.TravelBusan.request.Board.BoardModifyRequestDto;
+import Project.TravelBusan.request.Board.BoardRequestDto;
 import Project.TravelBusan.response.BoardListResponseDto;
 import Project.TravelBusan.response.BoardResponseDto;
 import Project.TravelBusan.response.BoardSaveResponseDto;
@@ -36,7 +36,7 @@ public class BoardController {
 
     @DeleteMapping("/{board-id}")
     public ResponseDto<Void> boardRemove(@PathVariable("board-id") Long boardId) {
-        return boardService.boardRemove(boardId);
+        return boardService.removeBoard(boardId);
     }
 
     @PatchMapping("/{board-id}")
