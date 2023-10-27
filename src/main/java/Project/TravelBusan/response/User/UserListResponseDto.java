@@ -1,4 +1,4 @@
-package Project.TravelBusan.response;
+package Project.TravelBusan.response.User;
 
 import lombok.*;
 

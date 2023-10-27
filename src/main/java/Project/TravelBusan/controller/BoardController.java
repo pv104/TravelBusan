@@ -3,6 +3,7 @@ package Project.TravelBusan.controller;
 import Project.TravelBusan.request.Board.BoardCommentRequestDto;
 import Project.TravelBusan.request.Board.BoardModifyRequestDto;
 import Project.TravelBusan.request.Board.BoardRequestDto;
+import Project.TravelBusan.response.Board.BoardDetailResponseDto;
 import Project.TravelBusan.response.Board.BoardListResponseDto;
 import Project.TravelBusan.response.Board.BoardResponseDto;
 import Project.TravelBusan.response.Board.BoardSaveResponseDto;
@@ -32,7 +33,7 @@ public class BoardController {
     }
 
     @GetMapping("/{board-id}")
-    public ResponseDto<BoardListResponseDto> boardDetails(@PathVariable("board-id") Long boardId){
+    public ResponseDto<BoardDetailResponseDto> boardDetails(@PathVariable("board-id") Long boardId){
         return boardService.detailBoard(boardId);
     }
 

@@ -7,7 +7,7 @@ import Project.TravelBusan.request.TokenDto;
 import Project.TravelBusan.jwt.JwtFilter;
 import Project.TravelBusan.jwt.TokenProvider;
 import Project.TravelBusan.response.ResponseDto;
-import Project.TravelBusan.response.UserLoginResponseDto;
+import Project.TravelBusan.response.User.UserLoginResponseDto;
 import Project.TravelBusan.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

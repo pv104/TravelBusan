@@ -3,7 +3,7 @@ package Project.TravelBusan.controller;
 import Project.TravelBusan.request.User.UserLoginRequestDto;
 import Project.TravelBusan.request.User.UserModifyRequestDto;
 import Project.TravelBusan.request.User.UserRemoveRequestDto;
-import Project.TravelBusan.response.UserListResponseDto;
+import Project.TravelBusan.response.User.UserListResponseDto;
 import Project.TravelBusan.response.ResponseDto;
 import Project.TravelBusan.service.UserService;
 import lombok.RequiredArgsConstructor;

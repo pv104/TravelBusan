@@ -1,4 +1,4 @@
-package Project.TravelBusan.response;
+package Project.TravelBusan.response.Board;
 
 import lombok.Builder;
 import lombok.Data;
@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 
 @Data
 @Builder
-public class BoardSaveResponseDto {
+public class BoardListResponseDto {
     private Long id;
     private String title;
     private String content;
@@ -17,5 +17,3 @@ public class BoardSaveResponseDto {
     private Long likeCount;
     private Timestamp creDate;
 }
-
-

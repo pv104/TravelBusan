@@ -12,9 +12,9 @@ import java.util.List;
 @Entity
 @Getter
 @Builder
-@Table(name = "BOARD_COMMENT")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@Table(name = "BOARD_COMMENT")
 public class BoardComment{
 
     @Id

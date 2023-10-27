@@ -6,6 +6,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 @Getter
@@ -46,9 +47,17 @@ public class Board {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
+    private List<BoardComment> comments;
+
+
     public void modifyBoard(String title, String content) {
         this.title = title;
         this.content = content;
+    }
+
+    public void increaseLike(Long likeCount){
+        this.likeCount = likeCount;
     }
 }
 

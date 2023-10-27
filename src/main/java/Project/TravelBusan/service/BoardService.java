@@ -9,9 +9,7 @@ import Project.TravelBusan.repository.BoardRepository;
 import Project.TravelBusan.repository.UserRepository;
 import Project.TravelBusan.request.Board.BoardModifyRequestDto;
 import Project.TravelBusan.request.Board.BoardRequestDto;
-import Project.TravelBusan.response.Board.BoardListResponseDto;
-import Project.TravelBusan.response.Board.BoardResponseDto;
-import Project.TravelBusan.response.Board.BoardSaveResponseDto;
+import Project.TravelBusan.response.Board.*;
 import Project.TravelBusan.response.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -90,20 +88,11 @@ public class BoardService {
      * 게시글 상세 조회
      */
     @Transactional
-    public ResponseDto<BoardListResponseDto> detailBoard(Long boardId) {
+    public ResponseDto<BoardDetailResponseDto> detailBoard(Long boardId) {
         Board board = boardRepository.findByBoardOrElseThrow(boardId);
         boardRepository.increaseVisit(board.getId()); // 조회수 증가
-        return ResponseDto.success("게시글 상세 조회",
-                BoardListResponseDto.builder()
-                        .id(board.getId())
-                        .title(board.getTitle())
-                        .content(board.getContent())
-                        .nickname(board.getNickname())
-                        .visit(board.getVisit())
-                        .likeCount(board.getLikeCount())
-                        .creDate(board.getCreDate())
-                        .build()
-        );
+
+        return ResponseDto.success("게시글 상세 조회", new BoardDetailResponseDto(board));
     }
 
 
