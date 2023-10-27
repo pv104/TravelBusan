@@ -8,7 +8,7 @@ import static jakarta.persistence.FetchType.LAZY;
 @Entity
 @Getter
 @Builder
-@Table(name = "board_like")
+@Table(name = "BOARD_LIKE")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class BoardLike{
@@ -24,7 +24,7 @@ public class BoardLike{
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "User_id")
-    private User User;
+    private User user;
 
 
 }
