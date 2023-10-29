@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import Nav from './nav';
+import Nav from '../nav';
 import { useNavigation } from '@react-navigation/native';
-import ImagePicker from 'react-native-image-picker';
 
 const BlogEditor = () => {
   const [title, setTitle] = useState('');

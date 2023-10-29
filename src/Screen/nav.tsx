@@ -33,6 +33,10 @@ const NavigationBarButton = () => {
     toggleModal();
     navigation.navigate('Maps');
   };
+  const handleInfo =() =>{
+    toggleModal();
+    navigation.navigate('UserInfo');
+  };
 
   return (
     <View style={styles.container}>
@@ -62,6 +66,9 @@ const NavigationBarButton = () => {
           </TouchableOpacity>
           <TouchableOpacity onPress={handleMaps}>
             <Text style={styles.loginButton}>MAPS</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleInfo}>
+            <Text style={styles.loginButton}>Info</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={toggleModal}>
             <Text style={styles.closeButton}>Close</Text>

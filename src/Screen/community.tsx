@@ -1,17 +1,17 @@
 import React from 'react';
 import { View,Image, Text, StyleSheet, FlatList, SafeAreaView,TouchableOpacity } from 'react-native';
 import Nav from "./nav";
-import Mine from "./Blog_mydata";
+import Mine from "./blog/Blog_mydata";
 import { useNavigation } from '@react-navigation/native';
 const CommunityData =[
-  {Title:"부산 여행 추천 쫌", Writer : "여행자", Date : "15:39"},
-  {Title:"어디가 좋을까", Writer : "웨어", Date : "15:39"},
-  {Title:"서면 추천", Writer : "서면", Date : "15:39"},
-  {Title:"부산 여행 추천 쫌", Writer : "방랑자", Date : "15:39"},
-  {Title:"아무리 생각해도 이건 아님", Writer : "ㅇㅇ1", Date : "13:30"},
-  {Title:"커뮤니티 글 테스트", Writer : "ㅇㅇ2", Date : "12:30"},
-  {Title:"백에서 받을 예정", Writer : "ㅇㅇ3", Date : "11:30"},
-  {Title:"테스트 중", Writer : "ㅇㅇ4", Date : "10:30"},
+  {Title:"부산 여행 추천 쫌",Content : "부산 여행가는데 여행지 추천 쫌", Writer : "여행자", Date : "15:39"},
+  {Title:"어디가 좋을까",Content : "여행지 어디가 좋을 까?", Writer : "웨어", Date : "15:39"},
+  {Title:"서면 추천",Content : "서면 맛집 추천 쫌", Writer : "서면", Date : "15:39"},
+  {Title:"부산 여행 추천 쫌",Content : "부산 여행가는데 여행지 추천 쫌", Writer : "방랑자", Date : "15:39"},
+  {Title:"아무리 생각해도 이건 아님", Content : "진짜 아님", Writer : "ㅇㅇ1", Date : "13:30"},
+  {Title:"커뮤니티 글 테스트",Content : "테스트2", Writer : "ㅇㅇ2", Date : "12:30"},
+  {Title:"백에서 받을 예정",Content : "백에서 받음", Writer : "ㅇㅇ3", Date : "11:30"},
+  {Title:"테스트 중",Content : "Travel Busan", Writer : "ㅇㅇ4", Date : "10:30"},
 ];
 
 const Community =()=>{
@@ -19,8 +19,13 @@ const Community =()=>{
   const handleSign =() =>{
     navigation.navigate('Editor_CM')
   };
-  const IntoContent =()=>{
-  
+  const IntoContent =(item)=>{
+    navigation.navigate('CommunityContent', { 
+      Writer : item.Writer,
+      title : item.Title,
+      content : item.Content,
+      date : item.Date,
+     });
   };
     return(
         <View style = {styles.container}>
@@ -39,7 +44,7 @@ const Community =()=>{
                 keyExtractor={(item) => item.Writer.toString()}
                 renderItem={({ item }) => (
                 <View style={styles.blogItem}>
-                <TouchableOpacity onPress={IntoContent}>
+                <TouchableOpacity onPress={() => IntoContent(item)}>
                   <Text>{item.Title}</Text>
                   <Text>{item.Writer}</Text>
                   <Text style={styles.UnderInfo_date}>{item.Date}</Text>

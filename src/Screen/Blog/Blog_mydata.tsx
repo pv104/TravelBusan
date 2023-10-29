@@ -1,5 +1,5 @@
 import React,{useState} from 'react';
-import {View,Image, Text, StyleSheet, FlatList, SafeAreaView,TouchableOpacity } from 'react-native';
+import {View,Text, StyleSheet,TouchableOpacity } from 'react-native';
 
 const mine = {
     Id : '테스트 닉네임',

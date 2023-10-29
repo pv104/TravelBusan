@@ -1,6 +1,6 @@
 import React from 'react';
 import { View,Image, Text, StyleSheet, FlatList, SafeAreaView,TouchableOpacity } from 'react-native';
-import Nav from "./nav";
+import Nav from "../nav";
 import BlogSearch from "./BlogSearch"
 import Mine from "./Blog_mydata";
 import { useNavigation } from '@react-navigation/native';
@@ -25,12 +25,17 @@ const blogData = [
   // 다른 블로그 내용들 추가
 ];
 
-const IntoBlog =()=>{
-
-};
-
 const BlogScreen = () => {
   const navigation  = useNavigation();
+  const IntoBlog = (item) => {
+    navigation.navigate('BlogData', { 
+      id : item.id,
+      title : item.title,
+      imageUri : item.imageUri,
+      content : item.content,
+      date : item.date,
+     });
+  };
   const IntoEditor=()=>{
     navigation.navigate('Editor');
   }
@@ -58,7 +63,7 @@ const BlogScreen = () => {
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <View style={styles.blogItem}>
-            <TouchableOpacity onPress={IntoBlog}>
+            <TouchableOpacity onPress={() => IntoBlog(item)}>
               <Image source={item.imageUri} style={styles.blogImage} />
               <View style={styles.overlay}>
                 <Text style={styles.blogTitle}>{item.title}</Text>
@@ -71,6 +76,7 @@ const BlogScreen = () => {
       />
     </SafeAreaView>
   );
+  
 };
 
 const styles = StyleSheet.create({
