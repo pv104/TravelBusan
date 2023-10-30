@@ -3,10 +3,7 @@ package Project.TravelBusan.controller;
 import Project.TravelBusan.request.Board.BoardCommentRequestDto;
 import Project.TravelBusan.request.Board.BoardModifyRequestDto;
 import Project.TravelBusan.request.Board.BoardRequestDto;
-import Project.TravelBusan.response.Board.BoardDetailResponseDto;
-import Project.TravelBusan.response.Board.BoardListResponseDto;
-import Project.TravelBusan.response.Board.BoardResponseDto;
-import Project.TravelBusan.response.Board.BoardSaveResponseDto;
+import Project.TravelBusan.response.Board.*;
 import Project.TravelBusan.response.ResponseDto;
 import Project.TravelBusan.service.BoardCommentService;
 import Project.TravelBusan.service.BoardService;
@@ -21,6 +18,7 @@ import java.util.List;
 public class BoardController {
 
     private final BoardService boardService;
+    private final BoardCommentService boardCommentService;
 
     @PostMapping
     public ResponseDto<BoardSaveResponseDto> boardAdd(@RequestBody BoardRequestDto boardRequestDto){
@@ -53,9 +51,9 @@ public class BoardController {
         return boardService.likeBoard(userId,boardId);
     }
 
-/*    @PostMapping("/{board-id}/comment")
-    public ResponseDto<?> addComment(@PathVariable("board-id") Long boardId, @RequestBody BoardCommentRequestDto boardCommentRequestDto) {
+    @PostMapping("/{board-id}/comment")
+    public ResponseDto<CommentSaveResponseDto> addComment(@PathVariable("board-id") Long boardId, @RequestBody BoardCommentRequestDto boardCommentRequestDto) {
         Long userId = 1L;
         return boardCommentService.saveBoardComment(boardId,boardCommentRequestDto, userId);
-    }*/
+    }
 }

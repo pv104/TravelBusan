@@ -91,7 +91,6 @@ public class BoardService {
     public ResponseDto<BoardDetailResponseDto> detailBoard(Long boardId) {
         Board board = boardRepository.findByBoardOrElseThrow(boardId);
         boardRepository.increaseVisit(board.getId()); // 조회수 증가
-
         return ResponseDto.success("게시글 상세 조회", new BoardDetailResponseDto(board));
     }
 

@@ -7,7 +7,7 @@ import Project.TravelBusan.repository.BoardCommentRepository;
 import Project.TravelBusan.repository.BoardRepository;
 import Project.TravelBusan.repository.UserRepository;
 import Project.TravelBusan.request.Board.BoardCommentRequestDto;
-import Project.TravelBusan.response.Board.BoardCommentResponseDto;
+import Project.TravelBusan.response.Board.CommentSaveResponseDto;
 import Project.TravelBusan.response.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,12 +28,11 @@ public class BoardCommentService {
      */
 
     @Transactional
-    public ResponseDto<?> saveBoardComment(Long boardId, BoardCommentRequestDto boardCommentRequestDto, Long userId) {
+    public ResponseDto<CommentSaveResponseDto> saveBoardComment(Long boardId, BoardCommentRequestDto boardCommentRequestDto, Long userId) {
         Board board = boardRepository.findByBoardOrElseThrow(boardId);
         User user = userRepository.findByIdOrElseThrow(userId);
 
-        if (boardCommentRequestDto.getParent() == null) {
-            // 부모 댓글 작성
+        if (boardCommentRequestDto.getParent() == null) { // 부모 댓글 작성
             BoardComment boardComment = BoardComment.builder()
                     .content(boardCommentRequestDto.getContent())
                     .writer(user.getNickname())
@@ -46,12 +45,17 @@ public class BoardCommentService {
 
             return ResponseDto.success(
                     "댓글 작성 성공",
-                    BoardCommentResponseDto.toDto(boardComment)
+                    CommentSaveResponseDto.toDto(boardComment)
             );
         } else {
             // 자식 댓글 작성
             BoardComment parentComment = boardCommentRepository.findById(boardCommentRequestDto.getParent().getId()).orElseThrow(() ->
                     new IllegalStateException("부모 댓글이 없습니다"));
+
+            // 부모 댓글의 게시글 ID와 현재 게시글 ID 비교
+            if (parentComment.getBoard().getId() != boardId) {
+                throw new IllegalStateException("해당 게시판 댓글이 아님");
+            }
 
             BoardComment boardComment = BoardComment.builder()
                     .writer(user.getUsername())
@@ -65,7 +69,7 @@ public class BoardCommentService {
 
             return ResponseDto.success(
                     "대댓글 작성 성공",
-                    BoardCommentResponseDto.toDto(boardComment)
+                    CommentSaveResponseDto.toDto(boardComment)
             );
         }
     }

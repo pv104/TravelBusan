@@ -1,27 +1,21 @@
 package Project.TravelBusan.response.Board;
 
-
 import Project.TravelBusan.domain.BoardComment;
-import lombok.Builder;
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.List;
-
-
 @Data
-public class BoardDetailCommentResponseDto {
-
+public class CommentChildrenResponseDto {
+    private Long commentId;
     private Long boarId;
     private Long parentId;
     private String content;
     private String writer;
 
-    public BoardDetailCommentResponseDto(BoardComment boardComment) {
+    public CommentChildrenResponseDto(BoardComment boardComment) {
+        commentId = boardComment.getId();
         boarId = boardComment.getBoard().getId();
-//        parentId = boardComment.getParent().getId();
+        parentId = (boardComment.getParent() != null) ? boardComment.getParent().getId() : null;
         content = boardComment.getContent();
-        writer = boardComment.getWriter();
+        writer = boardComment.getUser().getNickname();
     }
-
 }

@@ -6,7 +6,7 @@ import Project.TravelBusan.repository.UserRepository;
 import Project.TravelBusan.repository.SightsRepository;
 import Project.TravelBusan.request.Sights.SightsRequestDto;
 import Project.TravelBusan.response.ResponseDto;
-import Project.TravelBusan.response.SightsResponseDto;
+import Project.TravelBusan.response.Sights.SightsResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
