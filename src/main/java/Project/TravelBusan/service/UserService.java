@@ -51,7 +51,7 @@ public class UserService {
 //        }
 
             Authority authority = Authority.builder()
-                    .authorityName("ROLE_USER")
+                    .authorityName("ROLE_ADMIN")
                     .build();
 
 
