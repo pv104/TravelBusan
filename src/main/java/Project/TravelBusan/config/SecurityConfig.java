@@ -58,8 +58,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize ->
                         authorize.requestMatchers("/api/hello", "/api/authenticate", "/api/signup", "/api/login").permitAll()
                 .anyRequest().authenticated())
-                        .
-                sessionManagement(sessionManagement ->
+                        .sessionManagement(sessionManagement ->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .apply(new JwtSecurityConfig(tokenProvider));
 

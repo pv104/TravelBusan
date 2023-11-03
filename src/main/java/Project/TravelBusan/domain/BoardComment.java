@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -12,9 +14,9 @@ import java.util.List;
 @Entity
 @Getter
 @Builder
-@Table(name = "BOARD_COMMENT")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@Table(name = "BOARD_COMMENT")
 public class BoardComment{
 
     @Id
@@ -27,10 +29,10 @@ public class BoardComment{
     private String writer;
 
     @CreationTimestamp
-    @Column(name = "cre_date")
+    @Column(name = "credate")
     private Timestamp creDate;
 
-    @Column(name = "del_date")
+    @Column(name = "deldate")
     private Timestamp delDate;
 
     @ColumnDefault("N")
@@ -45,10 +47,10 @@ public class BoardComment{
     private Board board;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    @OneToMany(mappedBy = "parent", orphanRemoval = true)
+    @OneToMany(mappedBy = "parent", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<BoardComment> children = new ArrayList<>();
 }
 

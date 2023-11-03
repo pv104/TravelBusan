@@ -1,11 +1,11 @@
 package Project.TravelBusan.controller;
 
-import Project.TravelBusan.request.BoardModifyRequestDto;
-import Project.TravelBusan.request.BoardRequestDto;
-import Project.TravelBusan.response.BoardListResponseDto;
-import Project.TravelBusan.response.BoardResponseDto;
-import Project.TravelBusan.response.BoardSaveResponseDto;
+import Project.TravelBusan.request.Board.BoardCommentRequestDto;
+import Project.TravelBusan.request.Board.BoardModifyRequestDto;
+import Project.TravelBusan.request.Board.BoardRequestDto;
+import Project.TravelBusan.response.Board.*;
 import Project.TravelBusan.response.ResponseDto;
+import Project.TravelBusan.service.BoardCommentService;
 import Project.TravelBusan.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +18,7 @@ import java.util.List;
 public class BoardController {
 
     private final BoardService boardService;
+    private final BoardCommentService boardCommentService;
 
     @PostMapping
     public ResponseDto<BoardSaveResponseDto> boardAdd(@RequestBody BoardRequestDto boardRequestDto){
@@ -30,17 +31,35 @@ public class BoardController {
     }
 
     @GetMapping("/{board-id}")
-    public ResponseDto<BoardListResponseDto> boardDetails(@PathVariable("board-id") Long boardId){
+    public ResponseDto<BoardDetailResponseDto> boardDetails(@PathVariable("board-id") Long boardId){
         return boardService.detailBoard(boardId);
     }
 
     @DeleteMapping("/{board-id}")
     public ResponseDto<Void> boardRemove(@PathVariable("board-id") Long boardId) {
-        return boardService.boardRemove(boardId);
+        return boardService.removeBoard(boardId);
     }
 
     @PatchMapping("/{board-id}")
     public ResponseDto<BoardResponseDto> boardModify(@PathVariable("board-id") Long boardId, @RequestBody BoardModifyRequestDto boardModifyRequestDto) {
         return boardService.modifyBoard(boardModifyRequestDto, boardId);
+    }
+
+    @GetMapping("/{board-id}/boardLike")
+    public ResponseDto<Void> boardLike(@PathVariable("board-id") Long boardId) {
+        Long userId = 1L;
+        return boardService.likeBoard(userId,boardId);
+    }
+
+    @PostMapping("/{board-id}/comment")
+    public ResponseDto<CommentSaveResponseDto> addComment(@PathVariable("board-id") Long boardId, @RequestBody BoardCommentRequestDto boardCommentRequestDto) {
+        Long userId = 1L;
+        return boardCommentService.commentAdd(boardId,boardCommentRequestDto, userId);
+    }
+
+    @DeleteMapping("/{board-id}/comment/{comment-id}")
+    public ResponseDto<Void> deleteComment(@PathVariable("comment-id") Long commentId, @PathVariable("board-id") Long boardId) {
+        Long userId = 1L;
+        return boardCommentService.commentDelete(commentId,userId);
     }
 }

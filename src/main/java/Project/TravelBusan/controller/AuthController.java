@@ -1,9 +1,16 @@
 package Project.TravelBusan.controller;
 
-import Project.TravelBusan.request.LoginDto;
+import Project.TravelBusan.repository.UserRepository;
+import Project.TravelBusan.request.User.UserJoinRequestDto;
+import Project.TravelBusan.request.User.UserLoginRequestDto;
 import Project.TravelBusan.request.TokenDto;
 import Project.TravelBusan.jwt.JwtFilter;
 import Project.TravelBusan.jwt.TokenProvider;
+import Project.TravelBusan.response.ResponseDto;
+import Project.TravelBusan.response.User.UserLoginResponseDto;
+import Project.TravelBusan.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,20 +27,26 @@ import jakarta.validation.Valid;
 public class AuthController {
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
+    private final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
-    public AuthController(TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder) {
+    private final UserService userService;
+
+    private final UserRepository userRepository;
+    public AuthController(TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder, UserService userService, UserRepository userRepository) {
         this.tokenProvider = tokenProvider;
         this.authenticationManagerBuilder = authenticationManagerBuilder;
+        this.userService = userService;
+        this.userRepository = userRepository;
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<TokenDto> authorize(@Valid @RequestBody LoginDto loginDto) {
+    public ResponseEntity<TokenDto> authorize(@Valid @RequestBody UserLoginRequestDto userLoginRequestDto) {
 
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
+                new UsernamePasswordAuthenticationToken(userLoginRequestDto.getUsername(), userLoginRequestDto.getPassword());
+
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
 
         String jwt = tokenProvider.createToken(authentication);
 
@@ -41,6 +54,15 @@ public class AuthController {
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
 
         return new ResponseEntity<>(new TokenDto(jwt), httpHeaders, HttpStatus.OK);
-
     }
+    @PostMapping("/login")
+    public ResponseDto<UserLoginResponseDto> userLogin(@RequestBody UserLoginRequestDto userLoginRequestDto){
+        return userService.login(userLoginRequestDto);
+    }
+    @PostMapping("/signup")
+    public ResponseDto<UserLoginResponseDto> userAdd(@RequestBody UserJoinRequestDto userJoinRequestDto) {
+    // 위 authenticate에 있는 코드가 들어와야 토큰을 생성할 수 있음
+        return userService.join(userJoinRequestDto);
+    }
+
 }

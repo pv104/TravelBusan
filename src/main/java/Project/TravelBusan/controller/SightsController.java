@@ -1,6 +1,6 @@
 package Project.TravelBusan.controller;
 
-import Project.TravelBusan.request.SightsRequestDto;
+import Project.TravelBusan.request.Sights.SightsRequestDto;
 import Project.TravelBusan.response.ResponseDto;
 import Project.TravelBusan.service.SightsService;
 import lombok.RequiredArgsConstructor;
@@ -16,9 +16,9 @@ public class SightsController {
     private final SightsService sightsService;
 
     @PostMapping
-    public ResponseDto<?> createMember(@RequestBody SightsRequestDto sightsRequestDto) {
-        Long memberId = 1L; // 테스트용
-        return sightsService.saveSights(sightsRequestDto,memberId);
+    public ResponseDto<?> createUser(@RequestBody SightsRequestDto sightsRequestDto) {
+        Long UserId = 1L; // 테스트용
+        return sightsService.saveSights(sightsRequestDto,UserId);
     }
 
     @GetMapping

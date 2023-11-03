@@ -1,30 +1,30 @@
 package Project.TravelBusan.TravelBusan.service;
 
-import Project.TravelBusan.service.MemberService;
+import Project.TravelBusan.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 
 @SpringBootTest
-class MemberServiceTest {
+class UserServiceTest {
     @Autowired
-    MemberService memberService;
+    UserService userService;
 
 /*    @Test
     @Transactional
     public void 회원가입_(){
         //given
-        Member member = Member.builder()
+        User User = User.builder()
                 .username("test")
                 .password("123")
                 .email("aaa")
                 .build();
 
         //when
-        Long memberId = memberService.join(member);
+        Long UserId = UserService.join(User);
 
         //then
-        Member result = memberService.findById(memberId);
-        Assertions.assertEquals(member, result);
+        User result = UserService.findById(UserId);
+        Assertions.assertEquals(User, result);
     }*/
 }

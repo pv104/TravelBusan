@@ -1,53 +1,71 @@
 package Project.TravelBusan.controller;
 
-import Project.TravelBusan.request.UserDto;
+import Project.TravelBusan.request.User.UserLoginRequestDto;
+import Project.TravelBusan.request.User.UserModifyRequestDto;
+import Project.TravelBusan.request.User.UserRemoveRequestDto;
+import Project.TravelBusan.response.User.UserListResponseDto;
 import Project.TravelBusan.response.ResponseDto;
 import Project.TravelBusan.service.UserService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
-import java.io.IOException;
+import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@Slf4j
+@RequiredArgsConstructor
+@RequestMapping("/users")
 public class UserController {
+
     private final UserService userService;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
+    @GetMapping
+    public ResponseDto<List<UserListResponseDto>> userList(){
+        return userService.listUser();
     }
 
-    @PostMapping("/test-redirect")
-    public void testRedirect(HttpServletResponse response) throws IOException {
-        response.sendRedirect("/api/user");
+    @GetMapping("/{user-id}")
+    public ResponseDto<UserListResponseDto> userDetail(@PathVariable("user-id") Long userId){
+        return userService.detailUser(userId);
     }
 
-    @PostMapping("/signup")
-    public ResponseEntity<UserDto> signup(
-            @Valid @RequestBody UserDto userDto
-    ) {
-        return ResponseEntity.ok(userService.signup(userDto));
+    @PatchMapping("/{user-id}")
+    public ResponseDto<UserListResponseDto> userModify(@PathVariable("user-id") Long userId, @RequestBody UserModifyRequestDto userModifyRequestDto) throws Exception {
+       if(userModifyRequestDto.getId().equals(userId))
+        return userService.modifyUser(userId, userModifyRequestDto);
+       else {
+           throw new IllegalAccessException("본인");
+       }
     }
 
+    @DeleteMapping("/{user-id}")
+    public ResponseDto<Void> userRemove(@PathVariable("user-id") Long userId, @RequestBody UserRemoveRequestDto userRemoveRequestDto) throws Exception {
+        if(userRemoveRequestDto.getId().equals(userId))
+            return userService.removeUser(userId);
+        else {
+            throw new IllegalAccessException("본인");
+        }
+    }
     @GetMapping("/user")
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public ResponseEntity<UserDto> getMyUserInfo(HttpServletRequest request) {
+    public ResponseEntity<UserLoginRequestDto> getMyUserInfo() {
         return ResponseEntity.ok(userService.getMyUserWithAuthorities());
     }
 
-
-    @PostMapping("/login")
-    public ResponseDto<?> memberLogin(@RequestBody UserDto userDto){
-        return userService.login(userDto);
-    }
-
     @GetMapping("/user/{username}")
-    @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<UserDto> getUserInfo(@PathVariable String username) {
-        return ResponseEntity.ok(userService.getUserWithAuthorities(username));
+    public ResponseEntity<UserLoginRequestDto> getUserInfo(@PathVariable String username) throws Exception {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!hasAdminRole(authentication)) {
+            throw new IllegalAccessException("관리자");
+        } else {
+            return ResponseEntity.ok(userService.getUserWithAuthorities(username));
+        }
+    }
+    private boolean hasAdminRole(Authentication authentication) {
+        return authentication.getAuthorities().stream()
+                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"));
     }
 }

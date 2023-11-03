@@ -25,10 +25,10 @@ public class SightsReview {
     private String content;
 
     @CreationTimestamp
-    @Column(name = "cre_date")
+    @Column(name = "credate")
     private Timestamp creDate;
 
-    @Column(name = "del_date")
+    @Column(name = "deldate")
     private Timestamp delDate;
 
     private int rate;
@@ -40,8 +40,8 @@ public class SightsReview {
     private Sights sights;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
+    @JoinColumn(name = "user_id")
+    private User user;
 
 
 

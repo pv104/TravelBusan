@@ -2,13 +2,15 @@ package Project.TravelBusan.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
 @Builder
-@Table(name = "board_like")
+@Table(name = "BOARD_LIKE")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class BoardLike{
@@ -23,8 +25,9 @@ public class BoardLike{
     private Board board;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
-
+    @JoinColumn(name = "User_id")
+    private User user;
 
 }
+
+
