@@ -2,6 +2,8 @@ package Project.TravelBusan.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import static jakarta.persistence.FetchType.LAZY;
 
@@ -26,5 +28,6 @@ public class BoardLike{
     @JoinColumn(name = "User_id")
     private User user;
 
-
 }
+
+

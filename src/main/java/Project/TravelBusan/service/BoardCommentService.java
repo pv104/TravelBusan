@@ -28,7 +28,7 @@ public class BoardCommentService {
      */
 
     @Transactional
-    public ResponseDto<CommentSaveResponseDto> saveBoardComment(Long boardId, BoardCommentRequestDto boardCommentRequestDto, Long userId) {
+    public ResponseDto<CommentSaveResponseDto> commentAdd(Long boardId, BoardCommentRequestDto boardCommentRequestDto, Long userId) {
         Board board = boardRepository.findByBoardOrElseThrow(boardId);
         User user = userRepository.findByIdOrElseThrow(userId);
 
@@ -74,4 +74,21 @@ public class BoardCommentService {
         }
     }
 
+    /**
+     * 댓글 삭제
+     */
+    @Transactional
+    public ResponseDto<Void> commentDelete(Long commentId, Long userId) {
+        BoardComment comment = boardCommentRepository.findById(commentId)
+                .orElseThrow(() -> new IllegalStateException("해당 댓글이 존재하지 않습니다."));
+
+        userRepository.findByIdOrElseThrow(userId);
+
+        if (!comment.getUser().getId().equals(userId)) {
+            throw new IllegalStateException("해당 댓글 작성자가 아닙니다.");
+        }
+
+        boardCommentRepository.delete(comment);
+        return ResponseDto.success("댓글 삭제 성공",null);
+    }
 }

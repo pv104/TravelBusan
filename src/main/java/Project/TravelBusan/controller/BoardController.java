@@ -54,6 +54,12 @@ public class BoardController {
     @PostMapping("/{board-id}/comment")
     public ResponseDto<CommentSaveResponseDto> addComment(@PathVariable("board-id") Long boardId, @RequestBody BoardCommentRequestDto boardCommentRequestDto) {
         Long userId = 1L;
-        return boardCommentService.saveBoardComment(boardId,boardCommentRequestDto, userId);
+        return boardCommentService.commentAdd(boardId,boardCommentRequestDto, userId);
+    }
+
+    @DeleteMapping("/{board-id}/comment/{comment-id}")
+    public ResponseDto<Void> deleteComment(@PathVariable("comment-id") Long commentId, @PathVariable("board-id") Long boardId) {
+        Long userId = 1L;
+        return boardCommentService.commentDelete(commentId,userId);
     }
 }

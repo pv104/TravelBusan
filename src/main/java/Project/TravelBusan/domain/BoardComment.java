@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -48,7 +50,7 @@ public class BoardComment{
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "parent", orphanRemoval = true)
+    @OneToMany(mappedBy = "parent", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<BoardComment> children = new ArrayList<>();
 }
 

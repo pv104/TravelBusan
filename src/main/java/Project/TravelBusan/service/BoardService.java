@@ -2,8 +2,10 @@ package Project.TravelBusan.service;
 
 
 import Project.TravelBusan.domain.Board;
+import Project.TravelBusan.domain.BoardComment;
 import Project.TravelBusan.domain.BoardLike;
 import Project.TravelBusan.domain.User;
+import Project.TravelBusan.repository.BoardCommentRepository;
 import Project.TravelBusan.repository.BoardLikeRepository;
 import Project.TravelBusan.repository.BoardRepository;
 import Project.TravelBusan.repository.UserRepository;
@@ -126,7 +128,6 @@ public class BoardService {
     @Transactional
     public ResponseDto<Void> removeBoard(Long boardId) {
         Board board = boardRepository.findByBoardOrElseThrow(boardId);
-        // 작성자 검증 필요
         boardRepository.deleteById(board.getId());
         return ResponseDto.success("게시글 삭제 성공", null);
     }
