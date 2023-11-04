@@ -41,15 +41,17 @@ public class AuthController {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<TokenDto> authorize(@Valid @RequestBody UserLoginRequestDto userLoginRequestDto) {
+    public ResponseEntity<TokenDto> authorize(@Valid @RequestBody UserJoinRequestDto userJoinRequestDto) {
 
+        logger.info("궁금");
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(userLoginRequestDto.getUsername(), userLoginRequestDto.getPassword());
-        logger.info("?? {}",userLoginRequestDto.getUsername());
-        logger.info("?? {}",userLoginRequestDto.getAuthorityDtoSet());
+                new UsernamePasswordAuthenticationToken(userJoinRequestDto.getUsername(), userJoinRequestDto.getPassword());
+        logger.info("{} {}",authenticationToken.getCredentials(), authenticationToken.getPrincipal());
+        logger.info(authenticationManagerBuilder.getObject().authenticate(authenticationToken).toString());
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        logger.info("궁금2");
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
+        logger.info("궁금3");
         String jwt = tokenProvider.createToken(authentication);
 
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -57,14 +59,6 @@ public class AuthController {
 
         return new ResponseEntity<>(new TokenDto(jwt), httpHeaders, HttpStatus.OK);
     }
-    @PostMapping("/login")
-    public ResponseDto<UserLoginResponseDto> userLogin(@RequestBody UserLoginRequestDto userLoginRequestDto){
-        return userService.login(userLoginRequestDto);
-    }
-    @PostMapping("/signup")
-    public ResponseDto<UserLoginResponseDto> userAdd(@RequestBody UserJoinRequestDto userJoinRequestDto) {
-    // 위 authenticate에 있는 코드가 들어와야 토큰을 생성할 수 있음
-        return userService.join(userJoinRequestDto);
-    }
+
 
 }

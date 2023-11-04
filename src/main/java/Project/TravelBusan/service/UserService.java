@@ -55,6 +55,7 @@ public class UserService {
                     .build();
 
 
+
                 User user = User.builder()
                         .nickname(userJoinRequestDto.getNickname())
                         .username(userJoinRequestDto.getUsername())

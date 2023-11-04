@@ -29,12 +29,22 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequiredArgsConstructor // 생성자 자동주입
-@RequestMapping("/users")
+@RequestMapping("/api")
 public class UserController {
 
     private final UserService userService;
     private final UserRepository userRepository;
     Logger logger = LoggerFactory.getLogger(UserController.class);
+
+    @PostMapping("/login")
+    public ResponseDto<UserLoginResponseDto> userLogin(@RequestBody UserLoginRequestDto userLoginRequestDto){
+        return userService.login(userLoginRequestDto);
+    }
+    @PostMapping("/signup")
+    public ResponseDto<UserLoginResponseDto> userAdd(@RequestBody UserJoinRequestDto userJoinRequestDto) {
+        // 위 authenticate에 있는 코드가 들어와야 토큰을 생성할 수 있음
+        return userService.join(userJoinRequestDto);
+    }
 
     @GetMapping
     public ResponseDto<List<UserListResponseDto>>  userList(){
