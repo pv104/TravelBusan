@@ -3,10 +3,6 @@ import { View, StyleSheet,Text} from 'react-native';
 import Sliding from './slide';
 import Nav from './nav';
 import SlideBar from './slideBar'
-import Scroll from './Scroll';
-import { useNavigation, NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import LoginScreen from './Login';
 
 
 //가로 확장가능

@@ -3,16 +3,64 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import Nav from './nav'
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
+import { setCookie,getCookie } from './Cookie';
 
 
 const LoginScreen = () => {
-  const [email, setEmail] = useState('');
+  const [username, setusername] = useState('');
   const [password, setPassword] = useState('');
   const navigation  = useNavigation();
-  const handleLogin = () => {
+  const handleLogin = async () => {
     // 여기에 로그인 로직을 구현합니다.
     // 로그인이 성공하면 다음 화면으로 이동할 수 있습니다.
-    navigation.navigate('Home'); // Home은 다음 화면의 이름 (설정에 따라 다를 수 있음)
+    try {
+      const response = await axios.post(
+        'http://172.21.48.1:8080/api/login',
+        {
+          username: username,
+          password: password,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json', // 서버가 JSON 형식을 원하는 경우
+          },
+        }
+      );
+      if(response.status == 200)
+      {
+        try{
+          const response2 = await axios.post(
+            'http://172.21.48.1:8080/api/authenticate',
+            {
+              username : username,
+              password : password,
+            },
+            {
+              headers: {
+                'Content-Type': 'application/json', // 서버가 JSON 형식을 원하는 경우
+              },
+            }
+          )
+          const accessToken = response2.data.token;
+          setCookie("is_login", `${accessToken}`,''); 
+          console.log("쿠키 토큰" + getCookie("is_login"));
+          console.log("로그인성공");
+        }
+        catch (error) {
+          console.log(error);
+        }
+      }
+      /*const accessToken = response.data.token;
+      setCookie("is_login", `${accessToken}`,''); 
+      console.log("쿠키 토큰" + getCookie("is_login"));
+      console.log("로그인성공");*/
+
+      navigation.navigate("Home");
+    } 
+    catch (error) {
+      console.log(error);
+    }
   };
   const GotoSignUp =() =>{
     navigation.navigate('Signup');
@@ -28,9 +76,9 @@ const LoginScreen = () => {
       <Text style={styles.header}>로그인</Text>
       <TextInput
         style={styles.input}
-        placeholder="이메일"
-        onChangeText={setEmail}
-        value={email}
+        placeholder="아이디"
+        onChangeText={setusername}
+        value={username}
       />
       <TextInput
         style={styles.input}

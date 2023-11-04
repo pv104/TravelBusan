@@ -16,12 +16,12 @@ const explain ={
 const blogData = [
   { id: 1,
      title: '예시 1 - 블로그 제목',
-     imageUri: require('../pics/광안대교.jpg'),
+     imageUri: require('../../pics/광안대교.jpg'),
      content: '블로그 내용 1', 
      date: '2023.10.13' },
-  { id: 2, title: '예시 2',imageUri: require('../pics/영도대교.png'),content:  '블로그 내용 2', date: '2023.10.14' },
-  { id: 3, title: '예시 3',imageUri: require('../pics/광안대교.jpg'),content:  '블로그 내용 3', date: '2023.10.15' },
-  { id: 4, title: '예시 4',imageUri: require('../pics/광안대교.jpg'),content:  '블로그 내용 4', date: '2023.10.16' },
+  { id: 2, title: '예시 2',imageUri: require('../../pics/영도대교.png'),content:  '블로그 내용 2', date: '2023.10.14' },
+  { id: 3, title: '예시 3',imageUri: require('../../pics/광안대교.jpg'),content:  '블로그 내용 3', date: '2023.10.15' },
+  { id: 4, title: '예시 4',imageUri: require('../../pics/광안대교.jpg'),content:  '블로그 내용 4', date: '2023.10.16' },
   // 다른 블로그 내용들 추가
 ];
 

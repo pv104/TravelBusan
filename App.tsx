@@ -4,15 +4,15 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Home from './src/Screen/Home';
 import Login from './src/Screen/Login';
 import Signup from './src/Screen/Signup';
-import Blog from './src/Screen/blog/Blog';
-import Community from './src/Screen/community';
+import Blog from './src/Screen/Blog/Blog';
+import Community from './src/Screen/Community/community';
 import Maps from './src/Screen/Maps';
-import Editor from './src/Screen/blog/BlogContent';
-import Editor_CM from './src/Screen/CommunityEditor';
+import Editor from './src/Screen/Blog/BlogContent';
+import Editor_CM from './src/Screen/Community/CommunityEditor';
 import UserInfo from './src/Screen/UserInfo';
-import BlogData from './src/Screen/blog/BlogData';
-import CommunityContent from './src/Screen/CommunityContent';
-
+import BlogData from './src/Screen/Blog/BlogData';
+import CommunityContent from './src/Screen/Community/CommunityContent';
+import Sight from './src/Screen/Sight';
 
 const Stack = createNativeStackNavigator();
 
@@ -31,6 +31,7 @@ const App =()=> {
         <Stack.Screen name="Editor_CM" component ={Editor_CM}/>
         <Stack.Screen name="UserInfo" component ={UserInfo}/>
         <Stack.Screen name="BlogData" component ={BlogData}/>
+        <Stack.Screen name="Sight" component ={Sight}/>
         <Stack.Screen name="CommunityContent" component ={CommunityContent}/>
         </Stack.Navigator>
     </NavigationContainer>

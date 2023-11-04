@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Nav from "./nav";
+import Nav from "../nav";
 import { View, Text, StyleSheet, TextInput, Button, FlatList } from 'react-native';
 
 const formatDate = (date) => {

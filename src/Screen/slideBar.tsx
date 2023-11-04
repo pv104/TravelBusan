@@ -3,7 +3,7 @@ import { View, Text,StyleSheet, TouchableOpacity, Animated,FlatList } from 'reac
 import { GestureHandlerRootView, PanGestureHandler, State } from 'react-native-gesture-handler';
 import SearchBar from './SearchBar';
 import Button from './button';
-import Mine from './Blog_mydata';
+import Mine from './Blog/Blog_mydata';
 
 const data = [
   { key: '1', component: <TouchableOpacity><Text>맛집 아이콘 자리</Text></TouchableOpacity> },

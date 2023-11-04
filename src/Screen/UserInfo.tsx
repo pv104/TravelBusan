@@ -1,15 +1,37 @@
-import React from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, Button, StyleSheet} from 'react-native';
+import {getCookie} from './Cookie';
 import Nav from './nav';
-
-
+import axios from 'axios';
+import Login from './Login';
 const onAccountDeletion =() =>{
 
 };
 const onPasswordChange =() =>{
 
 };
-const UserProfile = ({ name, email, nickname}) => {
+const UserProfile = async () => {
+  const [username, setUsername]= useState('');
+  const [nickname, setNickname]= useState('');
+  const accessToken = getCookie('is_Login');
+  try{
+    const response = await axios.get('http://172.21.48.1:8080/users/Login.username',
+    {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      },
+    }
+    )
+    if(response.status == 200)
+    {
+      console.log(response.data);
+      setUsername(response.data.username);
+      setNickname(response.data.nickname);  
+    }
+  }
+  catch (error) {
+    console.log(error);
+  }
   return (
     <View style={styles.container}>
         <View style={styles.container2}> 
@@ -17,9 +39,8 @@ const UserProfile = ({ name, email, nickname}) => {
             <Text style={styles.Title}>Travel Busan</Text>
         </View>
         <View style={styles.content}>
-            <Text style={styles.label}>이름: {name}</Text>
+            <Text style={styles.label}>이름: {username}</Text>
             <Text style={styles.label}>닉네임: {nickname}</Text>
-            <Text style={styles.label}>이메일: {email}</Text>
             <View style={styles.buttonContainer}>
                 <Button title="비밀번호 변경" onPress={onPasswordChange} />
                 <Button title="회원 탈퇴" onPress={onAccountDeletion} />

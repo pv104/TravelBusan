@@ -1,121 +1,120 @@
 // LoginScreen.js
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Button } from 'react-native';
-import Modal from 'react-native-modal'
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Button, Alert } from 'react-native';
+import Modal from 'react-native-modal';
 import Nav from './nav';
-import axios from 'axios';
+import axios from 'axios'; // axios 모듈을 사용해야 합니다.
+import { useNavigation } from '@react-navigation/native';
 import qs from 'qs';
-/*.post('http://localhost:8080/api/signup',qs.stringify
-      ({
-        userName: userName,
-        password: password,
-        email: email,
-        nickName: nickName,
-      }))*/
-const LoginScreen = ({ navigation }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [checkpassword, setcheckPassword] = useState('');
-  const [userName, setuserName] = useState('');
-  const [nickName, setnickName] = useState('');
-  const [isModalVisible, setModalVisible] = useState(false);
 
-  const  handleSignup = ()=>{
-    // 여기에 로그인 로직을 구현합니다.
-    // 로그인이 성공하면 다음 화면으로 이동할 수 있습니다.
-    if(password == checkpassword)
-    {
-      console.log('진입');
-      axios({
-        method: "post",
-        url : "http://127.0.0.1/api/signup",
-        data:{
-          userName : userName,
-          password: password,
-          email : email,
-          nickName : nickName
-        }
-      })
-      .then(res =>{
-      console.log(res.data);
-      navigation.pop();
-    })
-    .catch(error =>{ console.log(error)});
-    }
-    else//password != checkpassword
-    {
-        setModalVisible(true);
-        navigation.navigate('Signup');
-    }
-    
+const LoginScreen = () => {
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [formData, setFormData] = useState({
+    username: '',
+    password: '',
+    passwordCheck: '',
+    nickname: '',
+    email: '',
+  });
+  const navigation  = useNavigation();
+  const handleInputChange = (name, value) => {
+    setFormData({ ...formData, [name]: value });
   };
+  const changeInt = (name, value) =>{
+    const LongId = parseInt(value, 10);
+    setFormData({ ...formData, [name]: LongId });
+  } 
+  const handleSignup = () => {
+    // 여기에 로그인 로직을 구현합니다.
+    console.log('console');
+    console.log(formData);
+    if(formData.password != formData.passwordCheck)
+    {
+      console.log("differnt");
+      Alert.alert('경고', '비밀번호가 일치하지 않습니다.');
+    }
+    else{
+      try {
+        const response = axios.post(
+          'http://172.21.48.1:8080/api/signup',
+          formData,
+          {
+            headers: {
+              'Content-Type': 'application/json', // 서버가 JSON 형식을 원하는 경우
+            },
+          }
+        );
+        console.log('성공');
+        navigation.navigate("Home");
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
   const closeModal = () => {
     setModalVisible(false);
   };
+
   return (
-    <View style ={styles.SignContainer}>
-      <View style ={styles.menu}>
-        <Nav/>
+    <View style={styles.SignContainer}>
+      <View style={styles.menu}>
+        <Nav />
         <Text style={styles.Title}>Travel Busan</Text>
       </View>
       <View style={styles.container}>
-      <Text style={styles.header}>회원가입</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="이름"
-        onChangeText={setuserName}
-        value={userName}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="닉네임"
-        onChangeText={setnickName}
-        value={nickName}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="이메일"
-        onChangeText={setEmail}
-        value={email}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="비밀번호"
-        secureTextEntry
-        onChangeText={setPassword}
-        value={password}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="비밀번호 확인"
-        secureTextEntry
-        onChangeText={setcheckPassword}
-        value={checkpassword}
-      />
-      <TouchableOpacity style={styles.button} onPress={handleSignup}>
-        <Text style={styles.buttonText}>회원가입</Text>
-      </TouchableOpacity>
-      <Modal isVisible={isModalVisible}>
-        <View>
-            <Text>알림 : 비밀번호가 다릅니다. 다시 확인해주세요.</Text>
-            <Button title="확인" onPress={closeModal}></Button>
-        </View>
-      </Modal>
-    </View>
+        <Text style={styles.header}>Styles</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="이름"
+          onChangeText={(text) => handleInputChange('username', text)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="비밀번호"
+          secureTextEntry
+          onChangeText={(text) => handleInputChange('password', text)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="비밀번호 확인"
+          secureTextEntry
+          onChangeText={(text) => handleInputChange('passwordCheck', text)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="닉네임"
+          onChangeText={(text) => handleInputChange('nickname', text)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="이메일"
+          onChangeText={(text) => handleInputChange('email', text)}
+        />
+        <TouchableOpacity style={styles.button} onPress={handleSignup}>
+          <Text style={styles.buttonText}>가입하기</Text>
+        </TouchableOpacity>
+        <Modal isVisible={isModalVisible}>
+          <View>
+            <Text>알림 : 회원가입에 실패했습니다. 다시 확인해주세요.</Text>
+            <Button title="닫기" onPress={closeModal} />
+          </View>
+        </Modal>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   menu: {
-    flexDirection: 'row', // 자식 컴포넌트를 가로로 나열
+    flexDirection: 'row',
   },
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  SignContainer : {
+  SignContainer: {
     flex: 1,
     paddingHorizontal: 20,
     paddingTop: 20,
@@ -138,11 +137,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 5,
   },
-  Title:{
+  Title: {
     fontSize: 40,
-    color : '#00B292',//진한 민트색
+    color: '#00B292',
     fontWeight: 'bold',
-    marginLeft : 20,
+    marginLeft: 20,
   },
   buttonText: {
     color: 'white',

@@ -2,13 +2,25 @@ import React, { useState } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, Modal } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
+import {getCookie} from './Cookie';
+
 
 const NavigationBarButton = () => {
   const [isActive, setIsActive] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const navigation  = useNavigation();
+  const[IsloggedIn, setIsloggedIn] = useState(false);
+  const cookie = getCookie('is_login');
   const toggleButton = () => {
     setIsModalVisible(!isModalVisible);
+    if(cookie != undefined)
+    {
+      setIsloggedIn(true);
+    }
+    else
+    {
+      setIsloggedIn(false);
+    }
     setIsActive(!isActive);
   };
 
@@ -19,7 +31,14 @@ const NavigationBarButton = () => {
 
   const handleLogin = () => {
     toggleModal(); // 모달 닫기
-    navigation.navigate('Login');
+    if(IsloggedIn == true)
+    {
+      navigation.navigate('Logout');
+    }
+    else
+    {
+      navigation.navigate('Login');
+    }
   };
   const handleBlog = () => {
     toggleModal(); // 모달 닫기
@@ -33,11 +52,19 @@ const NavigationBarButton = () => {
     toggleModal();
     navigation.navigate('Maps');
   };
+  const handleInfo2 =() =>{
+    toggleModal();
+    console.log(cookie);
+  };
   const handleInfo =() =>{
     toggleModal();
     navigation.navigate('UserInfo');
   };
-
+  const handleSight =() =>{
+    toggleModal();
+    navigation.navigate('Sight');
+  };
+  const IsLogin = getCookie("is_login");
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -56,7 +83,7 @@ const NavigationBarButton = () => {
         <View style={styles.modalContainer}>
           <Text style={styles.modalText}>모달창 메뉴 확장 추가 중</Text>
           <TouchableOpacity onPress={handleLogin}>
-            <Text style={styles.loginButton}>Login</Text>
+            {IsloggedIn ? <Text style={styles.loginButton}>Logout</Text> : <Text style={styles.loginButton}>Login</Text>}
           </TouchableOpacity>
           <TouchableOpacity onPress={handleBlog}>
             <Text style={styles.loginButton}>Blog</Text>
@@ -69,6 +96,12 @@ const NavigationBarButton = () => {
           </TouchableOpacity>
           <TouchableOpacity onPress={handleInfo}>
             <Text style={styles.loginButton}>Info</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleInfo2}>
+            <Text style={styles.loginButton}>token</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleSight}>
+            <Text style={styles.loginButton}>Sight</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={toggleModal}>
             <Text style={styles.closeButton}>Close</Text>

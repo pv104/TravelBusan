@@ -1,7 +1,7 @@
 import React from 'react';
 import { View,Image, Text, StyleSheet, FlatList, SafeAreaView,TouchableOpacity } from 'react-native';
-import Nav from "./nav";
-import Mine from "./blog/Blog_mydata";
+import Nav from "../nav";
+import Mine from "../Blog/Blog_mydata";
 import { useNavigation } from '@react-navigation/native';
 const CommunityData =[
   {Title:"부산 여행 추천 쫌",Content : "부산 여행가는데 여행지 추천 쫌", Writer : "여행자", Date : "15:39"},

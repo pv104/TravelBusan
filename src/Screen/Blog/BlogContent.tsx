@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import Nav from '../nav';
 import { useNavigation } from '@react-navigation/native';
-
+import axios from 'axios';
 const BlogEditor = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -29,11 +29,25 @@ const BlogEditor = () => {
     console.log('제목:', title);
     console.log('내용:', content);
     console.log('이미지 URI:', image);
-
-    // 블로그 내용을 저장 또는 업로드하는 로직을 추가
-
-    // 블로그 작성이 완료되면 'Blog' 스크린으로 이동
-    navigation.navigate('Blog');
+    try {
+      const response = axios.post(
+        'http://172.21.48.1:8080/api/blog',
+        {
+          title : title,
+          content : content,
+          image : image,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json', // 서버가 JSON 형식을 원하는 경우
+          },
+        }
+      );
+      console.log('성공');
+      navigation.navigate("Blog");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
