@@ -5,7 +5,10 @@ import Project.TravelBusan.domain.Authority;
 import Project.TravelBusan.domain.User;
 import Project.TravelBusan.exception.DuplicateUserException;
 import Project.TravelBusan.exception.NotFoundUserException;
+import Project.TravelBusan.jwt.JwtFilter;
+import Project.TravelBusan.jwt.TokenProvider;
 import Project.TravelBusan.repository.UserRepository;
+import Project.TravelBusan.request.TokenDto;
 import Project.TravelBusan.request.User.UserJoinRequestDto;
 import Project.TravelBusan.request.User.UserLoginRequestDto;
 import Project.TravelBusan.request.User.UserModifyRequestDto;
@@ -17,6 +20,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +41,9 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+    private final TokenProvider tokenProvider;
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
+
 
     /**
      * 회원 가입
@@ -82,19 +92,25 @@ public class UserService {
     /**
      * 로그인
      */
-    public ResponseDto<UserLoginResponseDto> login(UserLoginRequestDto userLoginRequestDto){
+    public ResponseDto<TokenDto> login(UserLoginRequestDto userLoginRequestDto){
         User user = userRepository.findByUsername(userLoginRequestDto.getUsername()).orElseThrow(() ->
                 new DuplicateUserException("존재하지 않는 아이디 입니다"));
 
         if(!passwordEncoder.matches(userLoginRequestDto.getPassword(), user.getPassword())){
             throw new IllegalStateException("패스워드가 일치하지 않습니다");
         }
-        return ResponseDto.success("로그인 성공",
-                UserLoginResponseDto.builder()
-                        .id(user.getId())
-                        .nickname(user.getNickname())
-                        .build()
-        );
+
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(userLoginRequestDto.getUsername(), userLoginRequestDto.getPassword());
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        String jwt = tokenProvider.createToken(authentication);
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
+
+        return ResponseDto.success("로그인 성공", new TokenDto(jwt));
     }
 
     /**
@@ -139,10 +155,14 @@ public class UserService {
      * 회원 수정
      */
     @Transactional
-    public ResponseDto<UserListResponseDto> modifyUser(Long userId, UserModifyRequestDto userModifyRequestDto) {
+    public ResponseDto<UserListResponseDto> modifyUser(Long userId, UserModifyRequestDto userModifyRequestDto, String username) {
         User user = userRepository.findByIdOrElseThrow(userId);
         // 사용자 검증 필요
         user.modifyUser(passwordEncoder.encode(userModifyRequestDto.getPassword()), userModifyRequestDto.getEmail(), userModifyRequestDto.getNickname());
+
+        if(!user.getUsername().equals(username)){
+            throw new IllegalStateException("사용자 ID가 일치하지 않습니다.");
+        }
 
         userRepository.save(user);
 
@@ -162,12 +182,17 @@ public class UserService {
      * 회원 삭제
      */
     @Transactional
-    public ResponseDto<Void> removeUser(Long userId) {
+    public ResponseDto<Void> removeUser(Long userId, String username) {
         User user = userRepository.findByIdOrElseThrow(userId);
-        // 사용자 검증 필요
+
+        if(!user.getUsername().equals(username)){
+            throw new IllegalStateException("사용자 ID가 일치하지 않습니다.");
+        }
+
         userRepository.deleteById(user.getId());
         return ResponseDto.success("회원 삭제 성공",null);
     }
+
 
     public UserLoginRequestDto getUserWithAuthorities(String username) {
         return UserLoginRequestDto.from(userRepository.findOneWithAuthoritiesByUsername(username).orElse(null));
