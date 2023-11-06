@@ -56,7 +56,7 @@ public class SecurityConfig {
                         .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 )
                 .authorizeHttpRequests(authorize ->
-                        authorize.requestMatchers("/api/hello", "/api/authenticate", "/api/signup", "/api/login").permitAll()
+                        authorize.requestMatchers( "/users/login","/users/signup").permitAll()
                 .anyRequest().authenticated())
                         .sessionManagement(sessionManagement ->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
