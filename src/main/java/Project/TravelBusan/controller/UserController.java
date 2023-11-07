@@ -1,5 +1,6 @@
 package Project.TravelBusan.controller;
 
+import Project.TravelBusan.domain.User;
 import Project.TravelBusan.jwt.JwtFilter;
 import Project.TravelBusan.jwt.TokenProvider;
 import Project.TravelBusan.request.TokenDto;
@@ -25,7 +26,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -38,6 +38,9 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final TokenProvider tokenProvider;
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
+
 
     @GetMapping
     public ResponseDto<UserDetailResponseDto> userDetail(){
@@ -65,7 +68,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseDto<TokenDto> userLogin(@RequestBody UserLoginRequestDto userLoginRequestDto) {
+    public ResponseEntity<TokenDto> userLogin(@RequestBody UserLoginRequestDto userLoginRequestDto) {
         return userService.login(userLoginRequestDto);
     }
 
@@ -76,7 +79,8 @@ public class UserController {
 
     @GetMapping("/check")
     public void check(@RequestHeader HttpHeaders header) {
-        log.info("checkController");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        log.info("getUserAuthorities : {}",authentication.getName());
         log.info("header : {}", header.getFirst("Authorization"));
         return ;
     }
