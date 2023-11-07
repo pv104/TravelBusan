@@ -44,7 +44,9 @@ const LoginScreen = () => {
           )
           const accessToken = response2.data.token;
           setCookie("is_login", `${accessToken}`,''); 
+          setCookie("userId", `${username}`,''); 
           console.log("쿠키 토큰" + getCookie("is_login"));
+          console.log("로그인된 아이디 : "+ getCookie("userId"));
           console.log("로그인성공");
         }
         catch (error) {

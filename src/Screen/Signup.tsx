@@ -5,7 +5,6 @@ import Modal from 'react-native-modal';
 import Nav from './nav';
 import axios from 'axios'; // axios 모듈을 사용해야 합니다.
 import { useNavigation } from '@react-navigation/native';
-import qs from 'qs';
 
 const LoginScreen = () => {
   const [isModalVisible, setModalVisible] = useState(false);

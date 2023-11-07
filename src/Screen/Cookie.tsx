@@ -1,7 +1,7 @@
 import { Cookies } from "react-cookie";
 
 const cookies = new Cookies();
-//쿠키에 값을 저장할때 
+//쿠키에 값을 저장할때
 export const setCookie = (name, value, option) => {
   return cookies.set(name, value, { ...option });
 };

@@ -4,13 +4,14 @@ import {getCookie} from './Cookie';
 import Nav from './nav';
 import axios from 'axios';
 import Login from './Login';
-const onAccountDeletion =() =>{
 
-};
-const onPasswordChange =() =>{
-
-};
 const UserProfile = async () => {
+  const onAccountDeletion =() =>{
+
+  };
+  const onPasswordChange =() =>{
+  
+  };
   const [username, setUsername]= useState('');
   const [nickname, setNickname]= useState('');
   const accessToken = getCookie('is_Login');

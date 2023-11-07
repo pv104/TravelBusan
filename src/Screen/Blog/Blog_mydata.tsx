@@ -1,15 +1,16 @@
 import React,{useState} from 'react';
 import {View,Text, StyleSheet,TouchableOpacity } from 'react-native';
-
-const mine = {
-    Id : '테스트 닉네임',
-}
-const handlePress = () => {
-    // 버튼을 누르면 이 함수가 실행됩니다.
-    // 원하는 작업을 여기에 추가하세요.
-  };
+import { getCookie } from '../Cookie';
+import { useNavigation } from '@react-navigation/native';
 
 const myData =()=>{
+    const navigation = useNavigation();
+    const handlePress = () => {
+        // 버튼을 누르면 이 함수가 실행됩니다.
+        // 원하는 작업을 여기에 추가하세요.
+        navigation.navigate("Blog");
+      };
+    const [mine, setMine] = useState('로그인 된 아이디가 없습니다.');
     const [signal, setSignal] = useState('');
     const handleSign =() =>{
         setSignal("새로운 소식이 없습니다.");
@@ -17,9 +18,20 @@ const myData =()=>{
     const handleActing =() =>{
         setSignal("새로운 활동이 없습니다.");
     }
+    const cookie = getCookie('is_login');
+    const userId = getCookie('userId');
+    console.log(userId);
+    if(cookie != undefined)//로그인 상태 확인
+    {
+        setMine("함수 작동 확인");
+    }
+    else if(userId != undefined)
+    {
+        setMine(userId);
+    }
     return(
         <View>
-            <Text style ={styles.my}>{mine.Id}</Text>
+            <Text style ={styles.my}>{mine}</Text>
             <View style ={styles.menuButton}>
                 <TouchableOpacity style={styles.button} onPress={handlePress}>
                     <Text style={styles.buttonText}>내 블로그로</Text>

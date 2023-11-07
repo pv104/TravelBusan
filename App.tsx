@@ -1,5 +1,5 @@
 import React from 'react';  ``
-import { useNavigation, NavigationContainer } from '@react-navigation/native';
+import {NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Home from './src/Screen/Home';
 import Login from './src/Screen/Login';
@@ -14,10 +14,10 @@ import BlogData from './src/Screen/Blog/BlogData';
 import CommunityContent from './src/Screen/Community/CommunityContent';
 import Sight from './src/Screen/Sight';
 
-const Stack = createNativeStackNavigator();
 
 //가로 확장가능
 const App =()=> {
+  const Stack = createNativeStackNavigator();
   return(
     <NavigationContainer>
       <Stack.Navigator>

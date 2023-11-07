@@ -10,8 +10,10 @@ const NavigationBarButton = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const navigation  = useNavigation();
   const[IsloggedIn, setIsloggedIn] = useState(false);
-  const cookie = getCookie('is_login');
+
+  
   const toggleButton = () => {
+    const cookie = getCookie('is_login');
     setIsModalVisible(!isModalVisible);
     if(cookie != undefined)
     {
@@ -82,27 +84,37 @@ const NavigationBarButton = () => {
       >
         <View style={styles.modalContainer}>
           <Text style={styles.modalText}>모달창 메뉴 확장 추가 중</Text>
-          <TouchableOpacity onPress={handleLogin}>
-            {IsloggedIn ? <Text style={styles.loginButton}>Logout</Text> : <Text style={styles.loginButton}>Login</Text>}
-          </TouchableOpacity>
-          <TouchableOpacity onPress={handleBlog}>
-            <Text style={styles.loginButton}>Blog</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={handleCommunity}>
-            <Text style={styles.loginButton}>Community</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={handleMaps}>
-            <Text style={styles.loginButton}>MAPS</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={handleInfo}>
-            <Text style={styles.loginButton}>Info</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={handleInfo2}>
-            <Text style={styles.loginButton}>token</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={handleSight}>
-            <Text style={styles.loginButton}>Sight</Text>
-          </TouchableOpacity>
+          <View>
+              <TouchableOpacity onPress={handleLogin}>
+                <Text style={styles.loginButton}>LogOut</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={handleInfo}>
+               <Text style={styles.loginButton}>Info</Text>
+               </TouchableOpacity>
+               <TouchableOpacity onPress={handleInfo2}>
+                  <Text style={styles.loginButton}>token</Text>
+                </TouchableOpacity>
+              <TouchableOpacity onPress={handleBlog}>
+                <Text style={styles.loginButton}>Blog</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={handleCommunity}>
+                 <Text style={styles.loginButton}>Community</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={handleMaps}>
+                  <Text style={styles.loginButton}>MAPS</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={handleSight}>
+                  <Text style={styles.loginButton}>Sight</Text>
+               </TouchableOpacity>
+               <View>
+              <TouchableOpacity onPress={handleLogin}>
+                <Text style={styles.loginButton}>Login</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={()=>handleInfo2}>
+                  <Text style={styles.loginButton}>token</Text>
+                </TouchableOpacity>
+              </View>
+          </View>
           <TouchableOpacity onPress={toggleModal}>
             <Text style={styles.closeButton}>Close</Text>
           </TouchableOpacity>

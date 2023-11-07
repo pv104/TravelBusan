@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, FlatList } from 'react-native';
 import Nav from './nav';
 import { useNavigation } from '@react-navigation/native';
@@ -9,27 +9,27 @@ const data = [
     Title: "동아대학교",
     Star: 1,
     Good: 32156,
-    Content: "그냥 대학교"
+    Content: "그냥 대학교",
+    type : "메인",
   }
 ]
 
 const Review = [
-  { id: 11, Title: "그냥 동아대", Writer: "테스터1", Star: 3.0, Content: "동아대는 그냥 동아대입니다." },
-  { id: 12, Title: "테스트", Writer: "테스터2", Star: 3.0, Content: "테스트 중입니다." },
-  { id: 13, Title: "222222", Writer: "테스터3", Star: 3.0, Content: "123123123123123123123." },
+  { id: 11, Title: "그냥 동아대", Writer: "테스터1", Star: 3.0, Content: "동아대는 그냥 동아대입니다.", type : "리뷰",},
+  { id: 12, Title: "테스트", Writer: "테스터2", Star: 3.0, Content: "테스트 중입니다." , type : "리뷰"},
+  { id: 13, Title: "222222", Writer: "테스터3", Star: 3.0, Content: "123123123123123123123." , type : "리뷰"},
 ]
 
 const blogData = [
-  { id: 1, title: '예시 1 - 블로그 제목', imageUri: require('../pics/광안대교.jpg'), content: '블로그 내용 1', date: '2023.10.13' },
-  { id: 2, title: '예시 2', imageUri: require('../pics/광안대교.jpg'), content: '블로그 내용 2', date: '2023.10.14' },
-  { id: 3, title: '예시 3', imageUri: require('../pics/광안대교.jpg'), content: '블로그 내용 3', date: '2023.10.15' },
-  { id: 4, title: '예시 4', imageUri: require('../pics/광안대교.jpg'), content: '블로그 내용 4', date: '2023.10.16' },
+  { id: 1, title: '예시 1 - 블로그 제목', imageUri: require('../pics/광안대교.jpg'), content: '블로그 내용 1', date: '2023.10.13' , type : "블로그"},
+  { id: 2, title: '예시 2', imageUri: require('../pics/광안대교.jpg'), content: '블로그 내용 2', date: '2023.10.14'  , type : "블로그"},
+  { id: 3, title: '예시 3', imageUri: require('../pics/광안대교.jpg'), content: '블로그 내용 3', date: '2023.10.15'  , type : "블로그"},
+  { id: 4, title: '예시 4', imageUri: require('../pics/광안대교.jpg'), content: '블로그 내용 4', date: '2023.10.16'  , type : "블로그"},
   // 다른 블로그 내용들 추가
 ];
 
 const Sight = () => {
   const navigation = useNavigation();
-  const [prevType, setPrevType] = useState("메인"); // 이전 항목의 타입을 저장
 
   const IntoBlog = (item) => {
     navigation.navigate('BlogData', {
@@ -40,40 +40,19 @@ const Sight = () => {
       date: item.date,
     });
   };
-
+  const [prevType, setPrevType] = useState('메인'); // 이전 항목의 타입을 저장
   const renderItem = (item) => {
-    let type = ''; // 현재 항목의 타입
-    let separator = null; // separator 초기화
-
-    if (item.Star !== undefined) {
-      if (item.Good !== undefined) {
-        // 본문 항목
-        type = '메인';
-      } else {
-        // 리뷰 항목
-        type = '리뷰';
-      }
-    } else {
-      // Data 및 Blog 항목
-      type = '블로그';
-    }
-    console.log("이전타입 : "+ prevType);
-    console.log("현재타입 : "+type);
-    
-    if (prevType != type) {
-        separator = (
-          <View>
-            <Text style={styles.SeparatorTitle}>{type}</Text>
-          </View>
-        );
-        
-    }
-
-    setPrevType(type);
-    if (type === '블로그') {
+    if (item.type === '블로그')
+     {
       return (
         <View style={styles.blogItem}>
-          {separator}
+              <View>
+               {prevType !== item.type ? (
+               <View>
+                <Text>{item.type}</Text>
+               </View>
+                ) : null}
+              </View>
           <TouchableOpacity onPress={() => IntoBlog(item)}>
             <Image source={item.imageUri} style={styles.blogImage} />
             <View style={styles.overlay}>
@@ -83,9 +62,18 @@ const Sight = () => {
           </TouchableOpacity>
         </View>
       );
-    } else if (type == '메인') {
+      
+    } else if (item.type == '메인') 
+    {
       return (
         <View style={styles.blogItem}>
+            <View>
+               {prevType!== item.type ? (
+               <View>
+                <Text>{item.type}</Text>
+               </View>
+                ) : null}
+              </View>
             <Text style={styles.MainTitle}>{item.Title}</Text>
             <View style={styles.separator} />
             <View style={styles.Reviewmenu}>
@@ -99,7 +87,14 @@ const Sight = () => {
     }
     else{
         return(
-            <View style={styles.blogItem}>
+          <View style={styles.blogItem}>
+            <View>
+               {prevType !== item.type ? (
+               <View>
+                <Text>{item.type}</Text>
+               </View>
+                ) : null}
+              </View>
             <Text style={styles.ReviewTitle}>{item.Title}</Text>
             <View style={styles.Reviewmenu}>
               <Text style={styles.Reviewmenu_in}>작성자: {item.Writer}</Text>
@@ -124,6 +119,7 @@ const Sight = () => {
         renderItem={({ item }) => renderItem(item)}
       />
     </View>
+    
   );
 };
 
@@ -177,7 +173,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'gray',
   },
   blogItem: {
-    marginBottom: 10,
+    marginBottom: 30,
     marginTop: 0,
   },
   blogImage: {
