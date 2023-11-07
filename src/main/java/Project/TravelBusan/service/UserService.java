@@ -181,8 +181,7 @@ public class UserService {
         User user = userRepository.findByUsernameOrElseThrow(authentication.getName());
         return user;
     }
-
-
+    
     public UserLoginRequestDto getUserWithAuthorities(String username) {
         return UserLoginRequestDto.from(userRepository.findOneWithAuthoritiesByUsername(username).orElse(null));
     }

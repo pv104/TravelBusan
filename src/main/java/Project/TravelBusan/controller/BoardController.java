@@ -22,7 +22,7 @@ public class BoardController {
 
     @PostMapping
     public ResponseDto<BoardSaveResponseDto> boardAdd(@RequestBody BoardRequestDto boardRequestDto){
-        return boardService.addBoard(boardRequestDto, 1L);
+        return boardService.addBoard(boardRequestDto);
     }
 
     @GetMapping
@@ -47,19 +47,16 @@ public class BoardController {
 
     @GetMapping("/{board-id}/boardLike")
     public ResponseDto<Void> boardLike(@PathVariable("board-id") Long boardId) {
-        Long userId = 1L;
-        return boardService.likeBoard(userId,boardId);
+        return boardService.likeBoard(boardId);
     }
 
     @PostMapping("/{board-id}/comment")
     public ResponseDto<CommentSaveResponseDto> addComment(@PathVariable("board-id") Long boardId, @RequestBody BoardCommentRequestDto boardCommentRequestDto) {
-        Long userId = 1L;
-        return boardCommentService.commentAdd(boardId,boardCommentRequestDto, userId);
+        return boardCommentService.commentAdd(boardId,boardCommentRequestDto);
     }
 
     @DeleteMapping("/{board-id}/comment/{comment-id}")
     public ResponseDto<Void> deleteComment(@PathVariable("comment-id") Long commentId, @PathVariable("board-id") Long boardId) {
-        Long userId = 1L;
-        return boardCommentService.commentDelete(commentId,userId);
+        return boardCommentService.commentDelete(commentId);
     }
 }

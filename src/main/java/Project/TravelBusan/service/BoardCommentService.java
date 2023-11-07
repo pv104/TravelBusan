@@ -11,6 +11,8 @@ import Project.TravelBusan.response.Board.CommentSaveResponseDto;
 import Project.TravelBusan.response.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,9 +30,9 @@ public class BoardCommentService {
      */
 
     @Transactional
-    public ResponseDto<CommentSaveResponseDto> commentAdd(Long boardId, BoardCommentRequestDto boardCommentRequestDto, Long userId) {
+    public ResponseDto<CommentSaveResponseDto> commentAdd(Long boardId, BoardCommentRequestDto boardCommentRequestDto) {
         Board board = boardRepository.findByBoardOrElseThrow(boardId);
-        User user = userRepository.findByIdOrElseThrow(userId);
+        User user = getUserAuthorities();
 
         if (boardCommentRequestDto.getParent() == null) { // 부모 댓글 작성
             BoardComment boardComment = BoardComment.builder()
@@ -78,17 +80,24 @@ public class BoardCommentService {
      * 댓글 삭제
      */
     @Transactional
-    public ResponseDto<Void> commentDelete(Long commentId, Long userId) {
+    public ResponseDto<Void> commentDelete(Long commentId) {
         BoardComment comment = boardCommentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalStateException("해당 댓글이 존재하지 않습니다."));
 
-        userRepository.findByIdOrElseThrow(userId);
+        User user = getUserAuthorities();
 
-        if (!comment.getUser().getId().equals(userId)) {
+        if (!comment.getUser().getId().equals(user.getId())) {
             throw new IllegalStateException("해당 댓글 작성자가 아닙니다.");
         }
 
         boardCommentRepository.delete(comment);
         return ResponseDto.success("댓글 삭제 성공",null);
     }
+
+    private User getUserAuthorities() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = userRepository.findByUsernameOrElseThrow(authentication.getName());
+        return user;
+    }
+
 }
