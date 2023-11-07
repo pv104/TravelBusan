@@ -6,9 +6,11 @@ import Project.TravelBusan.request.TokenDto;
 import Project.TravelBusan.request.User.UserJoinRequestDto;
 import Project.TravelBusan.request.User.UserLoginRequestDto;
 import Project.TravelBusan.request.User.UserModifyRequestDto;
+import Project.TravelBusan.response.User.UserDetailResponseDto;
 import Project.TravelBusan.response.User.UserListResponseDto;
 import Project.TravelBusan.response.ResponseDto;
 import Project.TravelBusan.response.User.UserLoginResponseDto;
+import Project.TravelBusan.response.User.UserModifyResponseDto;
 import Project.TravelBusan.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -21,9 +23,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -35,27 +40,23 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseDto<List<UserListResponseDto>> userList(){
-        return userService.listUser();
+    public ResponseDto<UserDetailResponseDto> userDetail(){
+        return userService.detailUser();
     }
 
-    @GetMapping("/{user-id}")
-    public ResponseDto<UserListResponseDto> userDetail(@PathVariable("user-id") Long userId){
-        return userService.detailUser(userId);
-    }
-
-    @PatchMapping("/{user-id}")
-    public ResponseDto<UserListResponseDto> userModify(@PathVariable("user-id") Long userId, @RequestBody UserModifyRequestDto userModifyRequestDto) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); // 현재 토큰에 있는사용자 정보를 가져옴
-        String username = authentication.getName();
-        return userService.modifyUser(userId, userModifyRequestDto, username);
+    @PatchMapping
+    public ResponseDto<UserModifyResponseDto> userModify(@RequestBody UserModifyRequestDto userModifyRequestDto) {
+        return userService.modifyUser(userModifyRequestDto);
        }
 
-    @DeleteMapping("/{user-id}")
-    public ResponseDto<Void> userRemove(@PathVariable("user-id") Long userId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); // 현재 토큰에 있는사용자 정보를 가져옴
-        String username = authentication.getName();
-        return userService.removeUser(userId, username);
+    @DeleteMapping
+    public ResponseDto<Void> userRemove() {
+        return userService.removeUser();
+    }
+
+    @GetMapping("/list")
+    public ResponseDto<List<UserListResponseDto>> userList(){
+        return userService.listUser();
     }
 
     @GetMapping("/user")
@@ -73,10 +74,4 @@ public class UserController {
         return userService.join(userJoinRequestDto);
     }
 
-    @GetMapping("/check")
-    public void check (){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        log.info("nowUser : {}", authentication.getName());
-        return;
-    }
 }

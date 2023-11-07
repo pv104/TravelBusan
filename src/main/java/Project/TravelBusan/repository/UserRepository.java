@@ -11,8 +11,14 @@ public interface UserRepository extends JpaRepository<User,Long> {
     Optional<User> findOneWithAuthoritiesByUsername(String username);
 
     Optional<User> findByUsername(String username);
+
     default User findByIdOrElseThrow(Long userId) {
         return findById(userId).orElseThrow(() ->
+                new IllegalStateException("존재하지 않는 아이디 입니다."));
+    }
+
+    default User findByUsernameOrElseThrow(String username){
+        return findByUsername(username).orElseThrow(() ->
                 new IllegalStateException("존재하지 않는 아이디 입니다."));
     }
 

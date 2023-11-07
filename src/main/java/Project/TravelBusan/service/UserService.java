@@ -12,14 +12,14 @@ import Project.TravelBusan.request.TokenDto;
 import Project.TravelBusan.request.User.UserJoinRequestDto;
 import Project.TravelBusan.request.User.UserLoginRequestDto;
 import Project.TravelBusan.request.User.UserModifyRequestDto;
+import Project.TravelBusan.response.User.UserDetailResponseDto;
 import Project.TravelBusan.response.User.UserListResponseDto;
 import Project.TravelBusan.response.User.UserLoginResponseDto;
 import Project.TravelBusan.response.ResponseDto;
+import Project.TravelBusan.response.User.UserModifyResponseDto;
 import Project.TravelBusan.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -50,44 +50,32 @@ public class UserService {
      */
     @Transactional
     public ResponseDto<UserLoginResponseDto> join(UserJoinRequestDto userJoinRequestDto) {
-        if (isPresentUsername(userJoinRequestDto.getUsername())) {
+        if(userRepository.findByUsername(userJoinRequestDto.getUsername()).isPresent()){
             throw new DuplicateUserException("이미 존재하는 아이디 입니다");
         }
 
-//        if(!userJoinRequestDto.getPassword().equals(userJoinRequestDto.getPasswordCheck())){
-//            logger.info(" original : {}",userJoinRequestDto.getPassword());
-//            logger.info(" Check :  {}", userJoinRequestDto.getPasswordCheck());
-//            throw new IllegalStateException("비빌번호와 비밀번호 확인이 일치하지 않습니다");
-//        }
+        Authority authority = Authority.builder()
+                .authorityName("ROLE_ADMIN")
+                .build();
 
-            Authority authority = Authority.builder()
-                    .authorityName("ROLE_ADMIN")
-                    .build();
+        User user = User.builder()
+                .nickname(userJoinRequestDto.getNickname())
+                .username(userJoinRequestDto.getUsername())
+                .password(passwordEncoder.encode(userJoinRequestDto.getPassword()))
+                .email(userJoinRequestDto.getEmail())
+                .authorities((Collections.singleton(authority)))
+                .activated(true)
+                .build();
 
+        userRepository.save(user);
 
-                User user = User.builder()
-                        .nickname(userJoinRequestDto.getNickname())
-                        .username(userJoinRequestDto.getUsername())
-                        .password(passwordEncoder.encode(userJoinRequestDto.getPassword()))
-                        .email(userJoinRequestDto.getEmail())
-                        .authorities((Collections.singleton(authority)))
-                        .activated(true)
-                        .build();
-
-                userRepository.save(user);
-
-            return ResponseDto.success("회원가입 성공",
-                    UserLoginResponseDto.builder()
-                            .id(user.getId())
-                            .nickname(user.getNickname())
-                            .build()
-            );
-        }
-
-    public boolean isPresentUsername(String username) {
-        return userRepository.findByUsername(username).isPresent();
+        return ResponseDto.success("회원가입 성공",
+                UserLoginResponseDto.builder()
+                        .id(user.getId())
+                        .nickname(user.getNickname())
+                        .build()
+        );
     }
-
 
     /**
      * 로그인
@@ -101,26 +89,30 @@ public class UserService {
         }
 
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(userLoginRequestDto.getUsername(), userLoginRequestDto.getPassword());
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+                new UsernamePasswordAuthenticationToken(userLoginRequestDto.getUsername(), userLoginRequestDto.getPassword()); // 사용자 아이디와 비밀번호를 가지고 인증 토큰을 생성
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken); // 사용자가 제출한 사용자 아이디와 비밀번호를 사용하여 인증을 시도
+        SecurityContextHolder.getContext().setAuthentication(authentication); // 로그인 성공시 SecurityContextHolder 에 사용자의 정보를 보관
 
-        String jwt = tokenProvider.createToken(authentication);
+        String jwt = tokenProvider.createToken(authentication); //JWT (JSON Web Token)를 생성하는 메서드
 
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
+        HttpHeaders httpHeaders = new HttpHeaders(); //  HTTP 헤더 정보를 저장하고 관리하는 클래스
+        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt); //  HTTP 응답 헤더에 JWT(Access Token) 추가
 
-        return ResponseDto.success("로그인 성공", new TokenDto(jwt));
+        return ResponseDto.success("로그인 성공",
+                TokenDto.builder()
+                    .token(jwt)
+                    .build()
+        );
     }
 
     /**
      * 회원 상세 조회
      */
-    public ResponseDto<UserListResponseDto> detailUser(Long userId) {
-        User user = userRepository.findByIdOrElseThrow(userId);
+    public ResponseDto<UserDetailResponseDto> detailUser() {
+        User user = getUserAuthorities();
 
         return ResponseDto.success("회원 조회 성공",
-                UserListResponseDto.builder()
+                UserDetailResponseDto.builder()
                         .id(user.getId())
                         .username(user.getUsername())
                         .nickname(user.getNickname())
@@ -155,19 +147,15 @@ public class UserService {
      * 회원 수정
      */
     @Transactional
-    public ResponseDto<UserListResponseDto> modifyUser(Long userId, UserModifyRequestDto userModifyRequestDto, String username) {
-        User user = userRepository.findByIdOrElseThrow(userId);
-        // 사용자 검증 필요
-        user.modifyUser(passwordEncoder.encode(userModifyRequestDto.getPassword()), userModifyRequestDto.getEmail(), userModifyRequestDto.getNickname());
+    public ResponseDto<UserModifyResponseDto> modifyUser(UserModifyRequestDto userModifyRequestDto) {
+        User user = getUserAuthorities();
 
-        if(!user.getUsername().equals(username)){
-            throw new IllegalStateException("사용자 ID가 일치하지 않습니다.");
-        }
+        user.modifyUser(passwordEncoder.encode(userModifyRequestDto.getPassword()), userModifyRequestDto.getEmail(), userModifyRequestDto.getNickname());
 
         userRepository.save(user);
 
         return ResponseDto.success("회원 수정 성공",
-                UserListResponseDto.builder()
+                UserModifyResponseDto.builder()
                         .id(user.getId())
                         .username(user.getUsername())
                         .nickname(user.getNickname())
@@ -182,15 +170,16 @@ public class UserService {
      * 회원 삭제
      */
     @Transactional
-    public ResponseDto<Void> removeUser(Long userId, String username) {
-        User user = userRepository.findByIdOrElseThrow(userId);
-
-        if(!user.getUsername().equals(username)){
-            throw new IllegalStateException("사용자 ID가 일치하지 않습니다.");
-        }
-
+    public ResponseDto<Void> removeUser() {
+        User user = getUserAuthorities();
         userRepository.deleteById(user.getId());
-        return ResponseDto.success("회원 삭제 성공",null);
+        return ResponseDto.success("회원 삭제",null);
+    }
+
+    private User getUserAuthorities() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = userRepository.findByUsernameOrElseThrow(authentication.getName());
+        return user;
     }
 
 
