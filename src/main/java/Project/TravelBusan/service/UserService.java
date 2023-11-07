@@ -149,7 +149,6 @@ public class UserService {
     @Transactional
     public ResponseDto<UserModifyResponseDto> modifyUser(UserModifyRequestDto userModifyRequestDto) {
         User user = getUserAuthorities();
-
         user.modifyUser(passwordEncoder.encode(userModifyRequestDto.getPassword()), userModifyRequestDto.getEmail(), userModifyRequestDto.getNickname());
 
         userRepository.save(user);
@@ -179,9 +178,10 @@ public class UserService {
     private User getUserAuthorities() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = userRepository.findByUsernameOrElseThrow(authentication.getName());
+        log.info("getUserAuthorities : {}",user.getUsername());
         return user;
     }
-    
+
     public UserLoginRequestDto getUserWithAuthorities(String username) {
         return UserLoginRequestDto.from(userRepository.findOneWithAuthoritiesByUsername(username).orElse(null));
     }

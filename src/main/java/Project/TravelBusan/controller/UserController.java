@@ -74,4 +74,10 @@ public class UserController {
         return userService.join(userJoinRequestDto);
     }
 
+    @GetMapping("/check")
+    public void check(@RequestHeader HttpHeaders header) {
+        log.info("checkController");
+        log.info("header : {}", header.getFirst("Authorization"));
+        return ;
+    }
 }
