@@ -1,10 +1,10 @@
 package Project.TravelBusan.request.Board;
 
-import Project.TravelBusan.domain.User;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class BoardModifyRequestDto {
     private String title;
