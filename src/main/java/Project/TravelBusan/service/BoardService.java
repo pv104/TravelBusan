@@ -2,10 +2,8 @@ package Project.TravelBusan.service;
 
 
 import Project.TravelBusan.domain.Board;
-import Project.TravelBusan.domain.BoardComment;
 import Project.TravelBusan.domain.BoardLike;
 import Project.TravelBusan.domain.User;
-import Project.TravelBusan.repository.BoardCommentRepository;
 import Project.TravelBusan.repository.BoardLikeRepository;
 import Project.TravelBusan.repository.BoardRepository;
 import Project.TravelBusan.repository.UserRepository;
@@ -16,6 +14,8 @@ import Project.TravelBusan.response.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,9 +36,8 @@ public class BoardService {
      * 게시글 생성
      */
     @Transactional
-    public ResponseDto<BoardSaveResponseDto> addBoard(BoardRequestDto boardRequestDto, Long userId) {
-        // 작성자 정보 받아와야됨
-        User user = userRepository.findByIdOrElseThrow(userId);
+    public ResponseDto<BoardSaveResponseDto> addBoard(BoardRequestDto boardRequestDto) {
+        User user = getUserAuthorities();
 
         boardRequestDto.updateCreateBy(1L, 0L, user);
 
@@ -102,8 +101,11 @@ public class BoardService {
      */
     @Transactional
     public ResponseDto<BoardResponseDto> modifyBoard(BoardModifyRequestDto boardModifyRequestDto, Long boardId) {
-        // 작성자 검증 필요
+        User user = getUserAuthorities();
         Board board = boardRepository.findByBoardOrElseThrow(boardId);
+
+        boardValidation(user, board);
+
         board.modifyBoard(boardModifyRequestDto.getTitle(), boardModifyRequestDto.getContent());
 
         boardRepository.save(board);
@@ -127,7 +129,11 @@ public class BoardService {
      */
     @Transactional
     public ResponseDto<Void> removeBoard(Long boardId) {
+        User user = getUserAuthorities();
         Board board = boardRepository.findByBoardOrElseThrow(boardId);
+
+        boardValidation(user, board);
+
         boardRepository.deleteById(board.getId());
         return ResponseDto.success("게시글 삭제 성공", null);
     }
@@ -137,9 +143,8 @@ public class BoardService {
      * 게시글 좋아요
      */
     @Transactional
-    public ResponseDto<Void> likeBoard(Long userId, Long boardId) {
-        // 로그인 정보 필요
-        User user = userRepository.findByIdOrElseThrow(userId);
+    public ResponseDto<Void> likeBoard(Long boardId) {
+        User user = getUserAuthorities();
         Board board = boardRepository.findByBoardOrElseThrow(boardId);
 
         if (boardLikeRepository.findByUserAndBoard(user, board).isPresent()) {
@@ -158,5 +163,18 @@ public class BoardService {
         boardRepository.save(board);
 
         return ResponseDto.success("좋아요 성공", null);
+    }
+
+    private User getUserAuthorities() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = userRepository.findByUsernameOrElseThrow(authentication.getName());
+        return user;
+    }
+
+
+    private static void boardValidation(User user, Board board) {
+        if(user != board.getUser()){
+            throw new IllegalStateException("게시글 작성자가 아닙니다");
+        }
     }
 }
