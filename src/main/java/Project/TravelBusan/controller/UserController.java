@@ -38,9 +38,6 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-    private final TokenProvider tokenProvider;
-    private final AuthenticationManagerBuilder authenticationManagerBuilder;
-
 
     @GetMapping
     public ResponseDto<UserDetailResponseDto> userDetail(){
@@ -68,7 +65,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<TokenDto> userLogin(@RequestBody UserLoginRequestDto userLoginRequestDto) {
+    public ResponseDto<TokenDto> userLogin(@Valid @RequestBody UserLoginRequestDto userLoginRequestDto) {
         return userService.login(userLoginRequestDto);
     }
 

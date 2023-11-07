@@ -82,7 +82,7 @@ public class UserService {
     /**
      * 로그인
      */
-    public ResponseEntity<TokenDto> login(UserLoginRequestDto userLoginRequestDto){
+    public ResponseDto<TokenDto> login(UserLoginRequestDto userLoginRequestDto){
         User user = userRepository.findByUsername(userLoginRequestDto.getUsername()).orElseThrow(() ->
                 new DuplicateUserException("존재하지 않는 아이디 입니다"));
 
@@ -100,8 +100,13 @@ public class UserService {
         HttpHeaders httpHeaders = new HttpHeaders(); //  HTTP 헤더 정보를 저장하고 관리하는 클래스
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt); //  HTTP 응답 헤더에 JWT(Access Token) 추가
 
-        return new ResponseEntity<>(new TokenDto(jwt), httpHeaders, HttpStatus.OK);
+        return ResponseDto.success("로그인 성공",
+                TokenDto.builder()
+                        .token(jwt)
+                        .build()
+        );
     }
+
 
     /**
      * 회원 상세 조회
