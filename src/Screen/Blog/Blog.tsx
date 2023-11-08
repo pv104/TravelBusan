@@ -5,7 +5,7 @@ import BlogSearch from "./BlogSearch"
 import Mine from "./Blog_mydata";
 import { useNavigation } from '@react-navigation/native';
 
-const navigation  = useNavigation();
+
 const blogData = [
   { id: 1,
      title: '예시 1 - 블로그 제목',
@@ -17,16 +17,18 @@ const blogData = [
   { id: 4, title: '예시 4',imageUri: require('../../pics/광안대교.jpg'),content:  '블로그 내용 4', date: '2023.10.16' },
   // 다른 블로그 내용들 추가
 ];
-const IntoBlog = (item) => {
-  navigation.navigate('BlogData', { 
-    id : item.id,
-    title : item.title,
-    imageUri : item.imageUri,
-    content : item.content,
-    date : item.date,
-   });
-};
+
 const BlogScreen = () => {
+  const navigation  = useNavigation();
+  const IntoBlog = (item) => {
+    navigation.navigate('BlogData', { 
+      id : item.id,
+      title : item.title,
+      imageUri : item.imageUri,
+      content : item.content,
+      date : item.date,
+     });
+  };
   const userData = {
     username: '작성자 아이디',
   };

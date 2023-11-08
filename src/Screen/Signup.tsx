@@ -35,7 +35,7 @@ const LoginScreen = () => {
     else{
       try {
         const response = axios.post(
-          'http://172.21.48.1:8080/api/signup',
+          'http://172.26.208.1.1:8080/users/signup',
           formData,
           {
             headers: {
@@ -45,7 +45,8 @@ const LoginScreen = () => {
         );
         console.log('성공');
         navigation.navigate("Home");
-      } catch (error) {
+      }
+      catch (error) {
         console.log(error);
       }
     }

@@ -1,29 +1,85 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { View,PermissionsAndroid, Text, TextInput, Image, StyleSheet, TouchableOpacity,Alert } from 'react-native';
 import Nav from '../nav';
 import { useNavigation } from '@react-navigation/native';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import axios from 'axios';
 const BlogEditor = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [image, setImage] = useState(null);
+  const [photo, setPhoto] = useState('');
   const navigation = useNavigation();
 
-  const handleImagePicker = () => {
-    const option = {
-      title: '이미지 선택',
-      storageOptions: {
-        skipBackup: true,
-        path: 'images',
-      },
-    };
-  
-    /*ImagePicker.launchImageLibrary(option, (response) => {
-      if (response.didCancel) {
-        console.log('사용자가 이미지 선택을 취소했습니다.');
+
+  const showPicker = async () =>{
+    const grantedcamera = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.CAMERA,
+      {
+        title : "카메라 권한",
+        message: "해당 어플은 카메라 권한이 필요합니다.",
+        buttonNeutral : "ASK ME Later",
+        buttonNegative : "Cancel",
+        buttonPositive : "OK"
       }
-    });*/
-  };
+    );
+    const grantedstorage = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+      {
+        title : "카메라 권한",
+        message: "해당 어플은 카메라 권한이 필요합니다.",
+        buttonNeutral : "ASK ME Later",
+        buttonNegative : "Cancel",
+        buttonPositive : "OK"
+      }
+    );
+    console.log(grantedcamera);
+    console.log(grantedstorage);
+    if(grantedcamera === PermissionsAndroid.RESULTS.GRANTED && grantedstorage === PermissionsAndroid.RESULTS.GRANTED){
+      console.log("권한 부여");
+      Alert.alert(
+        "뭘로 올릴래?",
+        "선택해",
+        [
+          {
+            text: "카메라로 찍기",
+            onPress: async() =>{
+              const result = await launchCamera({
+                mediaType : 'photo', 
+                cameraType : 'back', 
+              });
+                if (result.didCancel){ 
+                  return null;
+                }
+                const localUri = result.assets[0].uri;
+                const uriPath = localUri.split("//").pop();
+                const imageName = localUri.split("/").pop();
+                setPhoto("file://"+uriPath);
+                return photo;
+            }
+          },
+          {
+            text: "앨범에서 선택",
+            onPress: async() =>{
+              const result = await launchImageLibrary();
+              if (result.didCancel){
+                return null;
+              } 
+              const localUri = result.assets[0].uri;
+              const uriPath = localUri.split("//").pop();
+              const imageName = localUri.split("/").pop();
+              setPhoto("file://"+uriPath);
+              return photo;
+            }
+          },
+        ],
+        {cancelable: true}
+      );
+    }
+    else{
+      console.log("권한 미지급");
+    }
+  }
 
   const handleSubmit = () => {
     console.log('제목:', title);
@@ -49,7 +105,7 @@ const BlogEditor = () => {
       console.log(error);
     }
   };
-
+  
   return (
     <View style={styles.container}>
       <View style={styles.menu}>
@@ -72,9 +128,20 @@ const BlogEditor = () => {
         placeholder="블로그 내용을 입력하세요"
         multiline={true}
       />
-      <TouchableOpacity style={styles.button} onPress={handleImagePicker}>
-        <Text style={styles.buttonText}>이미지 첨부</Text>
-      </TouchableOpacity>
+      <View>
+        {photo ? 
+          <View>
+            <Image source={{uri : '../../pics/광안대교.jpg'}} />
+            <TouchableOpacity style={styles.button} onPress={showPicker}>
+              <Text style={styles.buttonText}>이미지 첨부2</Text>
+            </TouchableOpacity>
+          </View>
+        :
+        <TouchableOpacity style={styles.button} onPress={showPicker}>
+          <Text style={styles.buttonText}>이미지 첨부</Text>
+        </TouchableOpacity>
+        }
+      </View>
       <TouchableOpacity style={styles.button} onPress={handleSubmit}>
         <Text style={styles.buttonText}>제출</Text>
       </TouchableOpacity>

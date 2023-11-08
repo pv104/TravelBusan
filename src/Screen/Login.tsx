@@ -7,6 +7,7 @@ import axios from 'axios';
 import { setCookie,getCookie } from './Cookie';
 
 
+
 const LoginScreen = () => {
   const [username, setusername] = useState('');
   const [password, setPassword] = useState('');
@@ -16,7 +17,7 @@ const LoginScreen = () => {
     // 로그인이 성공하면 다음 화면으로 이동할 수 있습니다.
     try {
       const response = await axios.post(
-        'http://172.21.48.1:8080/api/login',
+        'http://172.26.208.1:8080/users/login',
         {
           username: username,
           password: password,
@@ -27,37 +28,12 @@ const LoginScreen = () => {
           },
         }
       );
-      if(response.status == 200)
-      {
-        try{
-          const response2 = await axios.post(
-            'http://172.21.48.1:8080/api/authenticate',
-            {
-              username : username,
-              password : password,
-            },
-            {
-              headers: {
-                'Content-Type': 'application/json', // 서버가 JSON 형식을 원하는 경우
-              },
-            }
-          )
-          const accessToken = response2.data.token;
-          setCookie("is_login", `${accessToken}`,''); 
-          setCookie("userId", `${username}`,''); 
-          console.log("쿠키 토큰" + getCookie("is_login"));
-          console.log("로그인된 아이디 : "+ getCookie("userId"));
-          console.log("로그인성공");
-        }
-        catch (error) {
-          console.log(error);
-        }
-      }
-      /*const accessToken = response.data.token;
-      setCookie("is_login", `${accessToken}`,''); 
-      console.log("쿠키 토큰" + getCookie("is_login"));
-      console.log("로그인성공");*/
-
+      console.log(response.data.data.token);
+      setCookie("userId", `${username}`,'');
+      setCookie("token", `${response.data.data.token}`,'');
+      console.log("로그인 ID" + getCookie("userId"));
+      console.log("토큰 : " + getCookie("token"));
+      console.log("로그인성공");
       navigation.navigate("Home");
     } 
     catch (error) {

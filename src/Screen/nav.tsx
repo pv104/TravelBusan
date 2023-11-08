@@ -9,20 +9,10 @@ const NavigationBarButton = () => {
   const [isActive, setIsActive] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const navigation  = useNavigation();
-  const[IsloggedIn, setIsloggedIn] = useState(false);
-
+  
   
   const toggleButton = () => {
-    const cookie = getCookie('is_login');
     setIsModalVisible(!isModalVisible);
-    if(cookie != undefined)
-    {
-      setIsloggedIn(true);
-    }
-    else
-    {
-      setIsloggedIn(false);
-    }
     setIsActive(!isActive);
   };
 
@@ -33,14 +23,7 @@ const NavigationBarButton = () => {
 
   const handleLogin = () => {
     toggleModal(); // 모달 닫기
-    if(IsloggedIn == true)
-    {
-      navigation.navigate('Logout');
-    }
-    else
-    {
-      navigation.navigate('Login');
-    }
+    navigation.navigate('Login');
   };
   const handleBlog = () => {
     toggleModal(); // 모달 닫기
@@ -56,7 +39,6 @@ const NavigationBarButton = () => {
   };
   const handleInfo2 =() =>{
     toggleModal();
-    console.log(cookie);
   };
   const handleInfo =() =>{
     toggleModal();
@@ -66,7 +48,7 @@ const NavigationBarButton = () => {
     toggleModal();
     navigation.navigate('Sight');
   };
-  const IsLogin = getCookie("is_login");
+  const IsLogin = getCookie("userId");
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -85,37 +67,37 @@ const NavigationBarButton = () => {
         <View style={styles.modalContainer}>
           <Text style={styles.modalText}>모달창 메뉴 확장 추가 중</Text>
           <View>
-              <TouchableOpacity onPress={handleLogin}>
-                <Text style={styles.loginButton}>LogOut</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={handleInfo}>
+            {IsLogin ? 
+            <TouchableOpacity onPress={() => handleLogin()}>
+            <Text style={styles.loginButton}>LogOut</Text>
+          </TouchableOpacity>
+          :
+              <TouchableOpacity onPress={() =>handleLogin()}>
+              <Text style={styles.loginButton}>Login</Text>
+            </TouchableOpacity>
+            }
+              <TouchableOpacity onPress={() =>handleInfo()}>
                <Text style={styles.loginButton}>Info</Text>
                </TouchableOpacity>
-               <TouchableOpacity onPress={handleInfo2}>
-                  <Text style={styles.loginButton}>token</Text>
-                </TouchableOpacity>
-              <TouchableOpacity onPress={handleBlog}>
+              <TouchableOpacity onPress={() =>handleBlog()}>
                 <Text style={styles.loginButton}>Blog</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={handleCommunity}>
+              <TouchableOpacity onPress={() =>handleCommunity()}>
                  <Text style={styles.loginButton}>Community</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={handleMaps}>
+              <TouchableOpacity onPress={() =>handleMaps()}>
                   <Text style={styles.loginButton}>MAPS</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={handleSight}>
+              <TouchableOpacity onPress={() =>handleSight()}>
                   <Text style={styles.loginButton}>Sight</Text>
                </TouchableOpacity>
                <View>
-              <TouchableOpacity onPress={handleLogin}>
-                <Text style={styles.loginButton}>Login</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={()=>handleInfo2}>
+              <TouchableOpacity onPress={()=>handleInfo2()}>
                   <Text style={styles.loginButton}>token</Text>
                 </TouchableOpacity>
               </View>
           </View>
-          <TouchableOpacity onPress={toggleModal}>
+          <TouchableOpacity onPress={() =>toggleModal()}>
             <Text style={styles.closeButton}>Close</Text>
           </TouchableOpacity>
         </View>

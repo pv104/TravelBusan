@@ -3,7 +3,6 @@ import { View, Text, Button, StyleSheet} from 'react-native';
 import {getCookie} from './Cookie';
 import Nav from './nav';
 import axios from 'axios';
-import Login from './Login';
 
 const UserProfile = async () => {
   const onAccountDeletion =() =>{
@@ -16,11 +15,8 @@ const UserProfile = async () => {
   const [nickname, setNickname]= useState('');
   const accessToken = getCookie('is_Login');
   try{
-    const response = await axios.get('http://172.21.48.1:8080/users/Login.username',
-    {
-      headers: {
-        'Authorization': `Bearer ${accessToken}`
-      },
+    const response = await axios.get('http://172.26.208.1:8080/users/Login.username',{
+
     }
     )
     if(response.status == 200)

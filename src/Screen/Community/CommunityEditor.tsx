@@ -2,34 +2,40 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Button, Image, StyleSheet } from 'react-native';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
+import { getCookie } from '../Cookie';
 
 
 const BlogEditor = () => {
   const navigation = useNavigation();
-  const [formData, setFormData] = useState({
-    title : '',
-    content : '',
-  });
-  const handleInputChange = (name, value) => {
-    setFormData({ ...formData, [name]: value });
-  };
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
   // 제출 버튼을 클릭했을 때 실행
   const handleSubmit = async () => {
     // title, content, image 등을 사용하여 블로그 내용을 저장 또는 업로드하는 로직을 추가
     // 여기에 서버에 블로그 내용을 업로드하거나 저장하는 로직을 추가하세요.
-    console.log(formData);
+    console.log(title);
+    console.log(content);
+    console.log(getCookie('token'));
     try {
-      const response = axios.post(
-        'http://172.21.48.1:8080/api/board',
-        formData,
+      const response = await axios.post(
+        'http://172.26.208.1:8080/boards',
+        {
+          title : title,
+          content : content,
+        },
         {
           headers: {
-            'Content-Type': 'application/json', // 서버가 JSON 형식을 원하는 경우
+             Authorization: `Bearer ${getCookie('token')}`,
+            'Content-Type': 'application/json',
           },
         }
       );
-      console.log('성공');
-      navigation.navigate("Community");
+      if(response.status == 200)
+      {
+        console.log('성공');
+        console.log(response.data);
+        navigation.navigate("Community");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -40,14 +46,14 @@ const BlogEditor = () => {
       <Text style={styles.label}>제목</Text>
       <TextInput
         style={styles.input}
-        onChangeText={(text) => handleInputChange('title', text)}
+        onChangeText={(text) => setTitle(text)}
         placeholder="제목을 입력하세요"
       />
 
       <Text style={styles.label}>내용</Text>
       <TextInput
         style={[styles.input, styles.contentInput]}
-        onChangeText={(text) => handleInputChange('content', text)}
+        onChangeText={(text) => setContent(text)}
         placeholder="게시글 내용을 입력하세요"
         multiline={true}
       />
