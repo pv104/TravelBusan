@@ -12,10 +12,13 @@ spring:
     properties:
       hibernate:
         show_sql: true
+  logging.level:
+    org.hibernate.SQL: debug  # ??? ??
   jwt:
     header: Authorization
     secret: a5j9papjwrpoieaaeiofjgiojaskluytresetdyfugyftretyfutzs5764zex87e6wz7exr8cxr7ezx8rz767ex8r87z4ex8
     token-validity-in-seconds: 86400
-
-  logging.level:
-    org.hibernate.SQL: debug  # ??? ??
+  security:
+    user:
+      name: user
+      password: password

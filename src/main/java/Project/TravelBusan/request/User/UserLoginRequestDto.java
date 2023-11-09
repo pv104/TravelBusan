@@ -16,21 +16,8 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Builder
 public class UserLoginRequestDto {
+    private Long id;
     private String username;
     private String password;
     private String nickname;
-    private Set<AuthorityDto> authorityDtoSet;
-
-    public static UserLoginRequestDto from(User user) {
-        if(user == null) return null;
-
-        return UserLoginRequestDto.builder()
-                .username(user.getUsername())
-                .password(user.getPassword())
-                .nickname(user.getNickname())
-                .authorityDtoSet(user.getAuthorities().stream()
-                        .map(authority -> AuthorityDto.builder().authorityName(authority.getAuthorityName()).build())
-                        .collect(Collectors.toSet()))
-                .build();
-    }
 }

@@ -2,11 +2,12 @@ package Project.TravelBusan.request.Board;
 
 
 import Project.TravelBusan.domain.BoardComment;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 
-@Data
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class BoardCommentRequestDto {
     private String content;

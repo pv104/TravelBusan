@@ -12,15 +12,14 @@ import Project.TravelBusan.request.TokenDto;
 import Project.TravelBusan.request.User.UserJoinRequestDto;
 import Project.TravelBusan.request.User.UserLoginRequestDto;
 import Project.TravelBusan.request.User.UserModifyRequestDto;
-import Project.TravelBusan.response.User.UserDetailResponseDto;
-import Project.TravelBusan.response.User.UserListResponseDto;
-import Project.TravelBusan.response.User.UserLoginResponseDto;
+import Project.TravelBusan.response.User.*;
 import Project.TravelBusan.response.ResponseDto;
-import Project.TravelBusan.response.User.UserModifyResponseDto;
 import Project.TravelBusan.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -80,7 +79,7 @@ public class UserService {
     /**
      * 로그인
      */
-    public ResponseDto<TokenDto> login(UserLoginRequestDto userLoginRequestDto){
+    public ResponseEntity<ResponseDto<TokenDto>> login(UserLoginRequestDto userLoginRequestDto){
         User user = userRepository.findByUsername(userLoginRequestDto.getUsername()).orElseThrow(() ->
                 new DuplicateUserException("존재하지 않는 아이디 입니다"));
 
@@ -98,18 +97,14 @@ public class UserService {
         HttpHeaders httpHeaders = new HttpHeaders(); //  HTTP 헤더 정보를 저장하고 관리하는 클래스
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt); //  HTTP 응답 헤더에 JWT(Access Token) 추가
 
-        return ResponseDto.success("로그인 성공",
-                TokenDto.builder()
-                    .token(jwt)
-                    .build()
-        );
+        return new ResponseEntity<>(ResponseDto.success("로그인 성공", new TokenDto(jwt)), httpHeaders, HttpStatus.OK);
     }
 
     /**
      * 회원 상세 조회
      */
     public ResponseDto<UserDetailResponseDto> detailUser() {
-        User user = getUserAuthorities();
+        User user = userRepository.findByIdOrElseThrow(getMyUserWithAuthorities().getId());
 
         return ResponseDto.success("회원 조회 성공",
                 UserDetailResponseDto.builder()
@@ -148,8 +143,7 @@ public class UserService {
      */
     @Transactional
     public ResponseDto<UserModifyResponseDto> modifyUser(UserModifyRequestDto userModifyRequestDto) {
-        User user = getUserAuthorities();
-
+        User user = userRepository.findByIdOrElseThrow(getMyUserWithAuthorities().getId());
         user.modifyUser(passwordEncoder.encode(userModifyRequestDto.getPassword()), userModifyRequestDto.getEmail(), userModifyRequestDto.getNickname());
 
         userRepository.save(user);
@@ -171,27 +165,22 @@ public class UserService {
      */
     @Transactional
     public ResponseDto<Void> removeUser() {
-        User user = getUserAuthorities();
-        userRepository.deleteById(user.getId());
+        userRepository.deleteById(getMyUserWithAuthorities().getId());
         return ResponseDto.success("회원 삭제",null);
     }
 
-    private User getUserAuthorities() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepository.findByUsernameOrElseThrow(authentication.getName());
-        return user;
-    }
-    
+
+/*
     public UserLoginRequestDto getUserWithAuthorities(String username) {
         return UserLoginRequestDto.from(userRepository.findOneWithAuthoritiesByUsername(username).orElse(null));
     }
+*/
 
-    public UserLoginRequestDto getMyUserWithAuthorities() {
-        return UserLoginRequestDto.from(
+    public UserAuthoritiesResponseDto getMyUserWithAuthorities() {
+        return UserAuthoritiesResponseDto.from(
                 SecurityUtil.getCurrentUsername()
                         .flatMap(userRepository::findOneWithAuthoritiesByUsername)
                         .orElseThrow(() -> new NotFoundUserException("Member not found"))
         );
     }
 }
-
