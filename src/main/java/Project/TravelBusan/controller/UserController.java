@@ -62,7 +62,7 @@ public class UserController {
     }*/
 
     @PostMapping("/login")
-    public ResponseDto<TokenDto> userLogin(@Valid @RequestBody UserLoginRequestDto userLoginRequestDto) {
+    public ResponseEntity<ResponseDto<TokenDto>> userLogin(@Valid @RequestBody UserLoginRequestDto userLoginRequestDto) {
         return userService.login(userLoginRequestDto);
     }
 
