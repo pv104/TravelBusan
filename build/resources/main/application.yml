@@ -1,9 +1,11 @@
 spring:
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://database-1.cqcdgnfc7io0.ap-southeast-2.rds.amazonaws.com:3306/travelbusan?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
     username: admin
     password: 12312312
+
   jpa:
     hibernate:
       ddl-auto: none
@@ -12,10 +14,16 @@ spring:
     properties:
       hibernate:
         show_sql: true
+  logging.level:
+    org.hibernate.SQL: debug  # ??? ??
+
   jwt:
     header: Authorization
     secret: a5j9papjwrpoieaaeiofjgiojaskluytresetdyfugyftretyfutzs5764zex87e6wz7exr8cxr7ezx8rz767ex8r87z4ex8
     token-validity-in-seconds: 86400
 
-  logging.level:
-    org.hibernate.SQL: debug  # ??? ??
+  spring:
+    security:
+      user:
+        name: user
+        password: password
