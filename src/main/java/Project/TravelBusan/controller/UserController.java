@@ -7,11 +7,8 @@ import Project.TravelBusan.request.TokenDto;
 import Project.TravelBusan.request.User.UserJoinRequestDto;
 import Project.TravelBusan.request.User.UserLoginRequestDto;
 import Project.TravelBusan.request.User.UserModifyRequestDto;
-import Project.TravelBusan.response.User.UserDetailResponseDto;
-import Project.TravelBusan.response.User.UserListResponseDto;
+import Project.TravelBusan.response.User.*;
 import Project.TravelBusan.response.ResponseDto;
-import Project.TravelBusan.response.User.UserLoginResponseDto;
-import Project.TravelBusan.response.User.UserModifyResponseDto;
 import Project.TravelBusan.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -59,10 +56,10 @@ public class UserController {
         return userService.listUser();
     }
 
-    @GetMapping("/user")
+/*    @GetMapping("/user")
     public ResponseEntity<UserLoginRequestDto> getMyUserInfo() {
         return ResponseEntity.ok(userService.getMyUserWithAuthorities());
-    }
+    }*/
 
     @PostMapping("/login")
     public ResponseDto<TokenDto> userLogin(@Valid @RequestBody UserLoginRequestDto userLoginRequestDto) {
@@ -75,10 +72,10 @@ public class UserController {
     }
 
     @GetMapping("/check")
-    public void check(@RequestHeader HttpHeaders header) {
+    public UserAuthoritiesResponseDto check(@RequestHeader HttpHeaders header) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         log.info("getUserAuthorities : {}",authentication.getName());
         log.info("header : {}", header.getFirst("Authorization"));
-        return ;
+        return userService.getMyUserWithAuthorities();
     }
 }

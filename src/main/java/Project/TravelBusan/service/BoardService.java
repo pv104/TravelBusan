@@ -4,13 +4,17 @@ package Project.TravelBusan.service;
 import Project.TravelBusan.domain.Board;
 import Project.TravelBusan.domain.BoardLike;
 import Project.TravelBusan.domain.User;
+import Project.TravelBusan.exception.NotFoundUserException;
 import Project.TravelBusan.repository.BoardLikeRepository;
 import Project.TravelBusan.repository.BoardRepository;
 import Project.TravelBusan.repository.UserRepository;
 import Project.TravelBusan.request.Board.BoardModifyRequestDto;
 import Project.TravelBusan.request.Board.BoardRequestDto;
+import Project.TravelBusan.request.User.UserLoginRequestDto;
 import Project.TravelBusan.response.Board.*;
 import Project.TravelBusan.response.ResponseDto;
+import Project.TravelBusan.response.User.UserDetailResponseDto;
+import Project.TravelBusan.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
@@ -31,13 +35,14 @@ public class BoardService {
     private final UserRepository userRepository;
     private final BoardRepository boardRepository;
     private final BoardLikeRepository boardLikeRepository;
+    private final UserService userService;
 
     /**
      * 게시글 생성
      */
     @Transactional
     public ResponseDto<BoardSaveResponseDto> addBoard(BoardRequestDto boardRequestDto) {
-        User user = getUserAuthorities();
+        User user = userRepository.findByIdOrElseThrow(userService.getMyUserWithAuthorities().getId());
 
         boardRequestDto.updateCreateBy(1L, 0L, user);
 
@@ -101,7 +106,7 @@ public class BoardService {
      */
     @Transactional
     public ResponseDto<BoardResponseDto> modifyBoard(BoardModifyRequestDto boardModifyRequestDto, Long boardId) {
-        User user = getUserAuthorities();
+        User user = userRepository.findByIdOrElseThrow(userService.getMyUserWithAuthorities().getId());
         Board board = boardRepository.findByBoardOrElseThrow(boardId);
 
         boardValidation(user, board);
@@ -129,7 +134,7 @@ public class BoardService {
      */
     @Transactional
     public ResponseDto<Void> removeBoard(Long boardId) {
-        User user = getUserAuthorities();
+        User user = userRepository.findByIdOrElseThrow(userService.getMyUserWithAuthorities().getId());
         Board board = boardRepository.findByBoardOrElseThrow(boardId);
 
         boardValidation(user, board);
@@ -144,7 +149,7 @@ public class BoardService {
      */
     @Transactional
     public ResponseDto<Void> likeBoard(Long boardId) {
-        User user = getUserAuthorities();
+        User user = userRepository.findByIdOrElseThrow(userService.getMyUserWithAuthorities().getId());
         Board board = boardRepository.findByBoardOrElseThrow(boardId);
 
         if (boardLikeRepository.findByUserAndBoard(user, board).isPresent()) {
@@ -163,12 +168,6 @@ public class BoardService {
         boardRepository.save(board);
 
         return ResponseDto.success("좋아요 성공", null);
-    }
-
-    private User getUserAuthorities() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepository.findByUsernameOrElseThrow(authentication.getName());
-        return user;
     }
 
 

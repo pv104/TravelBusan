@@ -12,17 +12,12 @@ import Project.TravelBusan.request.TokenDto;
 import Project.TravelBusan.request.User.UserJoinRequestDto;
 import Project.TravelBusan.request.User.UserLoginRequestDto;
 import Project.TravelBusan.request.User.UserModifyRequestDto;
-import Project.TravelBusan.response.User.UserDetailResponseDto;
-import Project.TravelBusan.response.User.UserListResponseDto;
-import Project.TravelBusan.response.User.UserLoginResponseDto;
+import Project.TravelBusan.response.User.*;
 import Project.TravelBusan.response.ResponseDto;
-import Project.TravelBusan.response.User.UserModifyResponseDto;
 import Project.TravelBusan.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -112,7 +107,7 @@ public class UserService {
      * 회원 상세 조회
      */
     public ResponseDto<UserDetailResponseDto> detailUser() {
-        User user = getUserAuthorities();
+        User user = userRepository.findByIdOrElseThrow(getMyUserWithAuthorities().getId());
 
         return ResponseDto.success("회원 조회 성공",
                 UserDetailResponseDto.builder()
@@ -151,7 +146,7 @@ public class UserService {
      */
     @Transactional
     public ResponseDto<UserModifyResponseDto> modifyUser(UserModifyRequestDto userModifyRequestDto) {
-        User user = getUserAuthorities();
+        User user = userRepository.findByIdOrElseThrow(getMyUserWithAuthorities().getId());
         user.modifyUser(passwordEncoder.encode(userModifyRequestDto.getPassword()), userModifyRequestDto.getEmail(), userModifyRequestDto.getNickname());
 
         userRepository.save(user);
@@ -173,28 +168,22 @@ public class UserService {
      */
     @Transactional
     public ResponseDto<Void> removeUser() {
-        User user = getUserAuthorities();
-        userRepository.deleteById(user.getId());
+        userRepository.deleteById(getMyUserWithAuthorities().getId());
         return ResponseDto.success("회원 삭제",null);
     }
 
-    private User getUserAuthorities() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepository.findByUsernameOrElseThrow(authentication.getName());
-        log.info("getUserAuthorities : {}",user.getUsername());
-        return user;
-    }
 
+/*
     public UserLoginRequestDto getUserWithAuthorities(String username) {
         return UserLoginRequestDto.from(userRepository.findOneWithAuthoritiesByUsername(username).orElse(null));
     }
+*/
 
-    public UserLoginRequestDto getMyUserWithAuthorities() {
-        return UserLoginRequestDto.from(
+    public UserAuthoritiesResponseDto getMyUserWithAuthorities() {
+        return UserAuthoritiesResponseDto.from(
                 SecurityUtil.getCurrentUsername()
                         .flatMap(userRepository::findOneWithAuthoritiesByUsername)
                         .orElseThrow(() -> new NotFoundUserException("Member not found"))
         );
     }
 }
-

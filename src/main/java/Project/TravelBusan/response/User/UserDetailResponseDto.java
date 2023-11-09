@@ -13,4 +13,5 @@ public class UserDetailResponseDto {
     private String nickname;
     private String email;
     private Timestamp creDate;
+
 }
