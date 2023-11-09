@@ -95,11 +95,7 @@ public class UserService {
         HttpHeaders httpHeaders = new HttpHeaders(); //  HTTP 헤더 정보를 저장하고 관리하는 클래스
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt); //  HTTP 응답 헤더에 JWT(Access Token) 추가
 
-        return ResponseDto.success("로그인 성공",
-                TokenDto.builder()
-                        .token(jwt)
-                        .build()
-        );
+        return ResponseDto.success("로그인 성공",new TokenDto(jwt));
     }
 
 
