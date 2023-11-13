@@ -169,7 +169,6 @@ public class UserService {
         return ResponseDto.success("회원 삭제",null);
     }
 
-
 /*
     public UserLoginRequestDto getUserWithAuthorities(String username) {
         return UserLoginRequestDto.from(userRepository.findOneWithAuthoritiesByUsername(username).orElse(null));

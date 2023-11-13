@@ -19,7 +19,7 @@ public class BoardDetailResponseDto {
     private Long visit;
     private Long likeCount;
 
-    @JsonFormat(pattern = "yyyy.MM.dd hh:mm", timezone = "Asia/Seoul")
+    @JsonFormat(pattern = "yyyy.MM.dd hh:mm")
     private Timestamp creDate;
 
     private List<CommentResponseDto> comments; // 댓글

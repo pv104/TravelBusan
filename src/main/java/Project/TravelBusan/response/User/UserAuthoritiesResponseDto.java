@@ -3,6 +3,7 @@ package Project.TravelBusan.response.User;
 
 import Project.TravelBusan.domain.User;
 import Project.TravelBusan.request.AuthorityDto;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -18,6 +19,7 @@ public class UserAuthoritiesResponseDto {
     private String password;
     private String nickname;
     private String email;
+    @JsonFormat(pattern = "yyyy.MM.dd hh:mm")
     private Timestamp creDate;
     private Set<AuthorityDto> authorityDtoSet;
 

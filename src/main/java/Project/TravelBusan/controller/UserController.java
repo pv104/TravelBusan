@@ -74,8 +74,10 @@ public class UserController {
     @GetMapping("/check")
     public UserAuthoritiesResponseDto check(@RequestHeader HttpHeaders header) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        SecurityContextHolder.clearContext();
         log.info("getUserAuthorities : {}",authentication.getName());
         log.info("header : {}", header.getFirst("Authorization"));
         return userService.getMyUserWithAuthorities();
     }
+
 }

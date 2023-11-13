@@ -21,6 +21,4 @@ public interface UserRepository extends JpaRepository<User,Long> {
         return findByUsername(username).orElseThrow(() ->
                 new IllegalStateException("존재하지 않는 아이디 입니다."));
     }
-
-
 }
