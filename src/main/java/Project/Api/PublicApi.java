@@ -31,7 +31,7 @@ public class PublicApi {
                     String[] data = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
 
                     // PreparedStatement를 사용하여 데이터베이스에 데이터 삽입
-                    String sql = "INSERT INTO SIGHTS (sights_id,name, info, addr, mapx, mapy, img, city, homepage, number, traffic_report  ) VALUES (?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    String sql = "INSERT INTO SIGHTS (sights_id,name, info, addr, mapx, mapy, img, city, homepage, number, traffic_report, title, open_date  ) VALUES (?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                     try (PreparedStatement statement = connection.prepareStatement(sql)) {
                         statement.setString(1, data[0].replaceAll("\"", ""));  // 고유 아이디값
                         statement.setString(2, data[1].replaceAll("\"", ""));  // 콘텐츠명 (명소명)
@@ -44,6 +44,10 @@ public class PublicApi {
                         statement.setString(9, data[10].replaceAll("\"", ""));  // 홈페이지
                         statement.setString(10, data[9].replaceAll("\"", ""));  // 연락처
                         statement.setString(11, data[11].replaceAll("\"", ""));  // 교통정보
+                        statement.setString(12, data[6].replaceAll("\"", ""));  // 교통정보
+                        statement.setString(13, data[14].replaceAll("\"", ""));  // 교통정보
+
+
 
                         // 콘텐츠ID(0),콘텐츠명(1),구군(2),위도(3),경도(4),여행지(5),제목(6),부제목(7),주소(8),연락처(9),홈페이지(10),
                         // 교통정보(11),운영일(12),휴무일(13),운영 및 시간(14),이용요금(15),편의시설(16),이미지URL(17),썸네일이미지URL(18),상세내용(19)

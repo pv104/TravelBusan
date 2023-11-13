@@ -1,14 +1,12 @@
 package Project.TravelBusan.response.Sights;
 
-import Project.TravelBusan.domain.User;
 import Project.TravelBusan.domain.Sights;
-import jakarta.persistence.Column;
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
-public class SightsResponseDto {
+public class SightsDetailResponseDto {
     private Long id;
     private String name;
     private String title;
@@ -27,8 +25,8 @@ public class SightsResponseDto {
     private String type;
 
 
-    public static SightsResponseDto toDto(Sights sights) {
-        return new SightsResponseDto(
+    public static SightsDetailResponseDto toDto(Sights sights) {
+        return new SightsDetailResponseDto(
                 sights.getId(),
                 sights.getName(),
                 sights.getTitle(),

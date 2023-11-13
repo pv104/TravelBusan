@@ -21,6 +21,8 @@ public class Sights {
     private Long id;
 
     private String name;
+    private String title;
+
     private String info;
 
     private String addr;
@@ -33,6 +35,8 @@ public class Sights {
     private String homepage;
     private String number;
 
+    @Column(name = "open_date")
+    private String openDate;
     @Column(name = "traffic_report")
     private String trafficReport;
 
