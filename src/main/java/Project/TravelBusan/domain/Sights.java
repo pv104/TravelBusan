@@ -30,6 +30,12 @@ public class Sights {
     private String img;
     private String city;
 
+    private String homepage;
+    private String number;
+
+    @Column(name = "traffic_report")
+    private String trafficReport;
+
     @ColumnDefault("0")
     private String like;
 
@@ -38,8 +44,8 @@ public class Sights {
     @Column(name = "isSights")
     private String type;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+//    @ManyToOne(fetch = LAZY)
+//    @JoinColumn(name = "user_id")
+//    private User user;
 
 }

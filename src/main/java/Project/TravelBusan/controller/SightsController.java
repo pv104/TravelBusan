@@ -15,12 +15,6 @@ public class SightsController {
 
     private final SightsService sightsService;
 
-    @PostMapping
-    public ResponseDto<?> createUser(@RequestBody SightsRequestDto sightsRequestDto) {
-        Long UserId = 1L; // 테스트용
-        return sightsService.saveSights(sightsRequestDto,UserId);
-    }
-
     @GetMapping
     public ResponseDto<?> getBoards() {
         return sightsService.sightsList();

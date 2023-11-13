@@ -2,6 +2,7 @@ package Project.TravelBusan.response.Sights;
 
 import Project.TravelBusan.domain.User;
 import Project.TravelBusan.domain.Sights;
+import jakarta.persistence.Column;
 import lombok.Builder;
 import lombok.Data;
 
@@ -16,10 +17,12 @@ public class SightsResponseDto {
     private String mapy;
     private String img;
     private String city;
+    private String homepage;
+    private String number;
+    private String trafficReport;
     private String like;
     private int rate;
     private String type;
-    private User User;
 
 
     public static SightsResponseDto toDto(Sights sights) {
@@ -32,10 +35,12 @@ public class SightsResponseDto {
                 sights.getMapy(),
                 sights.getImg(),
                 sights.getCity(),
+                sights.getHomepage(),
+                sights.getNumber(),
+                sights.getTrafficReport(),
                 sights.getLike(),
                 sights.getRate(),
-                sights.getType(),
-                sights.getUser()
+                sights.getType()
         );
     }
 
