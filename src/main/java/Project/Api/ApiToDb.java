@@ -8,7 +8,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class PublicApi {
+public class ApiToDb {
     public static void main(String[] args) {
         String csvFilePath = "/Users/moon/Projects/TravelBusan/src/main/java/Project/Api/BusanSights.csv";
 

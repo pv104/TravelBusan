@@ -1,13 +1,11 @@
 package Project.TravelBusan.service;
 
-import Project.TravelBusan.domain.User;
 import Project.TravelBusan.domain.Sights;
 import Project.TravelBusan.repository.UserRepository;
 import Project.TravelBusan.repository.SightsRepository;
-import Project.TravelBusan.request.Sights.SightsRequestDto;
 import Project.TravelBusan.response.ResponseDto;
 import Project.TravelBusan.response.Sights.SightsDetailResponseDto;
-import Project.TravelBusan.response.Sights.SightsResponseDto;
+import Project.TravelBusan.response.Sights.SightsListResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,10 +26,10 @@ public class SightsService {
     /**
      * 명소 조회
      */
-    public ResponseDto<List<SightsResponseDto>> sightsList() {
+    public ResponseDto<List<SightsListResponseDto>> sightsList() {
         List<Sights> boards = sightsRepository.findAll();
-        List<SightsResponseDto> boardDto = boards.stream()
-                .map(SightsResponseDto::toDto)
+        List<SightsListResponseDto> boardDto = boards.stream()
+                .map(SightsListResponseDto::toDto)
                 .collect(Collectors.toList());
         return ResponseDto.success("명소 전체 조회", boardDto);
     }
@@ -49,11 +47,11 @@ public class SightsService {
     /**
      * 구군별 조회
      */
-    public ResponseDto<List<SightsResponseDto>> searchListByCity(String city) {
+    public ResponseDto<List<SightsListResponseDto>> searchListByCity(String city) {
         List<Sights> boards = sightsRepository.findByCity(city);
 
-        List<SightsResponseDto> boardDto = boards.stream()
-                .map(SightsResponseDto::toDto)
+        List<SightsListResponseDto> boardDto = boards.stream()
+                .map(SightsListResponseDto::toDto)
                 .collect(Collectors.toList());
 
         return ResponseDto.success(" 구군별 명소 조회", boardDto);
