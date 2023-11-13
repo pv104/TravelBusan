@@ -1,6 +1,6 @@
 import React from 'react';
 import { View,Image, Text, StyleSheet, FlatList, SafeAreaView,TouchableOpacity } from 'react-native';
-import Nav from "../nav";
+import Nav from "../UserUtility/nav";
 import BlogSearch from "./BlogSearch"
 import Mine from "./Blog_mydata";
 import { useNavigation } from '@react-navigation/native';

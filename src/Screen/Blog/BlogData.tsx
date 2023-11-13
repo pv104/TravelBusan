@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Nav from "../nav";
+import Nav from "../UserUtility/nav";
 import { View, Text, StyleSheet, TextInput, Button, FlatList,Image } from 'react-native';
 
 const BlogData = ({ route }) => {

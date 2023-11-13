@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View,PermissionsAndroid, Text, TextInput, Image, StyleSheet, TouchableOpacity,Alert } from 'react-native';
-import Nav from '../nav';
+import Nav from '../UserUtility/nav';
 import { useNavigation } from '@react-navigation/native';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import axios from 'axios';
@@ -131,7 +131,7 @@ const BlogEditor = () => {
       <View>
         {photo ? 
           <View>
-            <Image source={{uri : '../../pics/광안대교.jpg'}} />
+            <Image source={{uri : require('../../pics/광안대교.jpg')}} />
             <TouchableOpacity style={styles.button} onPress={showPicker}>
               <Text style={styles.buttonText}>이미지 첨부2</Text>
             </TouchableOpacity>

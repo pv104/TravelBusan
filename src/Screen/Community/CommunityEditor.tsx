@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Button, Image, StyleSheet } from 'react-native';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
-import { getCookie } from '../Cookie';
+import { getCookie } from '../UserUtility/Cookie';
 
 
 const BlogEditor = () => {
@@ -18,7 +18,7 @@ const BlogEditor = () => {
     console.log(getCookie('token'));
     try {
       const response = await axios.post(
-        'http://172.26.208.1:8080/boards',
+        'http://172.18.112.1:8080/boards',
         {
           title : title,
           content : content,

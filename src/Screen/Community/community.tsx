@@ -1,31 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { View, Image, Text, StyleSheet, FlatList, SafeAreaView, TouchableOpacity } from 'react-native';
-import Nav from "../nav";
+import Nav from "../UserUtility/nav";
 import Mine from "../Blog/Blog_mydata";
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
-import { getCookie } from '../Cookie';
+import { getCookie } from '../UserUtility/Cookie';
 
 const Community = () => {
   const [CommunityData, setCommunityData] = useState([]);
   const navigation = useNavigation();
-
-  useEffect(() => {
-    SetData();
-  }, []);
-
   const handleSign = () => {
     navigation.navigate('Editor_CM');
   };
 
   const SetData = async () => {
     try {
-      const response = await axios.get('http://172.26.208.1:8080/boards', {
+      const response = await axios.get('http://172.18.112.1:8080/boards', {
         headers: {
           'Authorization': `Bearer ${getCookie('token')}`
         }
       });
-
       const updatedCommunityData = response.data.data.map((item) => ({
         Title: item.title,
         id : item.id,
@@ -39,6 +33,9 @@ const Community = () => {
       console.log(error);
     }
   };
+  useEffect(() => {
+    SetData();
+  }, []);
 
   const IntoContent = (item) => {
     navigation.navigate('CommunityContent', {

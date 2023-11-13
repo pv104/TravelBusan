@@ -1,8 +1,8 @@
 import React from 'react';  ``
 import { View, StyleSheet,Text} from 'react-native';
-import Sliding from './slide';
-import Nav from './nav';
-import SlideBar from './slideBar'
+import Sliding from '../slide';
+import Nav from '../UserUtility/nav';
+import SlideBar from '../slideBar'
 
 
 //가로 확장가능

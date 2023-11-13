@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, Modal } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
-import {getCookie} from './Cookie';
+import {getCookie, removeCookie} from './Cookie';
 
 
 const NavigationBarButton = () => {
@@ -25,6 +25,11 @@ const NavigationBarButton = () => {
     toggleModal(); // 모달 닫기
     navigation.navigate('Login');
   };
+  const handleLogout =() =>{
+    removeCookie('userId');
+    removeCookie('token');
+    toggleModal();
+  }
   const handleBlog = () => {
     toggleModal(); // 모달 닫기
     navigation.navigate('Blog');
@@ -68,34 +73,42 @@ const NavigationBarButton = () => {
           <Text style={styles.modalText}>모달창 메뉴 확장 추가 중</Text>
           <View>
             {IsLogin ? 
-            <TouchableOpacity onPress={() => handleLogin()}>
-            <Text style={styles.loginButton}>LogOut</Text>
-          </TouchableOpacity>
+            <View>
+            <TouchableOpacity onPress={() => handleLogout()}>
+              <Text style={styles.loginButton}>LogOut</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() =>handleInfo()}>
+              <Text style={styles.loginButton}>Info</Text>
+            </TouchableOpacity>
+           <TouchableOpacity onPress={() =>handleBlog()}>
+             <Text style={styles.loginButton}>Blog</Text>
+           </TouchableOpacity>
+           <TouchableOpacity onPress={() =>handleCommunity()}>
+              <Text style={styles.loginButton}>Community</Text>
+           </TouchableOpacity>
+           <TouchableOpacity onPress={() =>handleMaps()}>
+               <Text style={styles.loginButton}>MAPS</Text>
+           </TouchableOpacity>
+           <TouchableOpacity onPress={() =>handleSight()}>
+               <Text style={styles.loginButton}>Sight</Text>
+            </TouchableOpacity>
+            <View>
+           <TouchableOpacity onPress={()=>handleInfo2()}>
+               <Text style={styles.loginButton}>token</Text>
+             </TouchableOpacity>
+           </View>
+            </View>
           :
-              <TouchableOpacity onPress={() =>handleLogin()}>
+          <View>
+            <TouchableOpacity onPress={() =>handleLogin()}>
               <Text style={styles.loginButton}>Login</Text>
             </TouchableOpacity>
+            <TouchableOpacity onPress={() =>handleMaps()}>
+                <Text style={styles.loginButton}>MAPS</Text>
+            </TouchableOpacity>
+            </View>
             }
-              <TouchableOpacity onPress={() =>handleInfo()}>
-               <Text style={styles.loginButton}>Info</Text>
-               </TouchableOpacity>
-              <TouchableOpacity onPress={() =>handleBlog()}>
-                <Text style={styles.loginButton}>Blog</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() =>handleCommunity()}>
-                 <Text style={styles.loginButton}>Community</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() =>handleMaps()}>
-                  <Text style={styles.loginButton}>MAPS</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() =>handleSight()}>
-                  <Text style={styles.loginButton}>Sight</Text>
-               </TouchableOpacity>
-               <View>
-              <TouchableOpacity onPress={()=>handleInfo2()}>
-                  <Text style={styles.loginButton}>token</Text>
-                </TouchableOpacity>
-              </View>
+              
           </View>
           <TouchableOpacity onPress={() =>toggleModal()}>
             <Text style={styles.closeButton}>Close</Text>

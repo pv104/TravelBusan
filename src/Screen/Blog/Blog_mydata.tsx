@@ -1,6 +1,6 @@
 import React,{useState} from 'react';
 import {View,Text, StyleSheet,TouchableOpacity } from 'react-native';
-import { getCookie } from '../Cookie';
+import { getCookie } from '../UserUtility/Cookie';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 

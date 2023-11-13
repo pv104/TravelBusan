@@ -1,7 +1,7 @@
 import React from 'react';
 import { FlatList, Text, View, StyleSheet, TouchableOpacity } from 'react-native';
-import Button from './button';
-import Mine from './Blog_mydata';
+import Button from '../button';
+import Mine from '../Blog/Blog_mydata';
 
 const data = [
   { key: '1', component: <TouchableOpacity><Text>맛집 아이콘 자리</Text></TouchableOpacity> },

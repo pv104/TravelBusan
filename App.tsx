@@ -1,15 +1,15 @@
 import React from 'react';  ``
 import {NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Home from './src/Screen/Home';
-import Login from './src/Screen/Login';
-import Signup from './src/Screen/Signup';
+import Home from './src/Screen/HomeUtility/Home';
+import Login from './src/Screen/UserUtility/Login';
+import Signup from './src/Screen/UserUtility/Signup';
 import Blog from './src/Screen/Blog/Blog';
 import Community from './src/Screen/Community/community';
-import Maps from './src/Screen/Maps';
+import Maps from './src/Screen/maptest';
 import Editor from './src/Screen/Blog/BlogContent';
 import Editor_CM from './src/Screen/Community/CommunityEditor';
-import UserInfo from './src/Screen/UserInfo';
+import UserInfo from './src/Screen/UserUtility/UserInfo';
 import BlogData from './src/Screen/Blog/BlogData';
 import CommunityContent from './src/Screen/Community/CommunityContent';
 import Sight from './src/Screen/Sight';
@@ -29,7 +29,7 @@ const App =()=> {
         <Stack.Screen name="Blog" component ={Blog}/>
         <Stack.Screen name="Editor" component ={Editor}/>
         <Stack.Screen name="Editor_CM" component ={Editor_CM}/>
-        <Stack.Screen name="UserInfo" component ={UserInfo}/>
+        <Stack.Screen name="UserInfo" component={UserInfo}/>
         <Stack.Screen name="BlogData" component ={BlogData}/>
         <Stack.Screen name="Sight" component ={Sight}/>
         <Stack.Screen name="CommunityContent" component ={CommunityContent}/>

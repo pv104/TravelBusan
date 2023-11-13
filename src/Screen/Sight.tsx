@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, FlatList } from 'react-native';
-import Nav from './nav';
+import Nav from './UserUtility/nav';
 import { useNavigation } from '@react-navigation/native';
 
 const data = [
@@ -46,14 +46,7 @@ const Sight = () => {
      {
       return (
         <View style={styles.blogItem}>
-              <View>
-               {prevType !== item.type ? (
-               <View>
-                <Text>{item.type}</Text>
-               </View>
-                ) : null}
-              </View>
-          <TouchableOpacity onPress={() => IntoBlog(item)}>
+            <TouchableOpacity onPress={() => IntoBlog(item)}>
             <Image source={item.imageUri} style={styles.blogImage} />
             <View style={styles.overlay}>
               <Text style={styles.blogTitle}>{item.title}</Text>
@@ -67,14 +60,7 @@ const Sight = () => {
     {
       return (
         <View style={styles.blogItem}>
-            <View>
-               {prevType!== item.type ? (
-               <View>
-                <Text>{item.type}</Text>
-               </View>
-                ) : null}
-              </View>
-            <Text style={styles.MainTitle}>{item.Title}</Text>
+             <Text style={styles.MainTitle}>{item.Title}</Text>
             <View style={styles.separator} />
             <View style={styles.Reviewmenu}>
           <Text style={styles.Reviewmenu_in}>좋아요: {item.Good}</Text>
@@ -88,14 +74,7 @@ const Sight = () => {
     else{
         return(
           <View style={styles.blogItem}>
-            <View>
-               {prevType !== item.type ? (
-               <View>
-                <Text>{item.type}</Text>
-               </View>
-                ) : null}
-              </View>
-            <Text style={styles.ReviewTitle}>{item.Title}</Text>
+           <Text style={styles.ReviewTitle}>{item.Title}</Text>
             <View style={styles.Reviewmenu}>
               <Text style={styles.Reviewmenu_in}>작성자: {item.Writer}</Text>
               <Text style={styles.Reviewmenu_in}>별점: {item.Star}</Text>

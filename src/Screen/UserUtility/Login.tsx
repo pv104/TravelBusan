@@ -17,7 +17,7 @@ const LoginScreen = () => {
     // 로그인이 성공하면 다음 화면으로 이동할 수 있습니다.
     try {
       const response = await axios.post(
-        'http://172.26.208.1:8080/users/login',
+        'http://172.18.112.1:8080/users/login',
         {
           username: username,
           password: password,
@@ -28,6 +28,7 @@ const LoginScreen = () => {
           },
         }
       );
+      console.log(response.data);
       console.log(response.data.data.token);
       setCookie("userId", `${username}`,'');
       setCookie("token", `${response.data.data.token}`,'');
