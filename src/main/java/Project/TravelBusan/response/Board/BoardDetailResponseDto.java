@@ -2,6 +2,7 @@ package Project.TravelBusan.response.Board;
 
 import Project.TravelBusan.domain.Board;
 import Project.TravelBusan.domain.BoardComment;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.sql.Timestamp;
@@ -17,6 +18,8 @@ public class BoardDetailResponseDto {
     private String nickname;
     private Long visit;
     private Long likeCount;
+
+    @JsonFormat(pattern = "yyyy.MM.dd hh:mm", timezone = "Asia/Seoul")
     private Timestamp creDate;
 
     private List<CommentResponseDto> comments; // 댓글
