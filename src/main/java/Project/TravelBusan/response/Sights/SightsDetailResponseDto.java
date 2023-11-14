@@ -1,11 +1,13 @@
 package Project.TravelBusan.response.Sights;
 
+import Project.TravelBusan.domain.Review;
 import Project.TravelBusan.domain.Sights;
-import lombok.Builder;
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
-@Builder
 public class SightsDetailResponseDto {
     private Long id;
     private String name;
@@ -21,29 +23,32 @@ public class SightsDetailResponseDto {
     private String openDate;
     private String trafficReport;
     private String like;
-    private int rate;
+    private double rate;
     private String type;
+    private List<ReviewResponseDto> comments; // 리뷰
 
 
-    public static SightsDetailResponseDto toDto(Sights sights) {
-        return new SightsDetailResponseDto(
-                sights.getId(),
-                sights.getName(),
-                sights.getTitle(),
-                sights.getInfo(),
-                sights.getAddr(),
-                sights.getMapx(),
-                sights.getMapy(),
-                sights.getImg(),
-                sights.getCity(),
-                sights.getHomepage(),
-                sights.getNumber(),
-                sights.getOpenDate(),
-                sights.getTrafficReport(),
-                sights.getLike(),
-                sights.getRate(),
-                sights.getType()
-        );
+
+    public SightsDetailResponseDto(Sights sights) {
+        id = sights.getId();
+        name = sights.getName();
+        title = sights.getTitle();
+        info = sights.getInfo();
+        addr = sights.getAddr();
+        mapx = sights.getMapx();
+        mapy = sights.getMapy();
+        img = sights.getImg();
+        city = sights.getCity();
+        homepage = sights.getHomepage();
+        number = sights.getNumber();
+        openDate = sights.getOpenDate();
+        trafficReport = sights.getTrafficReport();
+        like = sights.getLike();
+        rate = sights.calculateAverageRating();
+        type = sights.getType();
+        comments = new ArrayList<>();
+        for (Review review : sights.getReview()) {
+            comments.add(new ReviewResponseDto(review));
+        }
     }
-
 }

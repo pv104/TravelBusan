@@ -1,6 +1,7 @@
 package Project.TravelBusan.service;
 
 import Project.TravelBusan.domain.Sights;
+import Project.TravelBusan.repository.ReviewRepository;
 import Project.TravelBusan.repository.UserRepository;
 import Project.TravelBusan.repository.SightsRepository;
 import Project.TravelBusan.response.ResponseDto;
@@ -21,7 +22,6 @@ import java.util.stream.Collectors;
 public class SightsService {
 
     private final SightsRepository sightsRepository;
-    private final UserRepository userRepository;
 
     /**
      * 명소 조회
@@ -38,9 +38,8 @@ public class SightsService {
      * 명소 상세 조회
      */
     public ResponseDto<SightsDetailResponseDto> sightsDetail(Long sightsId) {
-        Sights sights = sightsRepository.findById(sightsId).orElseThrow(() ->
-                new IllegalStateException("존재하지 않는 명소입니다"));
-        return ResponseDto.success("명소 상세 조회", SightsDetailResponseDto.toDto(sights));
+        Sights sights = sightsRepository.findByIdOrElseThrow(sightsId);
+        return ResponseDto.success("명소 상세 조회", new SightsDetailResponseDto(sights));
     }
 
 
@@ -49,11 +48,16 @@ public class SightsService {
      */
     public ResponseDto<List<SightsListResponseDto>> searchListByCity(String city) {
         List<Sights> boards = sightsRepository.findByCity(city);
-
         List<SightsListResponseDto> boardDto = boards.stream()
                 .map(SightsListResponseDto::toDto)
                 .collect(Collectors.toList());
 
         return ResponseDto.success(" 구군별 명소 조회", boardDto);
     }
+
+
+
+
+
+
 }
