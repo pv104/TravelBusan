@@ -1,5 +1,6 @@
 package Project.TravelBusan.response.User;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import java.sql.Timestamp;
@@ -11,6 +12,7 @@ public class UserListResponseDto {
     private String username;
     private String nickname;
     private String email;
+    @JsonFormat(pattern = "yyyy.MM.dd hh:mm")
     private Timestamp creDate;
 
 

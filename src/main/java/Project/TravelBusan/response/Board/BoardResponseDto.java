@@ -1,5 +1,6 @@
 package Project.TravelBusan.response.Board;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Data;
 
@@ -15,6 +16,8 @@ public class BoardResponseDto {
     private String nickname;
     private Long visit;
     private Long likeCount;
+
+    @JsonFormat(pattern = "yyyy.MM.dd hh:mm")
     private Timestamp creDate;
 }
 
