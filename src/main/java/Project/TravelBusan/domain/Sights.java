@@ -55,12 +55,10 @@ public class Sights {
         if (review == null || review.isEmpty()) {
             return 0.0; // 리뷰가 없을 경우 0.0 반환 또는 다른 적절한 값을 반환
         }
-
         int sum = 0;
         for (Review review : review) {
             sum += review.getRating();
         }
-
         // 평균을 계산하고 소수점 첫째 자리까지만 표시
         double averageRating = ((double) sum / review.size());
 
