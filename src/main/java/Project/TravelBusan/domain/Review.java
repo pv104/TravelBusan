@@ -30,7 +30,9 @@ public class Review {
     @Column(name = "rating", nullable = false)
     private int rating;
 
-    @Column(name = "comment")
+    @Column(name = "title")
+    private String title;
+
     private String comment;
 
     @CreationTimestamp
