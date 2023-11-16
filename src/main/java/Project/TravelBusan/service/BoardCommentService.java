@@ -24,7 +24,7 @@ public class BoardCommentService {
     private final BoardCommentRepository boardCommentRepository;
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
-
+    private final UserService userService;
     /**
      * 댓글 대댓글 작성
      */
@@ -32,7 +32,8 @@ public class BoardCommentService {
     @Transactional
     public ResponseDto<CommentSaveResponseDto> commentAdd(Long boardId, BoardCommentRequestDto boardCommentRequestDto) {
         Board board = boardRepository.findByBoardOrElseThrow(boardId);
-        User user = getUserAuthorities();
+        User user = userRepository.findByIdOrElseThrow(userService.getMyUserWithAuthorities().getId());
+
 
         if (boardCommentRequestDto.getParent() == null) { // 부모 댓글 작성
             BoardComment boardComment = BoardComment.builder()
@@ -84,7 +85,7 @@ public class BoardCommentService {
         BoardComment comment = boardCommentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalStateException("해당 댓글이 존재하지 않습니다."));
 
-        User user = getUserAuthorities();
+        User user = userRepository.findByIdOrElseThrow(userService.getMyUserWithAuthorities().getId());
 
         if (!comment.getUser().getId().equals(user.getId())) {
             throw new IllegalStateException("해당 댓글 작성자가 아닙니다.");
@@ -93,11 +94,4 @@ public class BoardCommentService {
         boardCommentRepository.delete(comment);
         return ResponseDto.success("댓글 삭제 성공",null);
     }
-
-    private User getUserAuthorities() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepository.findByUsernameOrElseThrow(authentication.getName());
-        return user;
-    }
-
 }

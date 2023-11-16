@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class ReviewSaveRequestDto {
-    private int rating;
+    private String title;
     private String comment;
+    private int rating;
 }

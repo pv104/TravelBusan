@@ -41,4 +41,9 @@ public class SightsController {
         return reviewService.addReview(sightsId, reviewSaveRequestDto);
     }
 
+    @DeleteMapping("/{sights-id}/review/{review-id}")
+    public ResponseDto<Void> reviewRemove(@PathVariable("review-id") Long reviewId, @PathVariable("sights-id") String sightsId) {
+        return reviewService.reviewRemove(reviewId);
+    }
+
 }

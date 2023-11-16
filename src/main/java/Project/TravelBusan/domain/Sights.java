@@ -53,7 +53,7 @@ public class Sights {
 
     public double calculateAverageRating() {
         if (review == null || review.isEmpty()) {
-            return 0.0; // 리뷰가 없을 경우 0.0 반환 또는 다른 적절한 값을 반환
+            return 0.0; // 리뷰가 없을 경우 0.0 반환
         }
         int sum = 0;
         for (Review review : review) {

@@ -12,6 +12,7 @@ public class ReviewResponseDto {
     private Long reviewId;
     private Long sightsId;
     private String writer;
+    private String title;
     private String comment;
     private int rating;
 
@@ -22,6 +23,7 @@ public class ReviewResponseDto {
         reviewId = review.getId();
         sightsId = review.getSights().getId();
         writer = review.getUser().getNickname();
+        title = review.getTitle();
         comment = review.getComment();
         rating = review.getRating();
         creDate = review.getCreDate();

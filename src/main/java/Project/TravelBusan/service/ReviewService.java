@@ -36,6 +36,7 @@ public class ReviewService {
 
         Review review = Review.builder()
                 .comment(reviewSaveRequestDto.getComment())
+                .title(reviewSaveRequestDto.getTitle())
                 .rating(reviewSaveRequestDto.getRating())
                 .sights(sights)
                 .user(user)
@@ -46,4 +47,21 @@ public class ReviewService {
         return ResponseDto.success("리뷰 작성",null);
     }
 
+    /**
+     * 리뷰 삭제
+     */
+    @Transactional
+    public ResponseDto<Void> reviewRemove(Long reviewId) {
+        Review review = reviewRepository.findById(reviewId).orElseThrow(() ->
+                new IllegalStateException("존재하지 않는 리뷰 입니다"));
+
+        User user = userRepository.findByIdOrElseThrow(userService.getMyUserWithAuthorities().getId());
+
+        if (!review.getUser().getId().equals(user.getId())) {
+            throw new IllegalStateException("해당 리뷰 작성자가 아닙니다.");
+        }
+
+        reviewRepository.delete(review);
+        return ResponseDto.success("리뷰 삭제",null);
+    }
 }
