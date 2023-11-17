@@ -5,6 +5,7 @@ import Project.TravelBusan.domain.Board;
 import Project.TravelBusan.domain.BoardLike;
 import Project.TravelBusan.domain.User;
 import Project.TravelBusan.exception.NotFoundUserException;
+import Project.TravelBusan.repository.BoardCommentRepository;
 import Project.TravelBusan.repository.BoardLikeRepository;
 import Project.TravelBusan.repository.BoardRepository;
 import Project.TravelBusan.repository.UserRepository;
