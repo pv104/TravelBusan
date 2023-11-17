@@ -4,6 +4,7 @@ import Project.TravelBusan.request.Blog.BlogSaveRequestDto;
 import Project.TravelBusan.response.Blog.BlogDetailResponseDto;
 import Project.TravelBusan.response.Blog.BlogListResponseDto;
 import Project.TravelBusan.response.Blog.BlogSaveResponseDto;
+import Project.TravelBusan.response.Blog.BlogSimplelResponseDto;
 import Project.TravelBusan.response.ResponseDto;
 import Project.TravelBusan.service.BlogService;
 import lombok.RequiredArgsConstructor;
@@ -32,11 +33,11 @@ public class BlogController {
     public ResponseDto<List<BlogListResponseDto>> blogList(){
         return blogService.listBlog();
     }
-
     @GetMapping("/{blog-id}")
     public ResponseDto<BlogDetailResponseDto> blogDetails(@PathVariable("blog-id") Long blogId){
         return blogService.detailBlog(blogId);
     }
+
 
     @DeleteMapping("/{blog-id}")
     public ResponseDto<Void> blogRemove(@PathVariable("blog-id") Long blogId) {

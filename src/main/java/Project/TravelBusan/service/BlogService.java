@@ -10,6 +10,7 @@ import Project.TravelBusan.request.Blog.BlogSaveRequestDto;
 import Project.TravelBusan.response.Blog.BlogDetailResponseDto;
 import Project.TravelBusan.response.Blog.BlogListResponseDto;
 import Project.TravelBusan.response.Blog.BlogSaveResponseDto;
+import Project.TravelBusan.response.Blog.BlogSimplelResponseDto;
 import Project.TravelBusan.response.ResponseDto;
 import Project.TravelBusan.response.Sights.SightsListResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -105,4 +106,5 @@ public class BlogService {
         blogRepository.delete(blog);
         return ResponseDto.success("블로그 삭제 성공",null);
     }
+
 }

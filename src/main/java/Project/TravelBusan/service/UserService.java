@@ -2,16 +2,19 @@ package Project.TravelBusan.service;
 
 
 import Project.TravelBusan.domain.Authority;
+import Project.TravelBusan.domain.Blog;
 import Project.TravelBusan.domain.User;
 import Project.TravelBusan.exception.DuplicateUserException;
 import Project.TravelBusan.exception.NotFoundUserException;
 import Project.TravelBusan.jwt.JwtFilter;
 import Project.TravelBusan.jwt.TokenProvider;
+import Project.TravelBusan.repository.BlogRepository;
 import Project.TravelBusan.repository.UserRepository;
 import Project.TravelBusan.request.TokenDto;
 import Project.TravelBusan.request.User.UserJoinRequestDto;
 import Project.TravelBusan.request.User.UserLoginRequestDto;
 import Project.TravelBusan.request.User.UserModifyRequestDto;
+import Project.TravelBusan.response.Blog.BlogSimplelResponseDto;
 import Project.TravelBusan.response.User.*;
 import Project.TravelBusan.response.ResponseDto;
 import Project.TravelBusan.util.SecurityUtil;
@@ -31,6 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -40,6 +44,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final BlogRepository blogRepository;
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
@@ -181,5 +186,19 @@ public class UserService {
                         .flatMap(userRepository::findOneWithAuthoritiesByUsername)
                         .orElseThrow(() -> new NotFoundUserException("Member not found"))
         );
+    }
+
+    /**
+     * 내가 쓴 블로그 조회
+     */
+    public ResponseDto<List<BlogSimplelResponseDto>> getMyBlogs() {
+        User user = userRepository.findByIdOrElseThrow(getMyUserWithAuthorities().getId());
+        List<Blog> blog = blogRepository.findByUserId(user.getId());
+
+        List<BlogSimplelResponseDto> myBlogDto = blog.stream()
+                .map(BlogSimplelResponseDto::new)
+                .collect(Collectors.toList());
+
+        return ResponseDto.success("내가 쓴 블로그", myBlogDto);
     }
 }
