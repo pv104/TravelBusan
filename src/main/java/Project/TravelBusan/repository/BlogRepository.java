@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 
 public interface BlogRepository extends JpaRepository<Blog, Long> {
     default Blog findByBlogOrElseThrow(Long blogId) {
@@ -16,5 +18,8 @@ public interface BlogRepository extends JpaRepository<Blog, Long> {
     @Modifying
     @Query("UPDATE Blog b SET b.visit = b.visit + 1 WHERE b.id = :blogId")
     void increaseVisit(@Param("blogId") Long questionId);
+
+    List<Blog> findByTitleContaining(String title);
+
 
 }

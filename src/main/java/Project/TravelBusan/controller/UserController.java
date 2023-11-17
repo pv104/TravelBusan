@@ -35,6 +35,10 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    @PostMapping
+    public ResponseDto<UserLoginResponseDto> userAdd(@RequestBody UserJoinRequestDto userJoinRequestDto) {
+        return userService.join(userJoinRequestDto);
+    }
 
     @GetMapping
     public ResponseDto<UserDetailResponseDto> userDetail(){
@@ -66,10 +70,6 @@ public class UserController {
         return userService.login(userLoginRequestDto);
     }
 
-    @PostMapping("/signup")
-    public ResponseDto<UserLoginResponseDto> userAdd(@RequestBody UserJoinRequestDto userJoinRequestDto) {
-        return userService.join(userJoinRequestDto);
-    }
 
     @GetMapping("/check")
     public UserAuthoritiesResponseDto check(@RequestHeader HttpHeaders header) {
