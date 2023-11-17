@@ -54,10 +54,4 @@ public class SightsService {
 
         return ResponseDto.success(" 구군별 명소 조회", boardDto);
     }
-
-
-
-
-
-
 }
