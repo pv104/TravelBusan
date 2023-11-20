@@ -6,26 +6,22 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
+
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class BlogDetailResponseDto {
+public class BlogSimplelResponseDto {
     private String title;
-    private String content;
     private String nickname;
-    private Long visit;
-    private Long likeCount;
-    private String img;
+    private Timestamp creDate;
 
 
-    public BlogDetailResponseDto(Blog blog) {
+    public BlogSimplelResponseDto(Blog blog) {
         this.title = blog.getTitle();
-        this.content = blog.getContent();
         this.nickname = blog.getNickname();
-        this.visit = blog.getVisit();
-        this.likeCount = blog.getLikeCount();
-        this.img = blog.getImg();
+        this.creDate = blog.getCreDate();
 
     }
 }

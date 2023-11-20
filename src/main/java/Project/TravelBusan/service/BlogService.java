@@ -1,6 +1,8 @@
 package Project.TravelBusan.service;
 
 import Project.TravelBusan.domain.Blog;
+import Project.TravelBusan.domain.BoardComment;
+import Project.TravelBusan.domain.Sights;
 import Project.TravelBusan.domain.User;
 import Project.TravelBusan.repository.BlogRepository;
 import Project.TravelBusan.repository.UserRepository;
@@ -8,10 +10,10 @@ import Project.TravelBusan.request.Blog.BlogSaveRequestDto;
 import Project.TravelBusan.response.Blog.BlogDetailResponseDto;
 import Project.TravelBusan.response.Blog.BlogListResponseDto;
 import Project.TravelBusan.response.Blog.BlogSaveResponseDto;
-import Project.TravelBusan.response.Board.BoardDetailResponseDto;
+import Project.TravelBusan.response.Blog.BlogSimplelResponseDto;
 import Project.TravelBusan.response.ResponseDto;
+import Project.TravelBusan.response.Sights.SightsListResponseDto;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -91,4 +93,18 @@ public class BlogService {
         Blog blog = blogRepository.findByBlogOrElseThrow(blogId);
         return ResponseDto.success("블로그 상세 조회", new BlogDetailResponseDto(blog));
     }
+
+    @Transactional
+    public ResponseDto<Void> removeBlog(Long blogId) {
+        Blog blog = blogRepository.findByBlogOrElseThrow(blogId);
+        User user = userRepository.findByIdOrElseThrow(userService.getMyUserWithAuthorities().getId());
+
+        if (!blog.getUser().getId().equals(user.getId())) {
+            throw new IllegalStateException("해당 블로그 작성자가 아닙니다.");
+        }
+
+        blogRepository.delete(blog);
+        return ResponseDto.success("블로그 삭제 성공",null);
+    }
+
 }
