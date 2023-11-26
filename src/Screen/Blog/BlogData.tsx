@@ -73,7 +73,7 @@ const BlogData = ({ route }) => {
         <Text style={styles.date}>{item.text}</Text>
       )}
       {item.key === 'image' && (
-        <Image source={item.imageUri} style={styles.blogImage} />
+        <Image source={{uri:item.imageUri}} style={styles.blogImage} />
       )}
       {item.key === 'content' && (
         <Text style={styles.content}>{item.text}</Text>

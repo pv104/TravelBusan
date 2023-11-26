@@ -1,34 +1,56 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View,Image, Text, StyleSheet, FlatList, SafeAreaView,TouchableOpacity } from 'react-native';
 import Nav from "../UserUtility/nav";
 import BlogSearch from "./BlogSearch"
 import Mine from "./Blog_mydata";
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
+import { getCookie } from '../UserUtility/Cookie';
 
 
 const blogData = [
-  { id: 1,
-    title: '흰여울 마을 후기',
-    imageUri: 'https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20171228_197%2F1514451096257hdrvJ_JPEG%2FEUDU5oOqcz00HIt4wJD5lVp2.jpg',
-    content: '흰여울 마을을 다녀왔어요~~~~~~', 
-    date: '2023.10.13',
-   type : "블로그" },
- { id: 2,
-    title: '흰여울 마을 산책사진',
-    imageUri: 'https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20171228_103%2F1514450162821RHFxw_JPEG%2FtDyLFd8UKNKcICm84xseyXxR.jpg',
-    content:  '블로그 내용 2', date: '2023.10.14',type : "블로그" },
- { id: 3, 
-   title: '영도, 흰여울 마을을 다녀오다.',
-   imageUri: 'https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20171228_117%2F1514450162206uDTng_JPEG%2FsgnIY_DysRFctyLJN3z_Z4SD.jpg',
-   content:  '블로그 내용 3', date: '2023.10.15',type : "블로그" },
- { id: 4, 
-   title: '부산 여행(영도편)',
-   imageUri: 'https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMzA2MTNfNTEg%2FMDAxNjg2NjU3MzE5MjM3.8tXSPZVmj5GjPZOOYTq0_Z3DPRmmBLmpYm3ZvIiOlCYg.-4AQy2JCaukyfpTdP2boZLLB89cYTomW_etW6R0Qbu4g.JPEG.smulsal%2F%253F%259E%25A5%253F%2586%258C%25EC%25B6%2594%25EC%25B2%259C-001_%25282%2529.jpg',
-   content:  '블로그 내용 4', date: '2023.10.16', type : "블로그" },
- // 다른 블로그 내용들 추가
+  { 
+    id: 1,//https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMzExMTVfMjI4%2FMDAxNjk5OTc5MTc1NTI3.SQrOvisLy02F6ffumh4GhM2vlsghj436xGr2RCnrYzYg.uhDJDmc8-gFb031XSuuR0Cy-OMKvrLsbKY39VNvd3sIg.JPEG.restinbed%2F20231112%25A3%25DF165356.jpg
+     title: '고척 스카이돔 다녀왔습니다.',
+     imageUri: 'https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20200512_262%2F1589288911579EayCb_JPEG%2FS6KIQJennJusJ5nHyymqwarx.jpg',
+     content: '야구보는 게 인생의 큰 낙인 것 같은 짝꿍과 함께 진짜 몇 년 만에 프로야구 직관을 하러 갔다. 나는 야구알못이지만.. 직관은 현장감 속에서 함께 응원하고, 이것저것 사먹는 재미가 쏠쏠한 것 같다. 서울에서 프로야구 경기가 열리는 야구장은 두 곳 !LG와 두산의 홈구장인 잠실야구장과 키움 홈구장인 고척야구장(aka 고척돔/고척스카이돔).우린 삼성팬이라서 주말 중 서울 원정경기를 찾다가 삼성:키움전을 보러 고척돔에 가게 됐다.', 
+     date: '2023.10.13'
+     },
+     { 
+       id: 2,
+       title: '롤드컵 경기 직관 후기',
+       imageUri: 'https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMzExMTVfMjI4%2FMDAxNjk5OTc5MTc1NTI3.SQrOvisLy02F6ffumh4GhM2vlsghj436xGr2RCnrYzYg.uhDJDmc8-gFb031XSuuR0Cy-OMKvrLsbKY39VNvd3sIg.JPEG.restinbed%2F20231112%25A3%25DF165356.jpg',
+       content: '리닝전 너무 잘해서 징동전도 속으로는 이길거야 했지만 또 징동이 너무 강한상대라 걱정도했는데 진짜 너무 잘해서 ㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠ오프닝영상도 너무 뽕찼다', 
+       date: '2023.11.15'
+       }
+  // 다른 블로그 내용들 추가
 ];
-
 const BlogScreen = () => {
+const [CommunityData, setCommunityData] = useState([]);
+const SetData = async () => {
+    try {
+      const response = await axios.get('http://192.168.123.172:8080/users/my-blog', {
+        headers: {
+          'Authorization': `Bearer ${getCookie('token')}`
+        }
+      });
+      console.log(response);
+      const updatedCommunityData = response.data.data.map((item) => ({
+        id: item.id,
+        title: item.title,
+        imageUri: require('../../pics/광안대교.jpg'),
+        content: item.content, 
+        date: item.date
+      }));
+
+      setCommunityData(updatedCommunityData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    SetData();
+  }, []);
   const navigation  = useNavigation();
   const IntoBlog = (item) => {
     navigation.navigate('BlogData', { 
@@ -40,11 +62,11 @@ const BlogScreen = () => {
      });
   };
   const userData = {
-    username: '작성자 아이디',
+    username: 'login',
   };
   
   const explain ={
-    ex : '블로그 테스팅 입니다~(블로그 설명란)'
+    ex : '나만의 작은 블로그. 언제나 여행가기 좋아.'
   }  
 
   const IntoEditor=()=>{
@@ -75,7 +97,7 @@ const BlogScreen = () => {
         renderItem={({ item }) => (
           <View style={styles.blogItem}>
             <TouchableOpacity onPress={() => IntoBlog(item)}>
-              <Image source={{uri:item.imageUri}} style={styles.blogImage} />
+              <Image source={{uri: item.imageUri}} style={styles.blogImage} />
               <View style={styles.overlay}>
                 <Text style={styles.blogTitle}>{item.title}</Text>
                 <Text style={styles.blogDate}>{item.date}</Text>

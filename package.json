@@ -10,6 +10,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@actbase/react-daum-postcode": "^1.0.4",
     "@expo/vector-icons": "^13.0.0",
     "@jiggag/react-native-kakao-maps": "^0.0.12",
     "@react-navigation/native": "^6.1.8",
@@ -26,6 +27,7 @@
     "react-cookie": "^6.1.1",
     "react-icons": "^4.11.0",
     "react-native": "0.72.5",
+    "react-native-geocoding": "^0.5.0",
     "react-native-gesture-handler": "^2.13.1",
     "react-native-image-picker": "^7.0.2",
     "react-native-maps": "^1.8.0",
@@ -35,8 +37,10 @@
     "react-native-safe-area-context": "^4.7.2",
     "react-native-screens": "^3.25.0",
     "react-native-slider": "^0.11.0",
+    "react-native-svg": "^14.0.0",
     "react-native-vector-icons": "^10.0.0",
-    "react-native-webview": "^13.6.2"
+    "react-native-webview": "^13.6.3",
+    "styled-components": "^6.1.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
@@ -54,6 +58,7 @@
     "jest": "^29.2.1",
     "metro-react-native-babel-preset": "0.76.8",
     "prettier": "^2.4.1",
+    "react-native-svg-transformer": "^1.1.0",
     "react-test-renderer": "18.2.0",
     "typescript": "4.8.4"
   },

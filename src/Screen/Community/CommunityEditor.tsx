@@ -18,7 +18,7 @@ const BlogEditor = () => {
     console.log(getCookie('token'));
     try {
       const response = await axios.post(
-        'http://172.18.112.1:8080/boards',
+        'http://192.168.123.145:8080/boards',
         {
           title : title,
           content : content,

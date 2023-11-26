@@ -25,7 +25,7 @@ const myData =()=>{
     const handlePress = () => {
         // 버튼을 누르면 이 함수가 실행됩니다.
         // 원하는 작업을 여기에 추가하세요.
-        navigation.navigate("Blog");
+        navigation.navigate("myBlog");
       };
     
     const handleSign =() =>{
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       borderWidth : 2,
       height : 110,
-      width : 372,
+      width : 380,
     },
     button: {
       backgroundColor: '#00B292', // 버튼 배경색

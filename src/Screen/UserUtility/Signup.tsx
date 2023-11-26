@@ -23,7 +23,7 @@ const LoginScreen = () => {
     const LongId = parseInt(value, 10);
     setFormData({ ...formData, [name]: LongId });
   } 
-  const handleSignup = () => {
+  const handleSignup = async() => {
     // 여기에 로그인 로직을 구현합니다.
     console.log('console');
     console.log(formData);
@@ -34,8 +34,8 @@ const LoginScreen = () => {
     }
     else{
       try {
-        const response = axios.post(
-          'http://172.26.208.1.1:8080/users/signup',
+        const response = await axios.post(
+          'http://192.168.123.145:8080/users',
           formData,
           {
             headers: {
@@ -43,8 +43,11 @@ const LoginScreen = () => {
             },
           }
         );
-        console.log('성공');
-        navigation.navigate("Home");
+        if(response.status == 200)
+        {
+          console.log('성공');
+          navigation.navigate("Home");
+        }
       }
       catch (error) {
         console.log(error);
@@ -63,7 +66,7 @@ const LoginScreen = () => {
         <Text style={styles.Title}>Travel Busan</Text>
       </View>
       <View style={styles.container}>
-        <Text style={styles.header}>Styles</Text>
+        <Text style={styles.header}>회원가입</Text>
         <TextInput
           style={styles.input}
           placeholder="이름"

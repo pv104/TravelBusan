@@ -1,113 +1,81 @@
-import React, { useState } from 'react';
-import { View,PermissionsAndroid, Text, TextInput, Image, StyleSheet, TouchableOpacity,Alert } from 'react-native';
-import Nav from '../UserUtility/nav';
-import { useNavigation } from '@react-navigation/native';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import axios from 'axios';
-const BlogEditor = () => {
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [image, setImage] = useState(null);
-  const [photo, setPhoto] = useState('');
+import React, { useEffect, useState } from "react";
+import {View, Text, Image, Button, Alert, StyleSheet, ImageURISource, TextInput, TouchableOpacity} from 'react-native'
+import {launchCamera, launchImageLibrary, CameraOptions, ImagePickerResponse, ImageLibraryOptions, Asset} from 'react-native-image-picker';
+import Nav from "../UserUtility/nav";
+import axios from "axios";
+import { getCookie } from "../UserUtility/Cookie";
+import { useNavigation } from "@react-navigation/native";
+      /*formData.append('title',JSON.stringify(title));
+      formData.append('content',JSON.stringify(content));*/
+// 이미지 파일 배열
+
+// Blob 객체 생성
+
+//함수형 컴포넌트
+const BlogContent =() => {
   const navigation = useNavigation();
-
-
-  const showPicker = async () =>{
-    const grantedcamera = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.CAMERA,
-      {
-        title : "카메라 권한",
-        message: "해당 어플은 카메라 권한이 필요합니다.",
-        buttonNeutral : "ASK ME Later",
-        buttonNegative : "Cancel",
-        buttonPositive : "OK"
+    //화면 갱신에 영향을 주는 특별한 변수 state 하지만 여긴 함수임 useState() 사용
+    const [img, setImg] = useState<Asset[]>();//setState를 대신하는 넘이랑 변수랑 같이 하기
+    const [title, setTitle] = useState('');
+    const [content, setContent] = useState('');
+    const formData = new FormData();
+    const showPhoto = async ()=> {
+      //1. 옵션객체 만들기
+      const option: ImageLibraryOptions = {
+          mediaType : "photo",
+          selectionLimit : 5,
       }
-    );
-    const grantedstorage = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-      {
-        title : "카메라 권한",
-        message: "해당 어플은 카메라 권한이 필요합니다.",
-        buttonNeutral : "ASK ME Later",
-        buttonNegative : "Cancel",
-        buttonPositive : "OK"
+
+      //ES7의 새로운 문법 : async-await 문법 [callback 비동기 작업을 동기작업처럼 처리함]
+      const response = await launchImageLibrary(option) //함수에 async가 붙어 있어야 함
+      if(response.didCancel) Alert.alert('취소')
+      else if(response.errorMessage) Alert.alert('Error : '+ response.errorMessage)
+      else {
+          const uris:Asset[] = []
+         
+          response.assets?.forEach((value)=>uris.push(value)) //선택한 사진 순서와 상관없이 들어옴
+          //원래는 FlatList로 이미지 보여줘야하지만 
+          //첫번째 이미지만 보여주기
+          setImg( uris );
       }
-    );
-    console.log(grantedcamera);
-    console.log(grantedstorage);
-    if(grantedcamera === PermissionsAndroid.RESULTS.GRANTED && grantedstorage === PermissionsAndroid.RESULTS.GRANTED){
-      console.log("권한 부여");
-      Alert.alert(
-        "뭘로 올릴래?",
-        "선택해",
-        [
-          {
-            text: "카메라로 찍기",
-            onPress: async() =>{
-              const result = await launchCamera({
-                mediaType : 'photo', 
-                cameraType : 'back', 
-              });
-                if (result.didCancel){ 
-                  return null;
-                }
-                const localUri = result.assets[0].uri;
-                const uriPath = localUri.split("//").pop();
-                const imageName = localUri.split("/").pop();
-                setPhoto("file://"+uriPath);
-                return photo;
-            }
-          },
-          {
-            text: "앨범에서 선택",
-            onPress: async() =>{
-              const result = await launchImageLibrary();
-              if (result.didCancel){
-                return null;
-              } 
-              const localUri = result.assets[0].uri;
-              const uriPath = localUri.split("//").pop();
-              const imageName = localUri.split("/").pop();
-              setPhoto("file://"+uriPath);
-              return photo;
-            }
-          },
-        ],
-        {cancelable: true}
-      );
-    }
-    else{
-      console.log("권한 미지급");
-    }
   }
 
-  const handleSubmit = () => {
-    console.log('제목:', title);
-    console.log('내용:', content);
-    console.log('이미지 URI:', image);
-    try {
-      const response = axios.post(
-        'http://172.21.48.1:8080/api/blog',
-        {
-          title : title,
-          content : content,
-          image : image,
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json', // 서버가 JSON 형식을 원하는 경우
-          },
-        }
-      );
-      console.log('성공');
-      navigation.navigate("Blog");
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  
-  return (
-    <View style={styles.container}>
+    const handleSubmit = async() => {
+      const value ={
+        title : title,
+        content : content
+      };
+      const imgFile = {
+        uri: img[0].uri,
+        type: "image/jpeg", // 이미지 타입에 맞게 설정
+        name: "image.jpg",
+      };
+      console.log(imgFile);
+      formData.append("title",JSON.stringify(title));
+      formData.append("content",JSON.stringify(content));
+      formData.append("img", imgFile);
+      console.log(formData);
+      try {
+        const response = await axios.post(
+          'http://192.168.123.145:8080/blogs',
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${getCookie('token')}`,
+              'Content-Type' : 'multipart/form-data',
+            },
+            transformRequest: (data, headers) => {
+              return data;
+            },
+          });
+          console.log("성공");
+          navigation.goBack();
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    return (
+      <View style={styles.container}>
       <View style={styles.menu}>
         <Nav />
         <Text style={styles.Title}>Travel Busan</Text>
@@ -128,72 +96,81 @@ const BlogEditor = () => {
         placeholder="블로그 내용을 입력하세요"
         multiline={true}
       />
-      <View>
-        {photo ? 
-          <View>
-            <Image source={{uri : require('../../pics/광안대교.jpg')}} />
-            <TouchableOpacity style={styles.button} onPress={showPicker}>
-              <Text style={styles.buttonText}>이미지 첨부2</Text>
-            </TouchableOpacity>
-          </View>
-        :
-        <TouchableOpacity style={styles.button} onPress={showPicker}>
-          <Text style={styles.buttonText}>이미지 첨부</Text>
-        </TouchableOpacity>
-        }
-      </View>
+      {img && 
+      <View style={styles.root}>
+       <Image source={{uri : img[0].uri}} style={styles.img}></Image>
+    </View>        
+    }
+    <View>
+     <TouchableOpacity style={styles.button} onPress={showPhoto}>
+         <Text style={styles.buttonText}>이미지 첨부</Text>
+     </TouchableOpacity>
+    </View>
       <TouchableOpacity style={styles.button} onPress={handleSubmit}>
         <Text style={styles.buttonText}>제출</Text>
       </TouchableOpacity>
     </View>
-  );
-};
+    )
+
+}
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-  },
-  label: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  buttonText: {
-    color: 'white',
-    textAlign: 'center',
-  },
-  button: {
-    marginBottom: 10,
-    backgroundColor: '#00B292', // 버튼 배경색
-    paddingVertical: 8, // 세로 방향 padding
-    paddingHorizontal: 5, // 가로 방향 padding
-    width: '23.8%',
-    borderRadius: 5,
-    marginRight: 5,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: 'gray',
-    borderRadius: 5,
-    padding: 10,
-    marginVertical: 10,
-  },
-  contentInput: {
-    height: 150,
-  },
-  image: {
-    width: 200,
-    height: 200,
-    marginTop: 10,
-  },
-  menu: {
-    flexDirection: 'row',
-  },
-  Title: {
-    fontSize: 40,
-    color: '#00B292',
-    fontWeight: 'bold',
-    marginLeft: 20,
-  },
-});
+    root: {
+        flex : 1,
+        padding : 16,
+    },
+    text : {
+        padding:8,
+        color : 'black'
+    },
+    img : {
+      marginTop : 8,
+      flex : 1, //가로넓이는 alien-item이 관리하고 기본 스트래치로 되어 있음
+    },
+    container: {
+      padding: 20,
+    },
+    label: {
+      fontSize: 18,
+      fontWeight: 'bold',
+    },
+    buttonText: {
+      color: 'white',
+      textAlign: 'center',
+    },
+    button: {
+      marginBottom: 10,
+      backgroundColor: '#00B292', // 버튼 배경색
+      paddingVertical: 8, // 세로 방향 padding
+      paddingHorizontal: 5, // 가로 방향 padding
+      width: '23.8%',
+      borderRadius: 5,
+      marginRight: 5,
+    },
+    input: {
+      borderWidth: 1,
+      borderColor: 'gray',
+      borderRadius: 5,
+      padding: 10,
+      marginVertical: 10,
+    },
+    contentInput: {
+      height: 150,
+    },
+    image: {
+      width: 200,
+      height: 200,
+      marginTop: 10,
+    },
+    menu: {
+      flexDirection: 'row',
+    },
+    Title: {
+      fontSize: 40,
+      color: '#00B292',
+      fontWeight: 'bold',
+      marginLeft: 20,
+    },
+})
 
-export default BlogEditor;
+export default BlogContent;

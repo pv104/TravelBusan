@@ -1,33 +1,65 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image, Modal, Alert } from 'react-native';
+import Postcode from '@actbase/react-daum-postcode';
+import Icon from 'react-native-vector-icons/Feather'; 
+import Geocoder from 'react-native-geocoding';
+import { useNavigation } from '@react-navigation/native';
 
 function SearchBar() {
-  const [enroll_company, setEnroll_company] = useState({
-    address: '',
-  });
-  const [popup, setPopup] = useState(false);
+  Geocoder.init("AIzaSyAYjPhPSHxu9o3uPAdLSB2bGWLJX_cF13M");
+  const navigation = useNavigation();
+  const [isModal, setModal] = useState(false);
+  const [latitude, setLatitude] = useState(0);
+  const [longitude, setLongitude] = useState(0);
+  const [address , setAddress] = useState('');
 
-  const handleInput = (text) => {
-    setEnroll_company({
-      ...enroll_company,
-      address: text,
-    });
+  const Geocoding = async()=>{
+    try{
+      await Geocoder.from(address)
+      .then(json=>{
+        const location = json.results[0].geometry.location;
+        setLatitude(0);
+        setLongitude(0);
+        setLatitude(location.lat);
+        setLongitude(location.lng);
+        console.log(latitude);
+        console.log(longitude);
+        console.log(location.lat);
+        console.log(location.lng);
+      }).catch(error=>console.log(error));
+    }
+    catch(error){
+      console.error('지오코딩 에러', error);
+      Alert.alert('지오코딩에 문제가 생겼습니다.')
+    }
   };
-
-  const handleComplete = () => {
-    setPopup(!popup);
-  };
-
-  const handleSubmit = async () => {
-    // 이 부분에서 API 호출 및 결과 처리를 수행합니다.
-    // 검색 기능 및 데이터 처리 방법은 리액트 네이티브 환경에 맞게 구현해야 합니다.
-
-    // 예를 들어, 다음과 같이 네비게이션을 사용하여 다른 화면으로 이동할 수 있습니다.
-  };
-
   return (
     <View>
-      <TextInput
+      <Modal visible={isModal}>
+      <TouchableOpacity 
+      onPress={()=>setModal(false)}>
+             <Icon name="x" size={30} color="red" />
+        </TouchableOpacity>
+      <Postcode
+          style={{ width: '100%', height: '100%' }}
+          jsOptions={{ animation: true, hideMapBtn: true }}
+          onSelected={data => {
+            console.log(JSON.stringify(data));
+            setAddress('');
+            setAddress(data.address);
+            Geocoding();
+            setModal(false);
+            navigation.navigate("SearchMap",{
+              gu : data.sigungu,
+              lat : latitude,
+              lng : longitude,
+            })
+          } } onError={function (error: unknown): void {
+            throw new Error('Function not implemented.');
+          } }/>
+
+      </Modal>
+      <TouchableOpacity
         style={{
           borderWidth: 3,
           borderColor: 'black',
@@ -38,15 +70,13 @@ function SearchBar() {
           borderBottomRightRadius:15,
           borderBottomLeftRadius:15,
           width: 300, 
+          height : 50
         }}
-        placeholder="어디로 가고싶나요?"
-        onChangeText={handleInput}
-        value={enroll_company.address}
-      />
-      <TouchableOpacity onPress={handleSubmit}>
-        <Text>검색</Text>
+        onPress={()=>setModal(true)}
+      >
+      <Text style={{height : 50}}>어디로 가고싶나요?</Text>
       </TouchableOpacity>
-    </View>
+      </View>
   );
 }
 

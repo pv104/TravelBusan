@@ -18,7 +18,9 @@ function Home() {
       </View>
       <View>
         <Sliding/>
-        <SlideBar/>
+        <View style={styles.Slide}>
+          <SlideBar/>
+        </View>
     </View>
   </View>
   );
@@ -27,6 +29,9 @@ function Home() {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row', // 자식 컴포넌트를 가로로 나열
+  },
+  Slide: {
+    marginTop: 440,
   },
   Title:{
     fontSize: 40,

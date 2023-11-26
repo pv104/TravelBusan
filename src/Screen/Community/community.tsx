@@ -15,11 +15,12 @@ const Community = () => {
 
   const SetData = async () => {
     try {
-      const response = await axios.get('http://172.18.112.1:8080/boards', {
+      const response = await axios.get('http://192.168.123.145:8080/boards', {
         headers: {
           'Authorization': `Bearer ${getCookie('token')}`
         }
       });
+      console.log(response);
       const updatedCommunityData = response.data.data.map((item) => ({
         Title: item.title,
         id : item.id,
@@ -36,9 +37,10 @@ const Community = () => {
   useEffect(() => {
     SetData();
   }, []);
-
+  console.log(CommunityData);
   const IntoContent = (item) => {
     navigation.navigate('CommunityContent', {
+      id : item.id,
       Writer: item.Writer,
       title: item.Title,
       content: item.Content,

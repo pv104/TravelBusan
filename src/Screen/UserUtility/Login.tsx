@@ -17,7 +17,7 @@ const LoginScreen = () => {
     // 로그인이 성공하면 다음 화면으로 이동할 수 있습니다.
     try {
       const response = await axios.post(
-        'http://172.18.112.1:8080/users/login',
+        'http://192.168.123.145:8080/users/login',
         {
           username: username,
           password: password,

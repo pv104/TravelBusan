@@ -49,10 +49,6 @@ const NavigationBarButton = () => {
     toggleModal();
     navigation.navigate('UserInfo');
   };
-  const handleSight =() =>{
-    toggleModal();
-    navigation.navigate('Sight');
-  };
   const IsLogin = getCookie("userId");
   return (
     <View style={styles.container}>
@@ -70,41 +66,29 @@ const NavigationBarButton = () => {
         transparent={true}
       >
         <View style={styles.modalContainer}>
-          <Text style={styles.modalText}>모달창 메뉴 확장 추가 중</Text>
+          <Text style={styles.modalText}>We can go EveryWhere</Text>
           <View>
             {IsLogin ? 
             <View>
             <TouchableOpacity onPress={() => handleLogout()}>
-              <Text style={styles.loginButton}>LogOut</Text>
+              <Text style={styles.loginButton}>로그아웃</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() =>handleInfo()}>
-              <Text style={styles.loginButton}>Info</Text>
+              <Text style={styles.loginButton}>내 정보</Text>
             </TouchableOpacity>
            <TouchableOpacity onPress={() =>handleBlog()}>
-             <Text style={styles.loginButton}>Blog</Text>
+             <Text style={styles.loginButton}>블로그</Text>
            </TouchableOpacity>
            <TouchableOpacity onPress={() =>handleCommunity()}>
-              <Text style={styles.loginButton}>Community</Text>
+              <Text style={styles.loginButton}>커뮤니티</Text>
            </TouchableOpacity>
-           <TouchableOpacity onPress={() =>handleMaps()}>
-               <Text style={styles.loginButton}>MAPS</Text>
-           </TouchableOpacity>
-           <TouchableOpacity onPress={() =>handleSight()}>
-               <Text style={styles.loginButton}>Sight</Text>
-            </TouchableOpacity>
             <View>
-           <TouchableOpacity onPress={()=>handleInfo2()}>
-               <Text style={styles.loginButton}>token</Text>
-             </TouchableOpacity>
            </View>
             </View>
           :
           <View>
             <TouchableOpacity onPress={() =>handleLogin()}>
               <Text style={styles.loginButton}>Login</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() =>handleMaps()}>
-                <Text style={styles.loginButton}>MAPS</Text>
             </TouchableOpacity>
             </View>
             }

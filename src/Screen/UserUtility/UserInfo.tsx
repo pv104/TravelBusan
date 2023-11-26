@@ -9,19 +9,18 @@ const UserProfile = () => {
   const navigation = useNavigation();
   const onAccountDeletion =async() =>{
     try{
-      const response = await axios.delete(`http://172.18.112.1:8080/users`,{
+      const response = await axios.delete('http://192.168.123.145:8080/users',{
         headers: {
-          'Authorization': `Bearer ${getCookie('token')}`
-        }
+          Authorization: `Bearer ${getCookie('token')}`,
+        },
       });
       if(response.status == 200)
       {
-        console.log("정상삭제");
-        Alert.alert('알림', '계정이 정상적으로 삭제되었습니다.');
-        navigation.navigate("home");
+        console.log("삭제완료");
+        navigation.navigate("Home");
       }
     }
-    catch (error) {
+    catch(error){
       console.log(error);
     }
   };
@@ -34,7 +33,7 @@ const UserProfile = () => {
   console.log(userId);
   const setUser = async()=>{
     try{
-      const response = await axios.get(`http://172.18.112.1:8080/users/user`, {
+      const response = await axios.get(`http://192.168.123.145:8080/users`, {
           headers: {
             'Authorization': `Bearer ${getCookie('token')}`
           }
@@ -42,9 +41,9 @@ const UserProfile = () => {
       if(response.status == 200)
       {
         console.log(response.data);
-        setUsername(response.data.username);
-        setNickname(response.data.nickname);  
-        setEmail(response.data.email);
+        setUsername(response.data.data.username);
+        setNickname(response.data.data.nickname);  
+        setEmail(response.data.data.email);
         console.log(username);
         console.log(nickname);
         console.log(email);
