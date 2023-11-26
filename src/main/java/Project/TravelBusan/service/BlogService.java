@@ -58,7 +58,7 @@ public class BlogService {
                 .title(blogSaveRequestDto.getTitle())
                 .content(blogSaveRequestDto.getContent())
                 .nickname(blogSaveRequestDto.getUser().getNickname())
-                .img("/files/" + fileName)
+                .img(projectPath + fileName)
                 .visit(blogSaveRequestDto.getVisit())
                 .likeCount(blogSaveRequestDto.getLikeCount())
                 .user(blogSaveRequestDto.getUser())
