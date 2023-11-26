@@ -41,7 +41,7 @@ public class BlogService {
     @Transactional
     public ResponseDto<BlogSaveResponseDto> addBlog(BlogSaveRequestDto blogSaveRequestDto, MultipartFile image) throws IOException {
         String projectPath = System.getProperty("user.dir") // 프로젝트 경로
-                + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "static" + File.separator + "img";
+                + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "static" + File.separator + "img" + File.separator;
 
         UUID uuid = UUID.randomUUID();
 
