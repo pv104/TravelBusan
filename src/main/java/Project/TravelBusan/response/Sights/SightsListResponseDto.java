@@ -22,7 +22,6 @@ public class SightsListResponseDto {
     private String trafficReport;
     private String like;
     private int rate;
-    private String type;
 
 
     public static SightsListResponseDto toDto(Sights sights) {
@@ -41,8 +40,7 @@ public class SightsListResponseDto {
                 sights.getOpenDate(),
                 sights.getTrafficReport(),
                 sights.getLike(),
-                sights.getRate(),
-                sights.getType()
+                sights.getRate()
         );
     }
 

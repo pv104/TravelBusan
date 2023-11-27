@@ -166,7 +166,7 @@ public class UserService {
 
 
     /**
-     * 회원 삭제
+     * 회원 탈퇴
      */
     @Transactional
     public ResponseDto<Void> removeUser() {

@@ -45,10 +45,7 @@ public class Sights {
 
     private int rate;
 
-    @Column(name = "isSights")
-    private String type;
-
-    @OneToMany(mappedBy = "sights", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "sights", fetch = FetchType.LAZY)
     private List<Review> review;
 
     public double calculateAverageRating() {

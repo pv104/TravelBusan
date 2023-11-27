@@ -60,7 +60,7 @@ public class SightsService {
     }
 
     /**
-     * 명소명으로 블로그 조회
+     * 명소명으로 관련 블로그 조회
      */
     public ResponseDto<List<BlogDetailResponseDto>> searchBlog(Long sightsId) {
         Sights sights = sightsRepository.findByIdOrElseThrow(sightsId);

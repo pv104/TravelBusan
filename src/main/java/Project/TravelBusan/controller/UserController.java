@@ -41,7 +41,7 @@ public class UserController {
         return userService.join(userJoinRequestDto);
     }
 
-    @GetMapping
+    @GetMapping("/my-page")
     public ResponseDto<UserDetailResponseDto> userDetail(){
         return userService.detailUser();
     }
@@ -56,35 +56,19 @@ public class UserController {
         return userService.removeUser();
     }
 
-    @GetMapping("/list")
+    @GetMapping
     public ResponseDto<List<UserListResponseDto>> userList(){
         return userService.listUser();
     }
-
-/*    @GetMapping("/user")
-    public ResponseEntity<UserLoginRequestDto> getMyUserInfo() {
-        return ResponseEntity.ok(userService.getMyUserWithAuthorities());
-    }*/
 
     @PostMapping("/login")
     public ResponseEntity<ResponseDto<TokenDto>> userLogin(@Valid @RequestBody UserLoginRequestDto userLoginRequestDto) {
         return userService.login(userLoginRequestDto);
     }
 
-
-    @GetMapping("/check")
-    public UserAuthoritiesResponseDto check(@RequestHeader HttpHeaders header) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        SecurityContextHolder.clearContext();
-        log.info("getUserAuthorities : {}",authentication.getName());
-        log.info("header : {}", header.getFirst("Authorization"));
-        return userService.getMyUserWithAuthorities();
-    }
-
     @GetMapping("my-blogs")
     public ResponseDto<List<BlogSimplelResponseDto>> myBlog(){
         return userService.getMyBlogs();
     }
-
 
 }

@@ -32,12 +32,6 @@ public class BoardComment{
     @Column(name = "credate")
     private Timestamp creDate;
 
-    @Column(name = "deldate")
-    private Timestamp delDate;
-
-    @ColumnDefault("N")
-    private String state;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
     private BoardComment parent;
@@ -50,7 +44,7 @@ public class BoardComment{
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "parent", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "parent", orphanRemoval = true)
     private List<BoardComment> children = new ArrayList<>();
 }
 

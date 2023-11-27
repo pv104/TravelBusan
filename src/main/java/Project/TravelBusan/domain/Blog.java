@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -36,19 +38,8 @@ public class Blog {
     @Column(name = "credate")
     private Timestamp creDate;
 
-    @Column(name = "deldate")
-    private Timestamp delDate;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    public void modifyBoard(String title, String content) {
-        this.title = title;
-        this.content = content;
-    }
-
-    public void increaseLike(Long likeCount){
-        this.likeCount = likeCount;
-    }
 }

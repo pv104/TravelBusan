@@ -29,15 +29,6 @@ public class User{
     @Column(name = "credate")
     private Timestamp creDate;
 
-    @Column(name = "deldate")
-    private Timestamp delDate;
-
-    @ColumnDefault("F")
-    private String state;
-
-    @ColumnDefault("M") // 기본값
-    private String grade;
-
     @Column(name = "username", length = 50, unique = true)
     private String username;
 

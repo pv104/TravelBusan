@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -25,7 +27,6 @@ public class Board {
     private String title;
     private String content;
     private String nickname;
-    private String img;
 
     @ColumnDefault("0")
     @Column(name = "like_count")
@@ -38,17 +39,11 @@ public class Board {
     @Column(name = "credate")
     private Timestamp creDate;
 
-    @Column(name = "deldate")
-    private Timestamp delDate;
-
-    @ColumnDefault("N")
-    private String state;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
     private List<BoardComment> comments;
 
 

@@ -24,8 +24,7 @@ public class SightsDetailResponseDto {
     private String trafficReport;
     private String like;
     private double rate;
-    private String type;
-    private List<ReviewResponseDto> comments; // 리뷰
+    private List<ReviewResponseDto> reviews; // 리뷰
 
 
 
@@ -45,10 +44,9 @@ public class SightsDetailResponseDto {
         trafficReport = sights.getTrafficReport();
         like = sights.getLike();
         rate = sights.calculateAverageRating();
-        type = sights.getType();
-        comments = new ArrayList<>();
+        reviews = new ArrayList<>();
         for (Review review : sights.getReview()) {
-            comments.add(new ReviewResponseDto(review));
+            reviews.add(new ReviewResponseDto(review));
         }
     }
 }
