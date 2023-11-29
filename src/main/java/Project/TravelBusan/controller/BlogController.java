@@ -48,17 +48,6 @@ public class BlogController {
     public ResponseDto<Void> blogRemove(@PathVariable("blog-id") Long blogId) {
         return blogService.removeBlog(blogId);
     }
-
-    @GetMapping("/get-image-url")
-    public ResponseDto<Map<String, String>> getImageUrl() {
-        // 이미지 URL을 생성 또는 데이터베이스에서 가져와서 전달
-        String imageUrl = "/Users/moon/Projects/TravelBusan/src/main/resources/static/img/84f24d80-b09a-491a-a0da-0c9ae7fe752e_IMG_1515.JPG";
-
-        Map<String, String> response = new HashMap<>();
-        response.put("imageUrl", imageUrl);
-
-        return ResponseDto.success("이미지 조회",response);
-    }
 }
 
 /*

@@ -3,12 +3,14 @@ package Project.TravelBusan.service;
 import Project.TravelBusan.domain.Board;
 import Project.TravelBusan.domain.BoardComment;
 import Project.TravelBusan.domain.User;
+import Project.TravelBusan.exception.NotFoundException;
 import Project.TravelBusan.repository.BoardCommentRepository;
 import Project.TravelBusan.repository.BoardRepository;
 import Project.TravelBusan.repository.UserRepository;
 import Project.TravelBusan.request.Board.BoardCommentRequestDto;
 import Project.TravelBusan.response.Board.CommentSaveResponseDto;
 import Project.TravelBusan.response.ResponseDto;
+import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -53,7 +55,7 @@ public class BoardCommentService {
         } else {
             // 자식 댓글 작성
             BoardComment parentComment = boardCommentRepository.findById(boardCommentRequestDto.getParent().getId()).orElseThrow(() ->
-                    new IllegalStateException("부모 댓글이 없습니다"));
+                    new NotFoundException("부모 댓글이 없습니다"));
 
             // 부모 댓글의 게시글 ID와 현재 게시글 ID 비교
             if (parentComment.getBoard().getId() != boardId) {
@@ -83,12 +85,12 @@ public class BoardCommentService {
     @Transactional
     public ResponseDto<Void> commentDelete(Long commentId) {
         BoardComment comment = boardCommentRepository.findById(commentId)
-                .orElseThrow(() -> new IllegalStateException("해당 댓글이 존재하지 않습니다."));
+                .orElseThrow(() -> new NotFoundException("해당 댓글이 존재하지 않습니다."));
 
         User user = userRepository.findByIdOrElseThrow(userService.getMyUserWithAuthorities().getId());
 
         if (!comment.getUser().getId().equals(user.getId())) {
-            throw new IllegalStateException("해당 댓글 작성자가 아닙니다.");
+            throw new ValidationException("해당 댓글 작성자가 아닙니다.");
         }
 
         boardCommentRepository.delete(comment);

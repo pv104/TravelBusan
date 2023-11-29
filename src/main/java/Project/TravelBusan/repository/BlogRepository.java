@@ -2,6 +2,7 @@ package Project.TravelBusan.repository;
 
 import Project.TravelBusan.domain.Blog;
 import Project.TravelBusan.domain.Board;
+import Project.TravelBusan.exception.NotFoundException;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -12,7 +13,7 @@ import java.util.List;
 
 public interface BlogRepository extends JpaRepository<Blog, Long> {
     default Blog findByBlogOrElseThrow(Long blogId) {
-        return findById(blogId).orElseThrow(() -> new IllegalStateException("해당 블로그가 존재하지 않습니다."));
+        return findById(blogId).orElseThrow(() -> new NotFoundException("해당 블로그를 찾을 수 없습니다."));
     }
 
     @Modifying

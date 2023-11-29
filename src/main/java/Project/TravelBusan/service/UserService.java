@@ -18,6 +18,7 @@ import Project.TravelBusan.response.Blog.BlogSimplelResponseDto;
 import Project.TravelBusan.response.User.*;
 import Project.TravelBusan.response.ResponseDto;
 import Project.TravelBusan.util.SecurityUtil;
+import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -86,10 +87,10 @@ public class UserService {
      */
     public ResponseEntity<ResponseDto<TokenDto>> login(UserLoginRequestDto userLoginRequestDto){
         User user = userRepository.findByUsername(userLoginRequestDto.getUsername()).orElseThrow(() ->
-                new DuplicateUserException("존재하지 않는 아이디 입니다"));
+                new NotFoundUserException("존재하지 않는 아이디 입니다"));
 
         if(!passwordEncoder.matches(userLoginRequestDto.getPassword(), user.getPassword())){
-            throw new IllegalStateException("패스워드가 일치하지 않습니다");
+            throw new ValidationException("패스워드가 일치하지 않습니다");
         }
 
         UsernamePasswordAuthenticationToken authenticationToken =

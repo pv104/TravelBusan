@@ -1,6 +1,7 @@
 package Project.TravelBusan.repository;
 
 import Project.TravelBusan.domain.Board;
+import Project.TravelBusan.exception.NotFoundException;
 import jakarta.persistence.EntityManager;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -12,7 +13,7 @@ import java.util.List;
 
 public interface BoardRepository extends JpaRepository<Board, Long> {
     default Board findByBoardOrElseThrow(Long boardId) {
-        return findById(boardId).orElseThrow(() -> new IllegalStateException("해당 게시글이 존재하지 않습니다."));
+        return findById(boardId).orElseThrow(() -> new NotFoundException("해당 게시글을 찾을 수 없습니다."));
     }
 
     @Modifying // jpa 동시성 문제로 -> sql로 처리

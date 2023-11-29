@@ -13,6 +13,7 @@ import Project.TravelBusan.response.Blog.BlogSaveResponseDto;
 import Project.TravelBusan.response.Blog.BlogSimplelResponseDto;
 import Project.TravelBusan.response.ResponseDto;
 import Project.TravelBusan.response.Sights.SightsListResponseDto;
+import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
@@ -100,7 +101,7 @@ public class BlogService {
         User user = userRepository.findByIdOrElseThrow(userService.getMyUserWithAuthorities().getId());
 
         if (!blog.getUser().getId().equals(user.getId())) {
-            throw new IllegalStateException("해당 블로그 작성자가 아닙니다.");
+            throw new ValidationException("해당 블로그 작성자가 아닙니다.");
         }
 
         blogRepository.delete(blog);

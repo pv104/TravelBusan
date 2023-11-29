@@ -3,11 +3,13 @@ package Project.TravelBusan.service;
 import Project.TravelBusan.domain.Review;
 import Project.TravelBusan.domain.Sights;
 import Project.TravelBusan.domain.User;
+import Project.TravelBusan.exception.NotFoundException;
 import Project.TravelBusan.repository.ReviewRepository;
 import Project.TravelBusan.repository.SightsRepository;
 import Project.TravelBusan.repository.UserRepository;
 import Project.TravelBusan.request.Sights.ReviewSaveRequestDto;
 import Project.TravelBusan.response.ResponseDto;
+import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -53,12 +55,12 @@ public class ReviewService {
     @Transactional
     public ResponseDto<Void> reviewRemove(Long reviewId) {
         Review review = reviewRepository.findById(reviewId).orElseThrow(() ->
-                new IllegalStateException("존재하지 않는 리뷰 입니다"));
+                new NotFoundException("존재하지 않는 리뷰 입니다"));
 
         User user = userRepository.findByIdOrElseThrow(userService.getMyUserWithAuthorities().getId());
 
         if (!review.getUser().getId().equals(user.getId())) {
-            throw new IllegalStateException("해당 리뷰 작성자가 아닙니다.");
+            throw new ValidationException("해당 리뷰 작성자가 아닙니다.");
         }
 
         reviewRepository.delete(review);

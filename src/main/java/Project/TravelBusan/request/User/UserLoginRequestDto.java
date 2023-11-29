@@ -16,8 +16,6 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Builder
 public class UserLoginRequestDto {
-    private Long id;
     private String username;
     private String password;
-    private String nickname;
 }

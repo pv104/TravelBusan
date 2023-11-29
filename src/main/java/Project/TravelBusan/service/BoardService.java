@@ -16,6 +16,7 @@ import Project.TravelBusan.response.Board.*;
 import Project.TravelBusan.response.ResponseDto;
 import Project.TravelBusan.response.User.UserDetailResponseDto;
 import Project.TravelBusan.util.SecurityUtil;
+import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
@@ -174,7 +175,7 @@ public class BoardService {
 
     private static void boardValidation(User user, Board board) {
         if(user != board.getUser()){
-            throw new IllegalStateException("게시글 작성자가 아닙니다");
+            throw new ValidationException("게시글 작성자가 아닙니다");
         }
     }
 }
